@@ -1,0 +1,33 @@
+{% extends "_base.html" %} {% load static %} {% block head %} {% endblock head%}
+{% block content %}
+<section>
+  <!-- Mensaje de error -->
+  {% if mensaje_error %}
+  <div>
+    <div>
+      <div>
+        <span>{{ mensaje_error }}</span>
+        <div>{{ sub_mensaje_error }}</div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div>
+    <div>
+      <div>
+        <h1>Iniciar sesión</h1>
+        <form method="post">
+          {% csrf_token %} 
+          {{ form }}
+          <button>Iniciar sesión</button>
+          <p>
+            ¿No tienes cuenta?
+            <a href="{% url 'appIberiaExplorer:register' %}">Crea una</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}
