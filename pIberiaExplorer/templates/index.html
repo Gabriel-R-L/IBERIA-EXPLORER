@@ -1,0 +1,18 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block head %} {% endblock head %}
+
+{% block content %}
+<h1>Iberia Explorer</h1>
+
+{% if request.user.is_authenticated %}
+    <p>Bienvenido {{ request.user.username }}!</p>
+    {% if not request.user.email_confirmed %}
+      <p>Por favor, revise su correo para verificar su cuenta.</p>
+    {% endif %}
+{% endif %}
+
+{% endblock content %}
+
+{% block script %} {% endblock script %}

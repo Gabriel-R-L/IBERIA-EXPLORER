@@ -1,0 +1,33 @@
+{% extends "_base.html" %} 
+{% load static %} 
+
+{% block content %}
+<section>
+  <!-- Mensaje de error -->
+  {% if mensaje_error %}
+  <div>
+    <div>
+      <span>{{ mensaje_error }}</span>
+      <div>{{ sub_mensaje_error }}</div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div>
+    <div>
+      <div>
+        <h1>Crear una cuenta</h1>
+        <form method="post">
+          {% csrf_token %} {{ form }}
+
+          <button type="submit">Crear cuenta</button>
+          <p>
+            ¿Ya tienes cuenta?
+            <a href="{% url 'appIberiaExplorer:login' %}">Inicia sesión</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

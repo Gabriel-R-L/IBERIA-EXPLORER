@@ -1,0 +1,16 @@
+{% extends "_base.html" %} 
+{% load static %} 
+
+{% block content %}
+    {% if not request.user.email_confirmed %}
+      
+    {% endif %}
+    <div>
+        <h1>Email confirmado</h1>
+        <p>Gracias por confirmar tu email. Pulsa el siguiente botón para regresar.</p>
+
+        <button>
+            <a href="{% url 'appIberiaExplorer:index' %}">Regresar</a>
+        </button>
+    </div>
+{% endblock content %}
