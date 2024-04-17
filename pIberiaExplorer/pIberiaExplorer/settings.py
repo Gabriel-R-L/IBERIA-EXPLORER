@@ -11,7 +11,17 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+
 import os
+import sys
+sys.path.append(
+    os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+)
+sys.path.append(os.path.dirname(os.path.realpath(__file__)))
+
+from services import srv_postgres_is_active as postgres_activo
+from services import srv_find_db as db_existe
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -75,16 +85,25 @@ WSGI_APPLICATION = "pIberiaExplorer.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "iberiaexplorerdb",
-        "USER": "postgres",
-        "PASSWORD": "Adivinala1.",
-        "HOST": "localhost",
-        "PORT": "5432",
+# and db_existe.check_database()
+if postgres_activo.is_postgres_service_active() and DEBUG == True:
+    print("*********** DEBUG TRUE. DESARROLLO ***********")
+
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "NAME": "iberiaexplorerdb",
+            "USER": "postgres",
+            "PASSWORD": "Adivinala1.",
+            "HOST": "localhost",
+            "PORT": "5432",
+        }
     }
-}
+else:
+    print(
+        "No se pudo conectar a la base de datos de PostgreSQL. Por favor, asegúrese de que el servicio esté activo."
+    )
+    exit()
 
 
 # Password validation
@@ -154,7 +173,7 @@ STATICFILES_FINDERS = (
 # My custom Auth Model (Usuario)
 # https://docs.djangoproject.com/en/5.0/topics/auth/customizing/#substituting-a-custom-user-model
 
-AUTH_USER_MODEL = 'appIberiaExplorer.Usuario'
+AUTH_USER_MODEL = "appIberiaExplorer.Usuario"
 
 
 # Default primary key field type
