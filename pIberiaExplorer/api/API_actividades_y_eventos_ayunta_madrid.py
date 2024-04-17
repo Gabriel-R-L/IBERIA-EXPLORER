@@ -1,6 +1,7 @@
 import requests
-import json
 import os
+
+import json
 
 # Rutas de los proyectos
 path_proyecto = os.path.dirname(os.path.abspath(__file__))
@@ -8,16 +9,15 @@ path_proyecto_padre = os.path.dirname(path_proyecto)
 
 
 def obtener_datos_desde_api():
-    '''
-        Función para obtener datos desde una API de ejemplo.
-        
-        Params: None
-        
-        ============================
-        Returns: None
-    '''
-    
-    
+    """
+    Función para obtener datos desde una API
+
+    Params: None
+
+    ============================
+    Returns: None
+    """
+
     # URL de la API de ejemplo
     url = (
         "https://datos.madrid.es/egob/catalogo/300107-0-agenda-actividades-eventos.json"
@@ -28,8 +28,15 @@ def obtener_datos_desde_api():
         response = requests.get(url)
         # Verificar si la solicitud fue exitosa (código de estado 200)
         if response.status_code == 200:
-            datos = response.json()
-            return datos
+            datos = response.json()["@graph"]
+            
+            datos_finales = [crear_obj_formateado(dato) for dato in datos]
+            
+            # Guardar en archivo json
+            with open(f"{path_proyecto_padre}/api/datos_actividades_eventos_madrid.json", "w", encoding="utf-8") as archivo:
+                archivo.write(json.dumps(datos_finales, ensure_ascii=False))
+            
+            return datos_finales
         else:
             # Imprimir mensaje de error si la solicitud no fue exitosa
             print(f"Error al obtener datos: {response.status_code}")
@@ -39,14 +46,23 @@ def obtener_datos_desde_api():
         print(f"Error de conexión: {e}")
         return None
 
+def crear_obj_formateado(datos):
+    """
+    Función para crear un objeto formateado con los datos obtenidos desde la API
 
-# Llamar a la función para obtener los datos desde la API
-datos = obtener_datos_desde_api()
+    Params:
+    - datos: dict
 
-
-# Si los datos fueron obtenidos exitosamente, imprimirlos
-if datos:
-    # Guardar datos a un archivo json en la ruta del proyecto
-    ruta_archivo = os.path.join(path_proyecto, f"{os.path.basename(__file__).split(".")[0]}.json")
-    with open(ruta_archivo, "w") as archivo:
-        json.dump(datos, archivo, indent=4)
+    ============================
+    Returns: dict
+    """
+    datos_tratados = {}
+    for clave, valor in datos.items():
+        # Reemplazar caracteres en las claves
+        clave_formateada= clave.replace("@", "").replace("-", "")
+        
+        if isinstance(valor, dict):
+            datos_tratados[clave_formateada] = crear_obj_formateado(valor)
+        else:
+            datos_tratados[clave_formateada] = valor
+    return datos_tratados

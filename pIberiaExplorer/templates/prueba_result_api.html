@@ -1,0 +1,41 @@
+{% extends "_base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+<h1>Datos de la API</h1>
+{% for dato in datos %}
+<ul>
+    <li>Titulo: {{ dato.title }}</li>
+    {% if dato.price != '' %}
+    <li>Precio: {{ dato.price }}</li>
+    {% else %}
+    <li>Entrada gratuita</li>
+    {% endif %}
+    {% if dato.description != '' %}
+    <li>Descripción{{ dato.description }}</li>
+    {% endif %}
+    {% if dato.dtstart != '' %}
+    <li>Fecha de inicio: {{ dato.dtstart }}</li>
+    {% endif %}
+    {% if dato.time != '' %}
+    <li>Hora de inicio: {{ dato.time }}</li>
+    {% else %}
+    <li>Sin hora de inicio</li>
+    {% endif %}
+    {% if dato.dtend != '' %}
+    <li>Fecha de fin: {{ dato.dtend }}</li>
+    {% endif %}
+    <li>Lugar: 
+        <ul>
+            <li>{{ dato.eventlocation }}</li>
+            <li>{{ dato.address }}</li>
+        </ul>
+    </li>
+   
+    <li><a href="{{ dato.link }}">Más detalles</a></li>
+</ul>
+{% endfor %}
+
+{% endblock content %}
