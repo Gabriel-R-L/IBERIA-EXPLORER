@@ -12,4 +12,10 @@ urlpatterns = [
     # Confirmar correo
     path("confirm_email/<str:token>/", confirm_email, name="confirm_email"),
     path("email_confirmed/", email_confirmed, name="email_confirmed"),
+    # Resultados de API
+    path(
+        "api/",
+        obtener_actividades_y_eventos_ayuda_madrid,
+        name="obtener_actividades_y_eventos_ayuda_madrid",
+    ),
 ]

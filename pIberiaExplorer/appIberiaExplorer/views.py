@@ -8,6 +8,13 @@ from validate_email import validate_email
 from django.core.mail import send_mail
 
 import os
+import sys
+sys.path.append(
+    os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+)
+sys.path.append(os.path.dirname(os.path.realpath(__file__)))
+
+
 from datetime import timezone
 import urllib.request as urllib
 
@@ -19,6 +26,17 @@ from django.contrib.sites.shortcuts import get_current_site
 
 from spanlp.palabrota import Palabrota
 from django.utils.crypto import get_random_string
+
+
+from api import API_actividades_y_eventos_ayunta_madrid
+
+###########################################
+# (API) Actividades y eventos de Ayto. Madrid
+##########################################
+def obtener_actividades_y_eventos_ayuda_madrid(request):
+    datos = API_actividades_y_eventos_ayunta_madrid.obtener_datos_desde_api()
+    return render(request, "prueba_result_api.html", {"datos": datos})
+
 
 ###########################################
 # Index
