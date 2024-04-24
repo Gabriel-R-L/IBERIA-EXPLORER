@@ -14,8 +14,8 @@ urlpatterns = [
     path("email_confirmed/", email_confirmed, name="email_confirmed"),
     # Resultados de API
     path(
-        "api/",
-        obtener_actividades_y_eventos_ayuda_madrid,
-        name="obtener_actividades_y_eventos_ayuda_madrid",
+        "actividades_&_eventos_ayto_madrid/",
+        resultado_datos_api,
+        name="resultado_datos_api",
     ),
 ]
