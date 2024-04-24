@@ -7,6 +7,8 @@ from django.core.exceptions import ValidationError
 from validate_email import validate_email
 from django.core.mail import send_mail
 
+from django.core.paginator import Paginator
+
 import os
 import sys
 sys.path.append(
@@ -330,3 +332,29 @@ def validarEmail(correo):
     except ValidationError:
         return False
 
+##########################################
+# Paginación API
+##########################################
+def vista_de_tus_datos(request):
+    # Obtener todos los datos de la API
+    datos_completos = obtener_datos_api()
+    
+    # Imprimir los datos obtenidos para depuración
+    print("Datos obtenidos de la API:", datos_completos)
+
+    # Depuración de la paginación
+    print("Número total de datos obtenidos:", len(datos_completos))
+
+    # Crear un objeto paginador con los datos completos y el número deseado de elementos por página
+    paginator = Paginator(datos_completos, 10)  # 10 elementos por página
+
+    # Depuración de la paginación
+    print("Número total de páginas:", paginator.num_pages)
+
+    # Obtener el número de página solicitado, o 1 si no se especifica
+    page_number = request.GET.get('page')
+    # Obtener la página de datos
+    page_obj = paginator.get_page(page_number)
+
+    # Renderizar la plantilla con la página de datos
+    return render(request, 'tu_template.html', {'page_obj': page_obj, 'paginator': paginator})
