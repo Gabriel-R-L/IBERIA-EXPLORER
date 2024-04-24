@@ -101,7 +101,7 @@ if postgres_activo.is_postgres_service_active() and DEBUG == True:
     }
 else:
     print(
-        "No se pudo conectar a la base de datos de PostgreSQL. Por favor, asegúrese de que el servicio esté activo."
+        "No se pudo conectar a la base de datos de PostgreSQL. Por favor, asegúrese de que el servicio esté activo o la base de datos exista."
     )
     exit()
 

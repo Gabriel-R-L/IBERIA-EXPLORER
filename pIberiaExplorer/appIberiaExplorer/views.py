@@ -27,15 +27,21 @@ from django.contrib.sites.shortcuts import get_current_site
 from spanlp.palabrota import Palabrota
 from django.utils.crypto import get_random_string
 
+from api.Plantilla_API_Com_Madrid import obtener_datos_api
 
-from api import API_actividades_y_eventos_ayunta_madrid
 
 ###########################################
 # (API) Actividades y eventos de Ayto. Madrid
 ##########################################
-def obtener_actividades_y_eventos_ayuda_madrid(request):
-    datos = API_actividades_y_eventos_ayunta_madrid.obtener_datos_desde_api()
-    return render(request, "prueba_result_api.html", {"datos": datos})
+def resultado_datos_api(request):
+    datos = obtener_datos_api()
+    datos_totales = len(datos)
+    
+    context = {
+        "datos": datos,
+        "datos_totales": datos_totales,
+    }
+    return render(request, "actividades_&_eventos_ayto_madrid.html", context=context)
 
 
 ###########################################
@@ -324,12 +330,3 @@ def validarEmail(correo):
     except ValidationError:
         return False
 
-
-##########################################
-# Buscar IP
-##########################################
-# def buscarIP():
-#     try:
-#         return urllib.urlopen('https://ident.me').read().decode('utf8')
-#     except:
-#         print("Error en la Librería de la IP")
