@@ -1,7 +1,7 @@
 # Register your models here.
 # create admin
 from django.contrib import admin
-from .models import Comentario, EstadoReserva, Favorito, Notificacion, Reserva, Usuario, Continente, Pais, Ciudad, Plan, Proveedor, TipoPlan, AtributoPlan, UsuarioPreferencia
+from .models import *
 admin.site.site_header = "SITIO DE ADMINISTRACIÓN DE IBERIA EXPLORER"  #este es el título
 admin.site.site_title = "SITIO DE ADMINISTRACIÓN DE IBERIA EXPLORER" #este es el título
 admin.site.index_title = "Bienvenido al portal de Administración" #este es el título
@@ -61,13 +61,6 @@ class UsuarioPreferenciaAdmin(admin.ModelAdmin):
     search_fields = ('id_preferencia', 'id_usuario', 'id_atributo_plan_plan')
     list_filter = ('id_preferencia', 'id_usuario', 'id_atributo_plan_plan')
 admin.site.register(UsuarioPreferencia, UsuarioPreferenciaAdmin)
-
-# 9 Usuario
-class UsuarioAdmin(admin.ModelAdmin):
-    list_display = ['id_usuario', 'username', 'apellido_1', 'email', 'telefono', 'id_plan']
-    search_fields = ('id_usuario', 'username', 'apellido_1', 'email', 'telefono', 'id_plan')
-    list_filter = ('id_usuario', 'username', 'apellido_1', 'email', 'telefono', 'id_plan')
-admin.site.register(Usuario, UsuarioAdmin)
 
 # 10 Reserva
 class ReservaAdmin(admin.ModelAdmin):

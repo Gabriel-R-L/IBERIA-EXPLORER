@@ -42,13 +42,18 @@ def obtener_datos_api():
                 try: 
                     fecha_inicio_original = dato["dtstart"].split(" ")[0]
                     fecha_fin_original = dato["dtend"].split(" ")[0]
+                    descripcion = dato["description"]
+                    if len(descripcion) < 400:
+                        descripcion = dato["description"]
+                    else:
+                        descripcion = dato["description"][:400] + "..." + "<a href='%s'> Leer más</a>" % dato["link"]
                     
                     # Problema: algunos objetos dan error en dato["address"] y no devuelve dichos objetos
                     datos_necesarios.append(
                         {
                             "titulo": dato["title"],
                             "precio": dato["price"],
-                            "descripcion": dato["description"],
+                            "descripcion": descripcion,
                             "fecha_inicio": datetime.strptime(fecha_inicio_original, "%Y-%m-%d").strftime("%d de %B de %Y"),
                             "fecha_fin": datetime.strptime(fecha_fin_original, "%Y-%m-%d").strftime("%d de %B de %Y"),
                             "hora_inicio": dato["time"],
