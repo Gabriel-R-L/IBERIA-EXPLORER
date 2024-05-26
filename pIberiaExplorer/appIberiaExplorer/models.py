@@ -1,7 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
-
-from django.utils import timezone
 
 
 # 1 Continente
@@ -103,76 +100,9 @@ class Plan(models.Model):
         verbose_name_plural = "Planes"
 
 
-# 9 Usuario
-class CustomUserManager(UserManager):
-    def _create_user(self, username, email, password, **extra_fields):
-        if not email:
-            raise ValueError("Introduce un email válido")
-        email = self.normalize_email(email)
-        user = self.model(username=username, email=email, **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
-
-    def create_user(self, username=None, email=None, password=None, **extra_fields):
-        extra_fields.setdefault("is_staff", False)
-        extra_fields.setdefault("is_superuser", False)
-        return self._create_user(username, email, password, **extra_fields)
-
-    def create_superuser(
-        self, username=None, email=None, password=None, **extra_fields
-    ):
-        extra_fields.setdefault("is_staff", True)
-        extra_fields.setdefault("is_superuser", True)
-
-        return self._create_user(username, email, password, **extra_fields)
-
-class Usuario(AbstractBaseUser, PermissionsMixin):
-    id_usuario = models.AutoField(primary_key=True)
-    #! PARA DEBUG UNIQUE=TRUE, PERO DEBE SER FALSE
-    username = models.CharField(max_length=255, null=True, unique=True)
-    apellido_1 = models.CharField(max_length=255)
-    apellido_2 = models.CharField(max_length=255, null=True)
-    #! PARA DEBUG UNIQUE=FALSE, PERO DEBE SER TRUE
-    email = models.EmailField(blank=False, null=True, default="", unique=False)
-    password = models.CharField(max_length=255)
-    telefono = models.CharField(max_length=12, null=True)
-    direccion = models.CharField(max_length=75, null=True)
-    # activo = models.BooleanField(default=True)
-    fecha_baja = models.DateTimeField(null=True)
-
-    is_active = models.BooleanField(default=True)
-    is_superuser = models.BooleanField(default=False)
-    is_staff = models.BooleanField(default=False)
-
-    date_joined = models.DateTimeField(default=timezone.now)
-    last_login = models.DateTimeField(blank=True, null=True)
-
-    objects = CustomUserManager()
-
-    email_confirmed = models.BooleanField(default=False)
-    confirmation_token = models.CharField(blank=True, null=True)
-
-    id_ciudad = models.ForeignKey(Ciudad, on_delete=models.CASCADE, null=True)
-    id_plan = models.ForeignKey(Plan, on_delete=models.SET_NULL, null=True)
-
-    USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = ["email", "password"]
-
-    class Meta:
-        managed = True
-        verbose_name = "Usuario"
-        verbose_name_plural = "Usuarios"
-
-    def get_full_name(self):
-        return self.username
-
-    def get_short_name(self):
-        return self.username or self.email.split("@")[0]
-
-
 # 8 UsuarioPreferencias
 class UsuarioPreferencia(models.Model):
+    from appLoginRegistro.models import Usuario
     id_preferencia = models.AutoField(primary_key=True)
     id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True)
     id_atributo_plan_plan = models.ForeignKey(
@@ -187,6 +117,7 @@ class UsuarioPreferencia(models.Model):
 
 # 10 Favorito
 class Favorito(models.Model):
+    from appLoginRegistro.models import Usuario
     id_favorito = models.AutoField(primary_key=True)
     id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True)
     id_plan = models.ForeignKey(Plan, on_delete=models.CASCADE, null=True)
@@ -199,6 +130,7 @@ class Favorito(models.Model):
 
 # 11 Comentario
 class Comentario(models.Model):
+    from appLoginRegistro.models import Usuario
     id_comentario = models.AutoField(primary_key=True)
     comentario = models.CharField(max_length=255)
     id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
@@ -212,6 +144,7 @@ class Comentario(models.Model):
 
 # 12 Notificacion
 class Notificacion(models.Model):
+    from appLoginRegistro.models import Usuario
     id_notificacion = models.AutoField(primary_key=True)
     texto_notificacion = models.CharField(max_length=255)
     hora_notificacion = models.DateTimeField()
@@ -238,6 +171,7 @@ class EstadoReserva(models.Model):
 
 # 14 Reserva
 class Reserva(models.Model):
+    from appLoginRegistro.models import Usuario
     id_reserva = models.AutoField(primary_key=True)
     fecha_reserva = models.DateTimeField()
     id_cliente = models.ForeignKey(Usuario, on_delete=models.CASCADE)

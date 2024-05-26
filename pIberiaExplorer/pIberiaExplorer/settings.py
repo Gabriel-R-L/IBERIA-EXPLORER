@@ -10,7 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
 
 import os
 import sys
@@ -20,18 +21,17 @@ sys.path.append(
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 from services import srv_postgres_is_active as postgres_activo
-from services import srv_find_db as db_existe
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-au_h74i4$6do)u$qi_^&9ti4whe^c_f4g@s42bvpw#lf-)g1rp"
+SECRET_KEY = os.getenv("SECRET_DJANGO_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,6 +40,7 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+SITE_ID = 3
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -48,13 +49,33 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'django_recaptcha',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
     "appIberiaExplorer",
+    "appLoginRegistro",
 ]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -66,7 +87,7 @@ ROOT_URLCONF = "pIberiaExplorer.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -92,11 +113,11 @@ if postgres_activo.is_postgres_service_active() and DEBUG == True:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql_psycopg2",
-            "NAME": "iberiaexplorerdb",
-            "USER": "postgres",
-            "PASSWORD": "Adivinala1.",
-            "HOST": "localhost",
-            "PORT": "5432",
+            "NAME": os.getenv("DB_NAME"),
+            "USER": os.getenv("DB_USER"),
+            "PASSWORD": os.getenv("DB_PASSWORD"),
+            "HOST": os.getenv("DB_HOST"),
+            "PORT": os.getenv("DB_PORT"),
         }
     }
 else:
@@ -144,17 +165,18 @@ USE_TZ = True
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
-EMAIL_HOST_USER = "mmiguellaangell888@gmail.com"
-EMAIL_HOST_PASSWORD = "iolm rurv qnba lloj"
+EMAIL_HOST_USER = "soporte.iberiaexplorer@gmail.com"
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-DEFAULT_FROM_EMAIL = "mmiguellaangell888@gmail.com"
+DEFAULT_FROM_EMAIL = "soporte.iberiaexplorer@gmail.com"
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = "/static/"
+PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # MEDIA_URL = "media/"
 # MEDIA_ROOT = os.path.join(BASE_DIR, "media")
@@ -173,10 +195,31 @@ STATICFILES_FINDERS = (
 # My custom Auth Model (Usuario)
 # https://docs.djangoproject.com/en/5.0/topics/auth/customizing/#substituting-a-custom-user-model
 
-AUTH_USER_MODEL = "appIberiaExplorer.Usuario"
+AUTH_USER_MODEL = "appLoginRegistro.Usuario"
 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# reCAPTCHA
+# https://pypi.org/project/django-recaptcha/
+# https://www.google.com/u/1/recaptcha/admin/
+
+RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY")
+RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY")
+
+
+# Authentication
+# https://django-allauth.readthedocs.io/en/latest/installation.html
+
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+    
