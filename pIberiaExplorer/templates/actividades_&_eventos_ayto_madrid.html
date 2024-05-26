@@ -15,10 +15,10 @@
     <li>Entrada gratuita</li>
     {% endif %}
     {% if dato.descripcion != '' %}
-    <li>Descripción: {{ dato.descripcion }}</li>
+    <li>{{ dato.descripcion | safe }}</li>
     {% endif %}
     {% if dato.fecha_inicio != '' %}
-        <li>Fecha de inicio: {{ dato.fecha_inicio }}</li>
+    <li>Fecha de inicio: {{ dato.fecha_inicio }}</li>
     {% endif %}
     {% if dato.hora_inicio != '' %}
     <li>Hora de inicio: {{ dato.hora_inicio }}</li>
@@ -47,5 +47,27 @@
     <li><a href="{{ dato.enlace_detalles }}">Más detalles</a></li>
 </ul>
 {% endfor %}
+
+{% if datos.has_other_pages %}
+<div>
+    {% if datos.has_previous %}
+    <a href="?page=1">&laquo; Primera</a>
+    <a href="?page={{ datos.previous_page_number }}">Anterior</a>
+    {% endif %}
+
+    {% for i in datos.paginator.page_range %}
+        {% if datos.number == i %}
+            <span>{{ i }}</span>
+        {% else %}
+            <a href="?page={{ i }}">{{ i }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if datos.has_next %}
+    <a href="?page={{ datos.next_page_number }}">Siguiente</a>
+    <a href="?page={{ datos.paginator.num_pages }}">Última &raquo;</a>
+    {% endif %}
+</div>
+{% endif %}
 
 {% endblock content %}

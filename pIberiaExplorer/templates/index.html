@@ -7,7 +7,7 @@
 <h1>Iberia Explorer</h1>
 
 {% if request.user.is_authenticated %}
-    <p>Bienvenido {{ request.user.username }}!</p>
+    <p>Bienvenido {{ user.username }}!</p>
     {% if not request.user.email_confirmed %}
       <p>Por favor, revise su correo para verificar su cuenta.</p>
     {% endif %}
