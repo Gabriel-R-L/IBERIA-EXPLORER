@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import subprocess
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -57,6 +58,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     "appIberiaExplorer",
     "appLoginRegistro",
+    "appCarritoPedido",
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -87,7 +89,12 @@ ROOT_URLCONF = "pIberiaExplorer.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "templates")],
+        "DIRS": [
+              os.path.join(BASE_DIR, "templates")
+            , os.path.join(BASE_DIR, "appIberiaExplorer/templates")
+            , os.path.join(BASE_DIR, "appLoginRegistro/templates")
+            , os.path.join(BASE_DIR, "appCarritoPedido/templates")
+            ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -95,6 +102,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "appIberiaExplorer.context_processors.carrito_context",
             ],
         },
     },

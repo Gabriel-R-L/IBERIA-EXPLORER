@@ -35,24 +35,24 @@ class AtributoPlanAdmin(admin.ModelAdmin):
 admin.site.register(AtributoPlan, AtributoPlanAdmin)
 
 # 5 Proveedor
-class ProveedorAdmin(admin.ModelAdmin):
+""" class ProveedorAdmin(admin.ModelAdmin):
     list_display = ['id_proveedor', 'nombre', 'direccion', 'telefono', 'email', 'id_ciudad', 'id_pais']
     search_fields = ('id_proveedor', 'nombre', 'direccion', 'telefono', 'email', 'id_ciudad', 'id_pais')
     list_filter = ('id_proveedor', 'nombre', 'direccion', 'telefono', 'email', 'id_ciudad', 'id_pais')
-admin.site.register(Proveedor, ProveedorAdmin)
+admin.site.register(Proveedor, ProveedorAdmin) """
 
 # 6 TipoPlan
 class TipoPlanAdmin(admin.ModelAdmin):
-    list_display = ['id_tipo_plan', 'nombre_tipo_plan', 'id_proveedor', 'id_atributo_plan']
-    search_fields = ('id_tipo_plan', 'nombre_tipo_plan', 'id_proveedor', 'id_atributo_plan')
-    list_filter = ('id_tipo_plan', 'nombre_tipo_plan', 'id_proveedor', 'id_atributo_plan')
+    list_display = ['id_tipo_plan', 'nombre_tipo_plan']
+    search_fields = ('id_tipo_plan', 'nombre_tipo_plan')
+    list_filter = ('id_tipo_plan', 'nombre_tipo_plan')
 admin.site.register(TipoPlan, TipoPlanAdmin)
 
 # 7 Plan
 class PlanAdmin(admin.ModelAdmin):
-    list_display = ['id_plan', 'nombre', 'descripcion', 'precio', 'duracion', 'fecha_inicio', 'id_proveedor', 'id_tipo_plan']
-    search_fields = ('id_plan', 'nombre', 'descripcion', 'precio', 'duracion', 'fecha_inicio', 'id_proveedor', 'id_tipo_plan')
-    list_filter = ('id_plan', 'nombre', 'descripcion', 'precio', 'duracion', 'fecha_inicio', 'id_proveedor', 'id_tipo_plan')
+    list_display = ['id_plan', 'titulo', 'precio', 'fecha_inicio', 'fecha_fin', 'hora_inicio', 'nombre_lugar', 'codigo_postal', 'nombre_calle', 'organizador']
+    search_fields = ('id_plan', 'titulo', 'precio', 'fecha_inicio', 'fecha_fin', 'hora_inicio', 'nombre_lugar', 'codigo_postal', 'nombre_calle', 'organizador')
+    list_filter = ('id_plan', 'titulo', 'precio', 'fecha_inicio', 'fecha_fin', 'hora_inicio', 'nombre_lugar', 'codigo_postal', 'nombre_calle', 'organizador')
 admin.site.register(Plan, PlanAdmin)
 
 # 8 UsuarioPreferencias
@@ -63,11 +63,11 @@ class UsuarioPreferenciaAdmin(admin.ModelAdmin):
 admin.site.register(UsuarioPreferencia, UsuarioPreferenciaAdmin)
 
 # 10 Reserva
-class ReservaAdmin(admin.ModelAdmin):
-    list_display = ['id_reserva', 'fecha_reserva', 'id_plan']
-    search_fields = ('id_reserva', 'fecha_reserva', 'id_plan')
-    list_filter = ('id_reserva', 'fecha_reserva', 'id_plan')
-admin.site.register(Reserva, ReservaAdmin)
+# class ReservaAdmin(admin.ModelAdmin):
+#     list_display = ['id_reserva', 'fecha_reserva', 'id_plan']
+#     search_fields = ('id_reserva', 'fecha_reserva', 'id_plan')
+#     list_filter = ('id_reserva', 'fecha_reserva', 'id_plan')
+# admin.site.register(Reserva, ReservaAdmin)
 
 # 11 Comentario
 class ComentarioAdmin(admin.ModelAdmin):
@@ -96,4 +96,3 @@ class FavoritoAdmin(admin.ModelAdmin):
     search_fields = ('id_favorito', 'id_usuario', 'id_plan')
     list_filter = ('id_favorito', 'id_usuario', 'id_plan')
 admin.site.register(Favorito, FavoritoAdmin)
-

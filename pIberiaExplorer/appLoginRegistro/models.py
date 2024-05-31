@@ -38,7 +38,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     password = models.CharField(max_length=255)
     telefono = models.CharField(max_length=12, null=True)
     direccion = models.CharField(max_length=75, null=True)
-    fecha_baja = models.DateTimeField(null=True)
+    fecha_baja = models.DateTimeField(null=True, blank=True)
 
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
@@ -52,7 +52,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     email_confirmed = models.BooleanField(default=False)
     confirmation_token = models.CharField(blank=True, null=True)
 
-    id_ciudad = models.ForeignKey(Ciudad, on_delete=models.CASCADE, null=True)
+    id_ciudad = models.ForeignKey(Ciudad, on_delete=models.CASCADE, null=True, blank=True)
     id_plan = models.ForeignKey(Plan, on_delete=models.SET_NULL, null=True)
 
     USERNAME_FIELD = "email"

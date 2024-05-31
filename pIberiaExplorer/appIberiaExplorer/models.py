@@ -40,13 +40,13 @@ class Ciudad(models.Model):
 # 4 AtributoPlan
 class AtributoPlan(models.Model):
     id_atributo_plan = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=255)
-    descripcion = models.CharField(max_length=255)
-    precio = models.FloatField()
-    duracion = models.IntegerField()
-    admite_perro = models.IntegerField()
-    fecha_inicio = models.DateTimeField()
-    fecha_fin = models.DateTimeField()
+    nombre = models.CharField(max_length=255, blank=True, null=True)
+    descripcion = models.CharField(max_length=255, blank=True, null=True)
+    precio = models.FloatField(blank=True, null=True)
+    duracion = models.IntegerField(blank=True, null=True)
+    admite_perro = models.IntegerField(blank=True, null=True)
+    fecha_inicio = models.DateTimeField(blank=True, null=True)
+    fecha_fin = models.DateTimeField(blank=True, null=True)
 
     class Meta:
         managed = True
@@ -55,7 +55,7 @@ class AtributoPlan(models.Model):
 
 
 # 5 Proveedor
-class Proveedor(models.Model):
+""" class Proveedor(models.Model):
     id_proveedor = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=255)
     direccion = models.CharField(max_length=255)
@@ -67,15 +67,19 @@ class Proveedor(models.Model):
     class Meta:
         managed = True
         verbose_name = "Proveedor"
-        verbose_name_plural = "Proveedores"
+        verbose_name_plural = "Proveedores" """
 
 
 # 6 TipoPlan
 class TipoPlan(models.Model):
+    TIPO_PLAN = [
+        ("Api", 1),
+        ("Manual", 2),
+        ("Otro", 3)
+    ]
     id_tipo_plan = models.AutoField(primary_key=True)
-    nombre_tipo_plan = models.CharField(max_length=255)
-    id_proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
-    id_atributo_plan = models.ForeignKey(AtributoPlan, on_delete=models.CASCADE)
+    nombre_tipo_plan = models.CharField(max_length=255, choices=TIPO_PLAN, default="Api")
+    # id_atributo_plan = models.ForeignKey(AtributoPlan, on_delete=models.CASCADE)
 
     class Meta:
         managed = True
@@ -85,20 +89,25 @@ class TipoPlan(models.Model):
 
 # 7 Plan
 class Plan(models.Model):
+    from .models import TipoPlan
+
     id_plan = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=255)
-    descripcion = models.CharField(max_length=255)
+    titulo = models.CharField(max_length=255)
     precio = models.FloatField()
-    duracion = models.IntegerField()
-    fecha_inicio = models.DateTimeField()
-    id_proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
-    id_tipo_plan = models.ForeignKey(TipoPlan, on_delete=models.CASCADE)
+    descripcion = models.CharField(max_length=255)
+    fecha_inicio = models.DateField(null=True)
+    fecha_fin = models.DateField(null=True)
+    hora_inicio = models.TimeField(null=True)
+    nombre_lugar = models.CharField(max_length=255, null=True)
+    codigo_postal = models.CharField(max_length=5, null=True)
+    nombre_calle = models.CharField(max_length=255, null=True)
+    organizador = models.CharField(max_length=255, null=True)
+    # id_tipo_plan = models.ForeignKey(TipoPlan, on_delete=models.CASCADE)
 
     class Meta:
         managed = True
         verbose_name = "Plan"
         verbose_name_plural = "Planes"
-
 
 # 8 UsuarioPreferencias
 class UsuarioPreferencia(models.Model):
@@ -168,18 +177,3 @@ class EstadoReserva(models.Model):
         verbose_name = "EstadoReserva"
         verbose_name_plural = "EstadoReservas"
 
-
-# 14 Reserva
-class Reserva(models.Model):
-    from appLoginRegistro.models import Usuario
-    id_reserva = models.AutoField(primary_key=True)
-    fecha_reserva = models.DateTimeField()
-    id_cliente = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    id_plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
-    id_estado_reserva = models.ForeignKey(EstadoReserva, on_delete=models.CASCADE)
-    id_tipo_plan = models.ForeignKey(TipoPlan, on_delete=models.CASCADE)
-
-    class Meta:
-        managed = True
-        verbose_name = "Reserva"
-        verbose_name_plural = "Reservas"
