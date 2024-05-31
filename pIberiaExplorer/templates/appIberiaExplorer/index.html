@@ -1,0 +1,26 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block head %} {% endblock head %}
+
+{% block content %}
+<h1>Iberia Explorer</h1>
+
+{% if request.user.is_authenticated %}
+    <p>Bienvenido {{ user.username }}!</p>
+    {% if not request.user.email_confirmed %}
+      <p>Por favor, revise su correo para verificar su cuenta.</p>
+    {% endif %}
+{% endif %}
+
+<hr>
+<details open>
+  <summary>Planes de la Comunidad de Madrid</summary>
+  <ul>
+    <li><a href="{% url 'appIberiaExplorer:resultado_datos_api' %}">Actividades y eventos</a></li>
+    <li><a href="#">TO-DO</a></li>
+  </ul>
+</details>
+{% endblock content %}
+
+{% block script %} {% endblock script %}

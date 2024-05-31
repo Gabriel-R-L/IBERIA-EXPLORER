@@ -1,0 +1,73 @@
+{% extends "_base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+<h1>Datos de la API</h1>
+<h2>{{ datos_totales }} resultados encontrados</h2>
+{% for dato in datos %}
+<ul>
+    <li>Titulo: {{ dato.titulo }}</li>
+    {% if dato.precio != '' %}
+    <li>Precio: {{ dato.precio }}</li>
+    {% else %}
+    <li>Entrada gratuita</li>
+    {% endif %}
+    {% if dato.descripcion != '' %}
+    <li>{{ dato.descripcion | safe }}</li>
+    {% endif %}
+    {% if dato.fecha_inicio != '' %}
+    <li>Fecha de inicio: {{ dato.fecha_inicio }}</li>
+    {% endif %}
+    {% if dato.hora_inicio != '' %}
+    <li>Hora de inicio: {{ dato.hora_inicio }}</li>
+    {% else %}
+    <li>Sin hora de inicio</li>
+    {% endif %}
+    {% if dato.fecha_fin != '' %}
+    <li>Fecha de fin: {{ dato.fecha_fin }}</li>
+    {% endif %}
+    <li>
+        {% if dato.nombre_lugar != '' or dato.codigo_postal != '' or dato.nombre_calle != '' %}
+            Dirección:
+        {% endif %}
+        {% if dato.nombre_lugar != '' %}
+        {{ dato.nombre_lugar }}, 
+        {% endif %}
+        {% if dato.codigo_postal != '' %}
+        {{ dato.codigo_postal }}, 
+        {% endif %}
+        {% if dato.nombre_calle != '' %}
+        {{ dato.nombre_calle }}
+        {% endif %}
+    </li>
+    <li>Organizadores: {{ dato.organizador }}</li>
+   
+    <li><a href="{{ dato.enlace_detalles }}">Más detalles</a></li>
+</ul>
+{% endfor %}
+
+{% if datos.has_other_pages %}
+<div>
+    {% if datos.has_previous %}
+    <a href="?page=1">&laquo; Primera</a>
+    <a href="?page={{ datos.previous_page_number }}">Anterior</a>
+    {% endif %}
+
+    {% for i in datos.paginator.page_range %}
+        {% if datos.number == i %}
+            <span>{{ i }}</span>
+        {% else %}
+            <a href="?page={{ i }}">{{ i }}</a>
+        {% endif %}
+    {% endfor %}
+
+    {% if datos.has_next %}
+    <a href="?page={{ datos.next_page_number }}">Siguiente</a>
+    <a href="?page={{ datos.paginator.num_pages }}">Última &raquo;</a>
+    {% endif %}
+</div>
+{% endif %}
+
+{% endblock content %}

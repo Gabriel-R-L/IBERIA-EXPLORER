@@ -1,0 +1,22 @@
+{% extends "_base.html" %} 
+{% load static %} 
+
+{% block head %}
+{% endblock head %}
+
+{% block content %}
+<section>
+  <div>
+    <div>
+      <div>
+        <h1>Crear una cuenta</h1>
+        <form method="post">
+          {% csrf_token %} 
+          {{ form }}
+          <button type="submit">Crear cuenta</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}
