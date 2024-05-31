@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth import login as login_user, logout as logout_user, authenticate
 from django.conf import settings
 from django.db import IntegrityError
@@ -38,7 +38,12 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 import jwt
 
+from django.contrib.auth.decorators import login_required
+
 from services.send_mail import prepararEmail, validarEmail
+from services.buscar_ip import buscar_ip
+from pIberiaExplorer.utils import APP_LOGIN_REGISTRO
+from appCarritoPedido.views import Carrito, Pedido
 
 
 def google_login_redirect(request):
@@ -73,7 +78,7 @@ def login_register(request):
         if request.user.is_authenticated:
             return redirect("/")
         else:
-            return render(request, "login_register.html", context={"form": LoginRegisterForm()})
+            return render(request, f"{APP_LOGIN_REGISTRO}/login_register.html", context={"form": LoginRegisterForm()})
         
     if request.method == "POST":
         email_to_verify = request.POST["email"]
@@ -83,22 +88,7 @@ def login_register(request):
             return redirect("/registro/login")
         else:
             return redirect("/registro/register")
-        
-        """ token = request.POST.get('token', None)
-        if token:
-            try:
-                user_data = id_token.verify_oauth2_token(
-                    token, requests.Request(), os.environ['GOOGLE_OAUTH_CLIENT_ID']
-                )
-                user = authenticate(request, user_data=user_data)
-                if user is not None:
-                    login_user(request, user)
-                    return redirect('/')
-            except ValueError:
-                return HttpResponse(status=403)
-        else:
-            register(request) """
-    
+           
 
 ##########################################
 # Iniciar sesión
@@ -109,7 +99,7 @@ def login(request):
         try:
             if form.is_valid():
                 try:
-                    user = Usuario.objects.get(email=email_to_find)
+                    user = get_object_or_404(Usuario, email=email_to_find)
                     if (
                         user is not None
                         and user.is_superuser == False
@@ -117,30 +107,32 @@ def login(request):
                         and user.is_active == True
                         and user.fecha_baja == None
                     ):
-                        login_user(request, user)
+                        login_user(request, user, backend="django.contrib.auth.backends.ModelBackend")
                         
                         prepararEmail(
                             user.email,
                             "Inicio de sesión",
-                            f"Tu cuenta '@{user.username}' ha iniciado sesión en un dispositivo.\n\nSi no has sido tú, por favor, comuníquese con nosotros.",
+                            f"Tu cuenta '{user.username}' ha iniciado sesión en un dispositivo con IP {buscar_ip()}.\n\nSi no has sido tú, por favor, contáctenos a este correo.",
                         )
 
                         return redirect("/")
 
                     else:
+                        print("El usuario no existe o no está activo")
                         context = {
                             "form": LoginForm(),
                             "mensaje_error": "El usuario y/o contraseña son incorrectos",
                             "sub_mensaje_error": "Por favor, verifique que el nombre de usuario y la contraseña sean correctos.",
                         }
-                        return render(request, "login.html", context=context)
+                        return render(request, f"{APP_LOGIN_REGISTRO}/login.html", context=context)
                 except:
+                    print("Ha habido un error inesperado")
                     context = {
                         "form": LoginForm(),
                         "mensaje_error": "Ha habido un error inesperado",
                         "sub_mensaje_error": "Por favor, inténtelo de nuevo más tarde.",
                     }
-                    return render(request, "login.html", context=context)
+                    return render(request, f"{APP_LOGIN_REGISTRO}/login.html", context=context)
 
             else:
                 print("La contraseña no coincide con el hash almacenado")
@@ -150,17 +142,17 @@ def login(request):
                     "sub_mensaje_error": "Por favor, inténtelo de nuevo más tarde.",
                 }
 
-                return render(request, "login.html", context=context)
+                return render(request, f"{APP_LOGIN_REGISTRO}/login.html", context=context)
         except ValidationError:
             context = {
                 "form": LoginForm(),
                 "mensaje_error": "Ha habido un error inesperado",
                 "sub_mensaje_error": "Por favor, inténtelo de nuevo más tarde.",
             }
-            return render(request, "login.html", context=context)
+            return render(request, f"{APP_LOGIN_REGISTRO}/login.html", context=context)
     else:
         context = {"form": LoginForm()}
-        return render(request, "login.html", context=context)
+        return render(request, f"{APP_LOGIN_REGISTRO}/login.html", context=context)
 
 
 ##########################################
@@ -182,7 +174,7 @@ def register(request):
                                 "form": RegisterForm(),
                             }
 
-                            return render(request, "register.html", context=context)
+                            return render(request, f"{APP_LOGIN_REGISTRO}/register.html", context=context)
 
                         # Creo el usuario
                         user = Usuario.objects.create(
@@ -192,6 +184,11 @@ def register(request):
                             confirmation_token=get_random_string(length=32),
                         )
                         user.save()
+                        
+                        carrito_usuario = Carrito.objects.create(id_usuario=user)
+                        carrito_usuario.save()
+                        pedido_usuario = Pedido.objects.create(id_cliente=user, total=0, fecha_reserva=timezone.now())
+                        pedido_usuario.save()
 
                         # Genera el enlace de confirmación
                         confirmation_link = request.build_absolute_uri(
@@ -227,7 +224,7 @@ def register(request):
                             "form": RegisterForm(),
                         }
 
-                        return render(request, "register.html", context=context)
+                        return render(request, f"{APP_LOGIN_REGISTRO}/register.html", context=context)
                 else:
                     context = {
                         "mensaje_error": "El email ya existe en la base de datos o no existe",
@@ -235,7 +232,7 @@ def register(request):
                         "form": RegisterForm(),
                     }
 
-                    return render(request, "register.html", context=context)
+                    return render(request, f"{APP_LOGIN_REGISTRO}/register.html", context=context)
             else:
                 context = {
                     "mensaje_error": "El email ya existe en la base de datos o no existe",
@@ -243,7 +240,7 @@ def register(request):
                     "form": RegisterForm(),
                 }
 
-                return render(request, "register.html", context=context)
+                return render(request, f"{APP_LOGIN_REGISTRO}/register.html", context=context)
 
         except IntegrityError:
             context = {
@@ -252,17 +249,18 @@ def register(request):
                 "form": RegisterForm(),
             }
 
-            return render(request, "register.html", context=context)
+            return render(request, f"{APP_LOGIN_REGISTRO}/register.html", context=context)
     else:
         context = {
             "form": RegisterForm(),
         }
 
-        return render(request, "register.html", context=context)
+        return render(request, f"{APP_LOGIN_REGISTRO}/register.html", context=context)
 
 
 ##########################################
 # Cerrar sesión
+@login_required
 def logout(request):
     logout_user(request)
 
@@ -275,6 +273,7 @@ def logout(request):
 
 ##########################################
 # Borrar cuenta (borrado lógico)
+@login_required
 def delete_account(request):
     usuario = request.user.usuario
     usuario.activo = False
@@ -294,6 +293,7 @@ def delete_account(request):
 
 ##########################################
 # Verificar email
+@login_required
 def confirm_email(request, token):
     try:
         user = Usuario.objects.get(confirmation_token=token)
@@ -310,5 +310,6 @@ def confirm_email(request, token):
 
 ##########################################
 # Email confirmado
+@login_required
 def email_confirmed(request):
-    return render(request, "email_confirmed.html")
+    return render(request, f"{APP_LOGIN_REGISTRO}/email_confirmed.html")

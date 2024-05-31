@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth import login as login_user, logout as logout_user, authenticate
 from django.conf import settings
 from django.db import IntegrityError
@@ -38,6 +38,10 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 import jwt
 
+from django.contrib.auth.decorators import login_required
+
+from pIberiaExplorer.utils import APP_IBERIA_EXPLORER
+
 
 ###########################################
 # (API) Actividades y eventos de Ayto. Madrid
@@ -66,11 +70,10 @@ def resultado_datos_api(request):
         "anterior": anterior,
     }
     
-    return render(request, "actividades_&_eventos_ayto_madrid.html", context=context)
+    return render(request, f"{APP_IBERIA_EXPLORER}/actividades_&_eventos_ayto_madrid.html", context=context)
 
 
 ###########################################
 # Index
 def index(request):
-    return render(request, "index.html")
-
+    return render(request, f"{APP_IBERIA_EXPLORER}/index.html")

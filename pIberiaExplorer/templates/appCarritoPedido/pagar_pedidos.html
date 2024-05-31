@@ -1,0 +1,36 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block content %}
+<h1>Pedidos Pendientes de Pago</h1>
+{% if pedidos_pendientes %}
+    <table>
+        <tr>
+            <th>ID Pedido</th>
+            <th>Fecha</th>
+            <th>Total</th>
+            <th>Acciones</th>
+        </tr>
+        {% for pedido in pedidos_pendientes %}
+        <tr>
+            <td>{{ pedido.id_pedido }}</td>
+            <td>{{ pedido.fecha_reserva }}</td>
+            <td>{{ pedido.total }}</td>
+            <td>
+                <form action="{% url 'appCarritoPedido:cancelar_pedido' pedido.id_pedido %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">Cancelar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <form action="{% url 'appCarritoPedido:completar_pago' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Pagar</button>
+    </form>
+{% else %}
+    <p>No tienes pedidos pendientes de pago.</p>
+{% endif %}
+
+{% endblock content %}
