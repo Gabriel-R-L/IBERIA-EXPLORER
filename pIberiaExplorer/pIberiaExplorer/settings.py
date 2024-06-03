@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "appIberiaExplorer",
     "appLoginRegistro",
     "appCarritoPedido",
+    "appNotificaciones",
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -94,6 +95,7 @@ TEMPLATES = [
             , os.path.join(BASE_DIR, "appIberiaExplorer/templates")
             , os.path.join(BASE_DIR, "appLoginRegistro/templates")
             , os.path.join(BASE_DIR, "appCarritoPedido/templates")
+            , os.path.join(BASE_DIR, "appNotificaciones/templates")
             ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -103,6 +105,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "appIberiaExplorer.context_processors.carrito_context",
+                "appNotificaciones.context_processors.unread_notifications",
             ],
         },
     },
@@ -115,9 +118,10 @@ WSGI_APPLICATION = "pIberiaExplorer.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 # and db_existe.check_database()
-if postgres_activo.is_postgres_service_active() and DEBUG == True:
+if DEBUG:
     print("*********** DEBUG TRUE. DESARROLLO ***********")
-
+    
+if postgres_activo.is_postgres_service_active():
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql_psycopg2",

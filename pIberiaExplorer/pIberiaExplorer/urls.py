@@ -27,5 +27,6 @@ urlpatterns = [
     path("", include("appIberiaExplorer.urls", namespace="appIberiaExplorer")),
     path("registro/", include("appLoginRegistro.urls", namespace="appLoginRegistro")),
     path("carrito/", include("appCarritoPedido.urls", namespace="appCarritoPedido")),
+    path("notificaciones/", include("appNotificaciones.urls", namespace="appNotificaciones")),
 ]
 

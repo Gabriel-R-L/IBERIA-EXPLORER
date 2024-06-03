@@ -10,7 +10,7 @@
 {% if carrito and detalles %}
     <table>
         <tr>
-            <th>Producto</th>
+            <th>Nombre del plan</th>
             <th>Cantidad</th>
             <th>Precio</th>
             <th>Total</th>
@@ -18,7 +18,7 @@
         </tr>
         {% for item in detalles %}
         <tr>
-            <td>{{ item.id_plan.nombre }}</td>
+            <td>{{ item.id_plan.titulo }}</td>
             <td>
                 <form action="{% url 'appCarritoPedido:actualizar_carrito' item.id_carrito_detalle %}" method="post">
                     {% csrf_token %}
