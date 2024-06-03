@@ -16,9 +16,11 @@
           {% csrf_token %} 
           {{ form }}
           <button type="submit">Siguiente</button>
+          {% comment %}
           <h2>O</h2>
           <hr>
           <a href="{% provider_login_url 'google' %}?next=/">Inicia sesión con Google</a>
+          {% endcomment %}
         </form>
       </div>
     </div>

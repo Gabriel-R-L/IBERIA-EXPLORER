@@ -31,6 +31,7 @@ if project_root not in sys.path:
     sys.path.append(project_root)
 from appIberiaExplorer.models import Plan
 
+
 def guardar_datos_api():
     """ 
         Método encargado de guardar los datos obtenidos de la API con un coste > 0
@@ -46,59 +47,87 @@ def guardar_datos_api():
     
     if datos is not None:
         for dato in datos:
+            id_plan_api = dato["id_api"]
             precio_str = dato['precio'].lower()
-            titulo_str = dato['titulo'].lower()
+            price_match = re.search(r'(\d+(\.\d+)?)', precio_str)
             if 'euro' not in precio_str:
                 continue
+            titulo_str = dato['titulo'].lower()
+            fecha_inicio_str = dato['fecha_inicio']
+            fecha_fin_str = dato['fecha_fin']
+            descripcion_str = dato['descripcion']
+            nombre_calle_str = dato['nombre_calle']
+            hora_inicio_str = dato['hora_inicio']
             
-            price_match = re.search(r'(\d+(\.\d+)?)', precio_str)
-            fecha_inicio = dato['fecha_inicio']
-            fecha_fin = dato['fecha_fin']
-            if price_match:
-                precio = float(price_match.group(1))
-            else:
-                precio = 0
-            if fecha_inicio:
-                fecha_inicio = datetime.strptime(fecha_inicio, "%d de %B de %Y").strftime("%Y-%m-%d")
-            else:
-                fecha_inicio = None
-            if fecha_fin:
-                fecha_fin = datetime.strptime(fecha_fin, "%d de %B de %Y").strftime("%Y-%m-%d")
-            else:
-                fecha_fin = None
-            if dato["descripcion"]:
-                descripcion = dato["descripcion"]
-                if len(descripcion) < 255:
-                    descripcion = dato["descripcion"]
+            if buscar_precio(precio_str):
+                if not Plan.objects.filter(titulo=titulo_str).exists():
+                    precio = float(price_match.group(1))
+                    
+                    if fecha_inicio_str:
+                        fecha_inicio = datetime.strptime(fecha_inicio, "%d de %B de %Y").strftime("%Y-%m-%d")
+                    else:
+                        fecha_inicio = None
+                        
+                    if fecha_fin_str:
+                        fecha_fin = datetime.strptime(fecha_fin, "%d de %B de %Y").strftime("%Y-%m-%d")
+                    else:
+                        fecha_fin = None
+                        
+                    if descripcion_str:
+                        descripcion = descripcion_str
+                        if len(descripcion) < 255:
+                            descripcion = descripcion_str
+                        else:
+                            descripcion = descripcion_str[:200] + "..."
+                    else:
+                        descripcion = ""
+                        
+                    if hora_inicio_str:
+                        hora_inicio = hora_inicio_str + ":00.000000"
+                    else:
+                        hora_inicio = None
+                        
+                    if nombre_calle_str:
+                        nombre_calle = nombre_calle_str
+                    else:
+                        nombre_calle = ""
+                    
+                    plan = Plan.objects.create(
+                        id_plan_api=id_plan_api,
+                        titulo=titulo_str,
+                        descripcion=descripcion,
+                        precio=precio,
+                        fecha_inicio=fecha_inicio,
+                        fecha_fin=fecha_fin,
+                        hora_inicio=hora_inicio,
+                        nombre_lugar=nombre_calle
+                    )
+                    
+                    print(f"Plan {plan.titulo} creado")
                 else:
-                    descripcion = dato["descripcion"][:200] + "..."
+                    print(f"Plan {titulo_str} ya existe")
             else:
-                descripcion = ""
-            if dato['hora_inicio']:
-                hora_inicio = dato['hora_inicio'] + ":00.000000"
-            else:
-                hora_inicio = None
-            if dato["nombre_calle"]:
-                nombre_calle = dato["nombre_calle"]
-            else:
-                nombre_calle = ""
-                
-            
-            # El plan existe en la DB
-            if not Plan.objects.filter(titulo=titulo_str).exists():
-                plan = Plan.objects.create(
-                    titulo=titulo_str,
-                    descripcion=descripcion,
-                    precio=precio,
-                    fecha_inicio=fecha_inicio,
-                    fecha_fin=fecha_fin,
-                    hora_inicio=hora_inicio,
-                    nombre_lugar=nombre_calle
-                )
-                
-                print(f"Plan {plan.titulo} creado")
+                print(f"Plan {titulo_str} no cumple con las normas")
     else: 
         print("No se han podido obtener los datos de la API")
+
+
+def buscar_precio(precio_str):
+    """Funcion que comprueba el precio y si cumple con las normas
+
+    Args:
+        precio_str (str): precio del plan
+
+    Returns:
+        Boolean: True si los datos cumplen con las normas, False en caso contrario
+    """
+    price_match = re.search(r'(\d+(\.\d+)?)', precio_str)
+    
+    if not price_match:
+        return False
+        
+    return True
+
 
 if __name__ == '__main__':
     guardar_datos_api()
