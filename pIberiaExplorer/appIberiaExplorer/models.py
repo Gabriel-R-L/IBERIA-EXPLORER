@@ -92,6 +92,7 @@ class Plan(models.Model):
     from .models import TipoPlan
 
     id_plan = models.AutoField(primary_key=True)
+    id_plan_api = models.IntegerField(null=True)
     titulo = models.CharField(max_length=255)
     precio = models.FloatField()
     descripcion = models.CharField(max_length=255)
@@ -149,20 +150,6 @@ class Comentario(models.Model):
         managed = True
         verbose_name = "Comentario"
         verbose_name_plural = "Comentarios"
-
-
-# 12 Notificacion
-class Notificacion(models.Model):
-    from appLoginRegistro.models import Usuario
-    id_notificacion = models.AutoField(primary_key=True)
-    texto_notificacion = models.CharField(max_length=255)
-    hora_notificacion = models.DateTimeField()
-    id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True)
-
-    class Meta:
-        managed = True
-        verbose_name = "Notificacion"
-        verbose_name_plural = "Notificaciones"
 
 
 # 13 EstadoReserva

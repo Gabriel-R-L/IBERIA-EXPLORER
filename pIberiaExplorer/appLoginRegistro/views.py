@@ -1,3 +1,4 @@
+from turtle import ht
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth import login as login_user, logout as logout_user, authenticate
 from django.conf import settings
@@ -6,6 +7,11 @@ from django.db import IntegrityError
 from django.core.exceptions import ValidationError
 from validate_email import validate_email
 from django.core.mail import send_mail
+
+from django.shortcuts import render
+from django.urls import reverse
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 import os
 import sys
@@ -31,7 +37,7 @@ from api.Plantilla_API_Com_Madrid import obtener_datos_api
 
 from django.core.paginator import Paginator
 
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from google.oauth2 import id_token
@@ -116,7 +122,6 @@ def login(request):
                         )
 
                         return redirect("/")
-
                     else:
                         print("El usuario no existe o no está activo")
                         context = {
@@ -158,6 +163,7 @@ def login(request):
 ##########################################
 # Crear cuenta
 def register(request):
+    from appNotificaciones.models import Notificacion
     if request.method == "POST":
         email = request.session.get("email", None)
         form = RegisterForm(request.POST)
@@ -184,6 +190,11 @@ def register(request):
                             confirmation_token=get_random_string(length=32),
                         )
                         user.save()
+                        
+                        notificacion = Notificacion.objects.create(
+                            usuario=user, 
+                            titulo_notificacion=f"¡Bienvenido {user}!",
+                            mensaje_notificacion="Por favor, revise su correo para verificar su cuenta.")
                         
                         carrito_usuario = Carrito.objects.create(id_usuario=user)
                         carrito_usuario.save()
@@ -269,6 +280,13 @@ def logout(request):
     }
 
     return redirect("/registro", context=context)
+
+@login_required
+def logout_confirmation(request):
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        html = render_to_string(f'{APP_LOGIN_REGISTRO}/logout_confirmation.html', {}, request=request)
+        return JsonResponse({'html': html})
+    return render(request, f"{APP_LOGIN_REGISTRO}/logout_confirmation.html")
 
 
 ##########################################

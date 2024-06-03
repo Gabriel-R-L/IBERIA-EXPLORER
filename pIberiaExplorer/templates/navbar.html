@@ -17,21 +17,40 @@
     <a href="{% url 'appCarritoPedido:ver_carrito' %}">
       Carrito{% if cantidad_total > 0 %} ({{ cantidad_total }}){% endif %}
     </a>
-    
-    <a onclick="confirmLogout(event)" href="/">Cerrar sesión</a>
+    <a href="{% url 'appCarritoPedido:ver_pedidos' %}">Ver historial de pedidos</a>
+    <a href="{% url 'appNotificaciones:ver_notificaciones' %}">Notificaciones{% if cantidad_notificaciones %}({{ cantidad_notificaciones }}){% endif %}</a>
+    <button id="logout-button">Cerrar sesión</button>
   {% endif %}
 </nav>
 {% endblock content %}
 
 {% block scripts %}
 <script>
-  function confirmLogout(event) {
+    document.getElementById('logout-button').addEventListener('click', function(event) {
       event.preventDefault();
-      if (confirm('Are you sure you want to logout?')) {
-          // User clicked OK, perform the logout
-          window.location.href = "{% url 'appLoginRegistro:logout' %}";
-      }
-  }
+      
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', '{% url "appLoginRegistro:logout_confirmation" %}', true);
+      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4 && xhr.status == 200) {
+              var response = JSON.parse(xhr.responseText);
+              var modalDiv = document.createElement('div');
+              modalDiv.innerHTML = response.html;
+              document.body.appendChild(modalDiv);
+              document.getElementById('logout-confirmation-modal').style.display = 'block';
+
+              document.getElementById('confirm-logout').addEventListener('click', function() {
+                  window.location.href = "{% url 'appLoginRegistro:logout' %}";
+              });
+
+              document.getElementById('cancel-logout').addEventListener('click', function() {
+                  document.getElementById('logout-confirmation-modal').style.display = 'none';
+              });
+          }
+      };
+      xhr.send();
+  });
 </script>
 {% endblock scripts %}
 
