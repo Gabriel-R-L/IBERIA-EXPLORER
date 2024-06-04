@@ -19,6 +19,10 @@ from django.urls import path, include
 
 from appLoginRegistro.views import google_login_redirect
 
+from django.conf.urls.static import static
+from django.conf import settings
+
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("allauth.urls")),
@@ -28,5 +32,6 @@ urlpatterns = [
     path("registro/", include("appLoginRegistro.urls", namespace="appLoginRegistro")),
     path("carrito/", include("appCarritoPedido.urls", namespace="appCarritoPedido")),
     path("notificaciones/", include("appNotificaciones.urls", namespace="appNotificaciones")),
-]
+    path("ajustes/", include("appAjustes.urls", namespace="appAjustes")),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
 
