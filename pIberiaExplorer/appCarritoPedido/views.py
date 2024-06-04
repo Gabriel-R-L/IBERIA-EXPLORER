@@ -44,7 +44,7 @@ from pIberiaExplorer.utils import APP_CARRITO_PEDIDO
 
 ###########################################
 # Carrito
-@login_required
+@login_required(login_url='/registro/')
 def agregar_al_carrito(request, plan_id):
     from appIberiaExplorer.models import Plan
     plan = get_object_or_404(Plan, id_plan_api=plan_id)
@@ -57,7 +57,7 @@ def agregar_al_carrito(request, plan_id):
     
     return redirect('/carrito')
 
-@login_required
+@login_required(login_url='/registro/')
 def actualizar_carrito(request, detalle_id):
     detalle = get_object_or_404(CarritoDetalle, id_carrito_detalle=detalle_id, id_carrito__id_usuario=request.user)
     
@@ -81,7 +81,7 @@ def eliminar_del_carrito(request, detalle_id):
     return redirect('/carrito')
     
 
-@login_required
+@login_required(login_url='/registro/')
 def ver_carrito(request):
     carrito = get_object_or_404(Carrito, id_usuario=request.user)
     
@@ -111,7 +111,7 @@ def ver_carrito(request):
 
 ###########################################
 # Pedidos
-@login_required
+@login_required(login_url='/registro/')
 def completar_pedido(request):
     carrito = get_object_or_404(Carrito, id_usuario=request.user)
     carrito_details = CarritoDetalle.objects.filter(id_carrito=carrito)
@@ -131,7 +131,7 @@ def completar_pedido(request):
     return redirect('/carrito/pagar_pedidos')
 
 
-@login_required
+@login_required(login_url='/registro/')
 def pagar_pedidos(request):
     # Obtener todos los pedidos pendientes del usuario actual
     pedidos_pendientes = Pedido.objects.filter(id_cliente=request.user, estado='PENDIENTE')
@@ -145,7 +145,7 @@ def pagar_pedidos(request):
     return render(request, 'appCarritoPedido/pagar_pedidos.html', context)
 
 
-@login_required
+@login_required(login_url='/registro/')
 def completar_pago(request):
     from appNotificaciones.models import Notificacion
     pedidos = Pedido.objects.filter(id_cliente=request.user, estado='PENDIENTE')
@@ -162,7 +162,7 @@ def completar_pago(request):
     return redirect('/carrito/pagar_pedidos')
 
 
-@login_required
+@login_required(login_url='/registro/')
 def cancelar_pedido(request, pedido_id):
     pedido = get_object_or_404(Pedido, id_pedido=pedido_id, id_cliente=request.user)
     
@@ -173,7 +173,7 @@ def cancelar_pedido(request, pedido_id):
     return redirect('/carrito/pagar_pedidos')
     
 
-@login_required
+@login_required(login_url='/registro/')
 def ver_pedidos(request):
     # Obtener todos los pedidos completados y cancelados del usuario actual
     pedidos_completados = Pedido.objects.filter(id_cliente=request.user, estado='COMPLETADO')
@@ -188,7 +188,7 @@ def ver_pedidos(request):
     return render(request, 'appCarritoPedido/pedidos.html', context=context)
 
 
-@login_required
+@login_required(login_url='/registro/')
 def ver_pedido_detalle(request, pedido_id):
     # Obtener el pedido y verificar que pertenece al usuario actual
     pedido = get_object_or_404(Pedido, id_pedido=pedido_id, id_cliente=request.user)

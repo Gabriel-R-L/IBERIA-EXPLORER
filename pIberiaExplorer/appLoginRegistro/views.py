@@ -1,3 +1,4 @@
+import re
 from turtle import ht
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib.auth import login as login_user, logout as logout_user, authenticate
@@ -192,9 +193,14 @@ def register(request):
                         user.save()
                         
                         notificacion = Notificacion.objects.create(
-                            usuario=user, 
-                            titulo_notificacion=f"¡Bienvenido {user}!",
-                            mensaje_notificacion="Por favor, revise su correo para verificar su cuenta.")
+                              usuario=user
+                            , titulo_notificacion=f"¡Bienvenido {user.username}!"
+                            , mensaje_notificacion="Por favor, revise su correo para verificar su cuenta.")
+                        
+                        notificacion2 = Notificacion.objects.create(
+                              usuario=user
+                            , titulo_notificacion=f"Configura tu cuenta"
+                            , mensaje_notificacion="Recuerda que puedes configurar tu cuenta en la sección de 'Mi perfil', y personalizar tu experiencia en nuestra plataforma.")
                         
                         carrito_usuario = Carrito.objects.create(id_usuario=user)
                         carrito_usuario.save()
@@ -204,7 +210,7 @@ def register(request):
                         # Genera el enlace de confirmación
                         confirmation_link = request.build_absolute_uri(
                             reverse(
-                                "appLoginRegistro:confirm_email",
+                                f"{APP_LOGIN_REGISTRO}:confirm_email",
                                 args=[user.confirmation_token],
                             )
                         )
@@ -271,7 +277,7 @@ def register(request):
 
 ##########################################
 # Cerrar sesión
-@login_required
+@login_required(login_url='/registro/')
 def logout(request):
     logout_user(request)
 
@@ -281,7 +287,7 @@ def logout(request):
 
     return redirect("/registro", context=context)
 
-@login_required
+@login_required(login_url='/registro/')
 def logout_confirmation(request):
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         html = render_to_string(f'{APP_LOGIN_REGISTRO}/logout_confirmation.html', {}, request=request)
@@ -291,27 +297,35 @@ def logout_confirmation(request):
 
 ##########################################
 # Borrar cuenta (borrado lógico)
-@login_required
+@login_required(login_url='/registro/')
 def delete_account(request):
-    usuario = request.user.usuario
+    usuario = request.user
     usuario.activo = False
     usuario.fecha_baja = timezone.now()
+    usuario.is_active = False
     usuario.save()
 
     prepararEmail(
         request.user.email,
         "Tu cuenta ha sido eliminada",
-        f"Tu cuenta '@{request.user.username}' ha sido eliminada. No podrás iniciar sesión en nuestra plataforma.\n\nSi crees que se trata de un error, por favor, comuníquese con nosotros.",
+        f"Tu cuenta '{request.user.username}' ha sido eliminada. No podrás iniciar sesión en nuestra plataforma.\n\nSi crees que se trata de un error, por favor, comuníquese con nosotros.",
     )
 
     logout_user(request)
 
     return redirect("/")
+    
+@login_required(login_url='/registro/')
+def delete_account_confirmation(request):
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        html = render_to_string(f'{APP_LOGIN_REGISTRO}/delete_account_confirmation.html', {}, request=request)
+        return JsonResponse({'html': html})
+    return render(request, f"{APP_LOGIN_REGISTRO}/delete_account_confirmation.html")
 
 
 ##########################################
 # Verificar email
-@login_required
+@login_required(login_url='/registro/')
 def confirm_email(request, token):
     try:
         user = Usuario.objects.get(confirmation_token=token)
@@ -328,6 +342,6 @@ def confirm_email(request, token):
 
 ##########################################
 # Email confirmado
-@login_required
+@login_required(login_url='/registro/')
 def email_confirmed(request):
     return render(request, f"{APP_LOGIN_REGISTRO}/email_confirmed.html")

@@ -77,15 +77,15 @@ class ComentarioAdmin(admin.ModelAdmin):
 admin.site.register(Comentario, ComentarioAdmin)
 
 # 13 EstadoRerserva
-class EstadoReservaAdmin(admin.ModelAdmin):
-    list_display = ['id_estado_reserva', 'nombre']
-    search_fields = ('id_estado_reserva', 'nombre')
-    list_filter = ('id_estado_reserva', 'nombre')
-admin.site.register(EstadoReserva, EstadoReservaAdmin)
+# class EstadoReservaAdmin(admin.ModelAdmin):
+#     list_display = ['id_estado_reserva', 'nombre']
+#     search_fields = ('id_estado_reserva', 'nombre')
+#     list_filter = ('id_estado_reserva', 'nombre')
+# admin.site.register(EstadoReserva, EstadoReservaAdmin)
 
 # 14 Reserva
-class FavoritoAdmin(admin.ModelAdmin):
-    list_display = ['id_favorito', 'id_usuario', 'id_plan']
-    search_fields = ('id_favorito', 'id_usuario', 'id_plan')
-    list_filter = ('id_favorito', 'id_usuario', 'id_plan')
-admin.site.register(Favorito, FavoritoAdmin)
+# class FavoritoAdmin(admin.ModelAdmin):
+#     list_display = ['id_favorito', 'id_usuario', 'id_plan']
+#     search_fields = ('id_favorito', 'id_usuario', 'id_plan')
+#     list_filter = ('id_favorito', 'id_usuario', 'id_plan')
+# admin.site.register(Favorito, FavoritoAdmin)

@@ -6,7 +6,7 @@ admin.site.index_title = "Bienvenido al portal de Administración" #este es el t
 
 # 9 Usuario
 class UsuarioAdmin(admin.ModelAdmin):
-    list_display = ['id_usuario', 'username', 'apellido_1', 'email', 'telefono', 'id_plan']
-    search_fields = ('id_usuario', 'username', 'apellido_1', 'email', 'telefono', 'id_plan')
-    list_filter = ('id_usuario', 'username', 'apellido_1', 'email', 'telefono', 'id_plan')
+    list_display = ['id_usuario', 'username', 'apellido_1', 'email', 'telefono', 'fecha_baja']
+    search_fields = ('id_usuario', 'username', 'apellido_1', 'email', 'telefono', 'fecha_baja')
+    list_filter = ('id_usuario', 'username', 'apellido_1', 'email', 'telefono', 'fecha_baja')
 admin.site.register(Usuario, UsuarioAdmin)
