@@ -30,7 +30,7 @@ def ver_notificacion(request, id):
     notificacion = get_object_or_404(Notificacion, usuario=request.user, id=id)
    
     context = {
-        "detalles_notificacion": notificacion,
+        "notificacion": notificacion,
     }
     
     if notificacion.leido == False:

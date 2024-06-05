@@ -38,8 +38,6 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 import jwt
 
-from django.contrib.auth.decorators import login_required
-
 from pIberiaExplorer.utils import APP_IBERIA_EXPLORER
 
 

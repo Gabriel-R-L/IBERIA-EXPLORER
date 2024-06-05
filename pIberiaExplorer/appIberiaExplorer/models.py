@@ -126,16 +126,16 @@ class UsuarioPreferencia(models.Model):
 
 
 # 10 Favorito
-class Favorito(models.Model):
-    from appLoginRegistro.models import Usuario
-    id_favorito = models.AutoField(primary_key=True)
-    id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True)
-    id_plan = models.ForeignKey(Plan, on_delete=models.CASCADE, null=True)
+# class Favorito(models.Model):
+#     from appLoginRegistro.models import Usuario
+#     id_favorito = models.AutoField(primary_key=True)
+#     id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True)
+#     id_plan = models.ForeignKey(Plan, on_delete=models.CASCADE, null=True)
 
-    class Meta:
-        managed = True
-        verbose_name = "Favorito"
-        verbose_name_plural = "Favoritos"
+#     class Meta:
+#         managed = True
+#         verbose_name = "Favorito"
+#         verbose_name_plural = "Favoritos"
 
 
 # 11 Comentario
@@ -153,14 +153,14 @@ class Comentario(models.Model):
 
 
 # 13 EstadoReserva
-class EstadoReserva(models.Model):
-    id_estado_reserva = models.AutoField(primary_key=True)
-    nombre = models.CharField(max_length=255)
-    detalles = models.CharField(max_length=255)
-    id_plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
+# class EstadoReserva(models.Model):
+#     id_estado_reserva = models.AutoField(primary_key=True)
+#     nombre = models.CharField(max_length=255)
+#     detalles = models.CharField(max_length=255)
+#     id_plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
 
-    class Meta:
-        managed = True
-        verbose_name = "EstadoReserva"
-        verbose_name_plural = "EstadoReservas"
+#     class Meta:
+#         managed = True
+#         verbose_name = "EstadoReserva"
+#         verbose_name_plural = "EstadoReservas"
 
