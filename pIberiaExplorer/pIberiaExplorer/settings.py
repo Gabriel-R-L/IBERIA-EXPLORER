@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "appLoginRegistro",
     "appCarritoPedido",
     "appNotificaciones",
+    "appAjustes",
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -97,6 +98,7 @@ TEMPLATES = [
             , os.path.join(BASE_DIR, "appLoginRegistro/templates")
             , os.path.join(BASE_DIR, "appCarritoPedido/templates")
             , os.path.join(BASE_DIR, "appNotificaciones/templates")
+            , os.path.join(BASE_DIR, "appAjustes/templates")
             ],
         "APP_DIRS": True,
         "OPTIONS": {
@@ -166,7 +168,7 @@ LOCALE_NAME = "es"
 
 LANGUAGE_CODE = "es"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "Europe/Madrid"
 
 USE_I18N = True
 
@@ -188,11 +190,11 @@ DEFAULT_FROM_EMAIL = "soporte.iberiaexplorer@gmail.com"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = "/static/"
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
-# MEDIA_URL = "media/"
-# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 STATICFILES_DIRS = (
     ("css", os.path.join(STATIC_ROOT, "css")),
@@ -204,6 +206,7 @@ STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 )
+
 
 # My custom Auth Model (Usuario)
 # https://docs.djangoproject.com/en/5.0/topics/auth/customizing/#substituting-a-custom-user-model
