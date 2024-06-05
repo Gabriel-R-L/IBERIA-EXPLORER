@@ -51,7 +51,6 @@ def obtener_datos_api():
                     # Problema: algunos objetos dan error en dato["address"] y no devuelve dichos objetos
                     datos_necesarios.append(
                         {
-                            "id_api": dato["id"],
                             "titulo": dato["title"],
                             "precio": dato["price"],
                             "descripcion": descripcion,
@@ -62,8 +61,7 @@ def obtener_datos_api():
                             "codigo_postal": dato["address"]["area"]["postalcode"],
                             "nombre_calle": dato["address"]["area"]["streetaddress"],
                             "organizador": dato["organization"]["organizationname"],
-                            "enlace_detalles": dato["link"],
-                            "en_bd": False,
+                            "enlace_detalles": dato["link"]
                         }
                     )
                 except KeyError as e:
