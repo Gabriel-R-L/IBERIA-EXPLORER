@@ -6,10 +6,9 @@ app_name = "appCarritoPedido"
 urlpatterns = [
     # Carrito
     path("", ver_carrito, name="ver_carrito"),
-    path("agregar/<int:id_plan>/", agregar_al_carrito, name="agregar_al_carrito"),
+    path("agregar/<int:plan_id>/", agregar_al_carrito, name="agregar_al_carrito"),
     path("actualizar/<int:detalle_id>/", actualizar_carrito, name="actualizar_carrito"),
     path("eliminar/<int:detalle_id>/", eliminar_del_carrito, name="eliminar_del_carrito"),
-    
     # Pedidos
     path('pedido/completar/', completar_pedido, name='completar_pedido'),
     path('pedidos/', ver_pedidos, name='ver_pedidos'),

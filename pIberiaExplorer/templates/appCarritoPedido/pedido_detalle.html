@@ -3,21 +3,20 @@
 
 {% block content %}
 <h1>Detalles del Pedido</h1>
-<p>ID Pedido: {{ pedido.id_pedido }}</p>
-<p>Fecha: {{ pedido.fecha_reserva }}</p>
+<p>Fecha del pedido: {{ pedido.fecha_reserva }}</p>
 <p>Total: {{ pedido.total }}</p>
 
 <h2>Detalles de los Productos</h2>
 <table>
     <tr>
-        <th>Producto</th>
+        <th>Nombre del plan</th>
         <th>Cantidad</th>
         <th>Precio</th>
         <th>Total</th>
     </tr>
     {% for detalle in detalles %}
     <tr>
-        <td>{{ detalle.id_plan.nombre }}</td>
+        <td>{{ detalle.id_plan.titulo }}</td>
         <td>{{ detalle.cantidad }}</td>
         <td>{{ detalle.id_plan.precio }}</td>
         <td>{{ total }}</td>

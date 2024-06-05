@@ -47,9 +47,9 @@ from pIberiaExplorer.utils import APP_CARRITO_PEDIDO
 @login_required
 def agregar_al_carrito(request, plan_id):
     from appIberiaExplorer.models import Plan
-    plan = get_object_or_404(Plan, id=plan_id)
-    cart, created = Carrito.objects.get_or_create(usuario=request.user)
-    carrito_details, created = CarritoDetalle.objects.get_or_create(id_carrito=cart, plan=plan)
+    plan = get_object_or_404(Plan, id_plan_api=plan_id)
+    cart, created = Carrito.objects.get_or_create(id_usuario=request.user)
+    carrito_details, created = CarritoDetalle.objects.get_or_create(id_carrito=cart, id_plan=plan, cantidad=1)
     
     if not created:
         carrito_details.cantidad += 1
@@ -147,11 +147,17 @@ def pagar_pedidos(request):
 
 @login_required
 def completar_pago(request):
+    from appNotificaciones.models import Notificacion
     pedidos = Pedido.objects.filter(id_cliente=request.user, estado='PENDIENTE')
     
     for pedido in pedidos:
         pedido.estado = 'COMPLETADO'
         pedido.save()
+        
+        notificacion = Notificacion.objects.create(
+                                usuario=request.user, 
+                                titulo_notificacion=f"¡Pedido {pedido} pagado!",
+                                mensaje_notificacion="Revise los detalles de su pedido en la sección de pedidos.")
     
     return redirect('/carrito/pagar_pedidos')
 
