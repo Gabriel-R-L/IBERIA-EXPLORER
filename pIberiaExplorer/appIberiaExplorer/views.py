@@ -62,19 +62,9 @@ def resultado_datos_api(request):
         anterior = datos_pagina.previous_page_number()
     else:
         anterior = paginator.num_pages
-        
-    id_planes_api = [int(dato["id_api"]) for dato in datos_pagina]
-    planes_en_db = Plan.objects.filter(id_plan_api__in=id_planes_api)
-    ids_planes_en_bd = set(planes_en_db.values_list("id_plan_api", flat=True))
     
-    asd = []
-    for dato in datos_pagina:
-        dato_id = int(dato["id_api"])
-        dato["en_bd"] = dato_id in ids_planes_en_bd
-        
     context = {
         "datos": datos_pagina,
-        "asd": asd,
         "datos_totales": datos_totales,
         "siguiente": siguiente,
         "anterior": anterior,

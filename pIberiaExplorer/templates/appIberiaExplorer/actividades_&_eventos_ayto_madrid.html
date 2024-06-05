@@ -8,7 +8,6 @@
 <h2>{{ datos_totales }} resultados encontrados</h2>
 {% for dato in datos %}
 <ul>
-    <li>Id: {{ dato.id_api }}</li>
     <li>Titulo: {{ dato.titulo }}</li>
     {% if dato.precio != '' %}
     <li>Precio: {{ dato.precio }}</li>
@@ -46,12 +45,6 @@
     <li>Organizadores: {{ dato.organizador }}</li>
    
     <li><a href="{{ dato.enlace_detalles }}">Más detalles</a></li>
-
-    {% if dato.en_bd %}
-    <li>
-        <a href="{% url 'appCarritoPedido:agregar_al_carrito' dato.id_api %}">
-            <button type="button">Agregar al carrito</button></a></li>
-    {% endif %}
 </ul>
 {% endfor %}
 

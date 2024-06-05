@@ -50,9 +50,9 @@ admin.site.register(TipoPlan, TipoPlanAdmin)
 
 # 7 Plan
 class PlanAdmin(admin.ModelAdmin):
-    list_display = ['id_plan', 'id_plan_api', 'titulo', 'precio', 'fecha_inicio', 'fecha_fin', 'hora_inicio', 'nombre_lugar', 'codigo_postal', 'nombre_calle', 'organizador']
-    search_fields = ('id_plan', 'id_plan_api', 'titulo', 'precio', 'fecha_inicio', 'fecha_fin', 'hora_inicio', 'nombre_lugar', 'codigo_postal', 'nombre_calle', 'organizador')
-    list_filter = ('id_plan', 'id_plan_api', 'titulo', 'precio', 'fecha_inicio', 'fecha_fin', 'hora_inicio', 'nombre_lugar', 'codigo_postal', 'nombre_calle', 'organizador')
+    list_display = ['id_plan', 'titulo', 'precio', 'fecha_inicio', 'fecha_fin', 'hora_inicio', 'nombre_lugar', 'codigo_postal', 'nombre_calle', 'organizador']
+    search_fields = ('id_plan', 'titulo', 'precio', 'fecha_inicio', 'fecha_fin', 'hora_inicio', 'nombre_lugar', 'codigo_postal', 'nombre_calle', 'organizador')
+    list_filter = ('id_plan', 'titulo', 'precio', 'fecha_inicio', 'fecha_fin', 'hora_inicio', 'nombre_lugar', 'codigo_postal', 'nombre_calle', 'organizador')
 admin.site.register(Plan, PlanAdmin)
 
 # 8 UsuarioPreferencias
@@ -75,6 +75,13 @@ class ComentarioAdmin(admin.ModelAdmin):
     search_fields = ('id_comentario', 'comentario', 'id_usuario', 'id_plan')
     list_filter = ('id_comentario', 'comentario', 'id_usuario', 'id_plan')
 admin.site.register(Comentario, ComentarioAdmin)
+
+# 12 Notificacion
+class NotificacionAdmin(admin.ModelAdmin):
+    list_display = ['id_notificacion', 'texto_notificacion', 'id_usuario']
+    search_fields = ('id_notificacion', 'texto_notificacion', 'id_usuario')
+    list_filter = ('id_notificacion', 'texto_notificacion', 'id_usuario')
+admin.site.register(Notificacion, NotificacionAdmin)
 
 # 13 EstadoRerserva
 class EstadoReservaAdmin(admin.ModelAdmin):
