@@ -4,77 +4,113 @@
 
 {% block content %}
 
-<h1>Datos de la API</h1>
-<h2>{{ datos_totales }} resultados encontrados</h2>
-{% for dato in datos %}
-<ul>
-    <li>Id: {{ dato.id_api }}</li>
-    <li>Titulo: {{ dato.titulo }}</li>
-    {% if dato.precio != '' %}
-    <li>Precio: {{ dato.precio }}</li>
-    {% else %}
-    <li>Entrada gratuita</li>
-    {% endif %}
-    {% if dato.descripcion != '' %}
-    <li>{{ dato.descripcion | safe }}</li>
-    {% endif %}
-    {% if dato.fecha_inicio != '' %}
-    <li>Fecha de inicio: {{ dato.fecha_inicio }}</li>
-    {% endif %}
-    {% if dato.hora_inicio != '' %}
-    <li>Hora de inicio: {{ dato.hora_inicio }}</li>
-    {% else %}
-    <li>Sin hora de inicio</li>
-    {% endif %}
-    {% if dato.fecha_fin != '' %}
-    <li>Fecha de fin: {{ dato.fecha_fin }}</li>
-    {% endif %}
-    <li>
-        {% if dato.nombre_lugar != '' or dato.codigo_postal != '' or dato.nombre_calle != '' %}
-            Dirección:
-        {% endif %}
-        {% if dato.nombre_lugar != '' %}
-        {{ dato.nombre_lugar }}, 
-        {% endif %}
-        {% if dato.codigo_postal != '' %}
-        {{ dato.codigo_postal }}, 
-        {% endif %}
-        {% if dato.nombre_calle != '' %}
-        {{ dato.nombre_calle }}
-        {% endif %}
-    </li>
-    <li>Organizadores: {{ dato.organizador }}</li>
-   
-    <li><a href="{{ dato.enlace_detalles }}">Más detalles</a></li>
 
-    {% if dato.en_bd %}
-    <li>
-        <a href="{% url 'appCarritoPedido:agregar_al_carrito' dato.id_api %}">
-            <button type="button">Agregar al carrito</button></a></li>
-    {% endif %}
-</ul>
-{% endfor %}
 
-{% if datos.has_other_pages %}
-<div>
-    {% if datos.has_previous %}
-    <a href="?page=1">&laquo; Primera</a>
-    <a href="?page={{ datos.previous_page_number }}">Anterior</a>
-    {% endif %}
 
-    {% for i in datos.paginator.page_range %}
-        {% if datos.number == i %}
-            <span>{{ i }}</span>
-        {% else %}
-            <a href="?page={{ i }}">{{ i }}</a>
-        {% endif %}
-    {% endfor %}
+<!-- Frontend con Flowbite -->
 
-    {% if datos.has_next %}
-    <a href="?page={{ datos.next_page_number }}">Siguiente</a>
-    <a href="?page={{ datos.paginator.num_pages }}">Última &raquo;</a>
-    {% endif %}
+<div class="mt-8 space-y-8">
+    <h1 class="flex items-center text-5xl font-extrabold dark:text-white">Actividades y eventos del Ayuntamiento de Madrid<span class="bg-blue-100 text-blue-800 text-2xl font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-2">BÚSQUEDA CON API</span></h1>
+    <!-- Primer contenedor de tarjetas -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        <!-- Tarjetas -->
+         <!-- Tarjetas de la API -->
+         {% for dato in datos %}
+         <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+             <a href="{{ dato.enlace_detalles }}">
+                 <img class="rounded-t-lg" src="{% static 'src/docs/images/api_ayunta/api_ayunta.png' %}" alt="" />
+             </a>
+             <div class="p-5">
+                 <a href="{{ dato.enlace_detalles }}">
+                     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ dato.titulo }}</h5>
+                 </a>
+                 <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                     {% if dato.precio != '' %}
+                         Precio: {{ dato.precio }}
+                     {% else %}
+                         Entrada gratuita
+                     {% endif %}
+                 </p>
+                 {% if dato.descripcion != '' %}
+                 <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">{{ dato.descripcion|safe }}</p>
+                 {% endif %}
+                 <ul class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                     {% if dato.fecha_inicio != '' %}
+                     <li>Fecha de inicio: {{ dato.fecha_inicio }}</li>
+                     {% endif %}
+                     {% if dato.hora_inicio != '' %}
+                     <li>Hora de inicio: {{ dato.hora_inicio }}</li>
+                     {% else %}
+                     <li>Sin hora de inicio</li>
+                     {% endif %}
+                     {% if dato.fecha_fin != '' %}
+                     <li>Fecha de fin: {{ dato.fecha_fin }}</li>
+                     {% endif %}
+                     <li>
+                         {% if dato.nombre_lugar != '' or dato.codigo_postal != '' or dato.nombre_calle != '' %}
+                             Dirección:
+                         {% endif %}
+                         {% if dato.nombre_lugar != '' %}
+                         {{ dato.nombre_lugar }},
+                         {% endif %}
+                         {% if dato.codigo_postal != '' %}
+                         {{ dato.codigo_postal }},
+                         {% endif %}
+                         {% if dato.nombre_calle != '' %}
+                         {{ dato.nombre_calle }}
+                         {% endif %}
+                     </li>
+                     <li>Organizadores: {{ dato.organizador }}</li>
+                 </ul>
+                 <a href="{{ dato.enlace_detalles }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                     Más detalles
+                     <svg class="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+                     </svg>
+                 </a>
+                 {% if dato.en_bd %}
+                 <a href="{% url 'appCarritoPedido:agregar_al_carrito' dato.id_api %}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-green-700 rounded-lg hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 mt-2">
+                     Agregar al carrito
+                 </a>
+                 {% endif %}
+             </div>
+         </div>
+         {% endfor %}
+    </div>
+
+    <!-- Paginación -->
+    <div class="flex justify-center mt-8">
+        <nav aria-label="Page navigation example">
+            <ul class="inline-flex -space-x-px text-base h-10">
+                {% if datos.has_previous %}
+                <li>
+                    <a href="?page={{ datos.previous_page_number }}" class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
+                </li>
+                {% endif %}
+                
+                {% for i in datos.paginator.page_range %}
+                    {% if i >= datos.number|add:-2 and i <= datos.number|add:2 %}
+                        {% if datos.number == i %}
+                        <li>
+                            <a href="#" aria-current="page" class="flex items-center justify-center px-4 h-10 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">{{ i }}</a>
+                        </li>
+                        {% else %}
+                        <li>
+                            <a href="?page={{ i }}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{{ i }}</a>
+                        </li>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                
+                {% if datos.has_next %}
+                <li>
+                    <a href="?page={{ datos.next_page_number }}" class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+
 </div>
-{% endif %}
 
 {% endblock content %}
