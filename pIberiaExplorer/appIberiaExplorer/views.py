@@ -43,6 +43,7 @@ from pIberiaExplorer.utils import APP_IBERIA_EXPLORER
 
 ###########################################
 # (API) Actividades y eventos de Ayto. Madrid
+###########################################
 def resultado_datos_api(request):
     datos = obtener_datos_api()
     datos_totales = len(datos)
@@ -83,5 +84,6 @@ def resultado_datos_api(request):
 
 ###########################################
 # Index
+###########################################
 def index(request):
     return render(request, f"{APP_IBERIA_EXPLORER}/index.html")
