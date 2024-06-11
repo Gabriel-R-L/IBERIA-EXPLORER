@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 
 from .views import prepararEmail
 from services.send_mail import prepararEmail
-from .models import Notificacion
+from appNotificaciones.models import Notificacion
 
 
 @receiver(user_logged_in)

@@ -34,7 +34,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from spanlp.palabrota import Palabrota
 from django.utils.crypto import get_random_string
 
-from pIberiaExplorer.api.Datos_API_Com_Madrid import obtener_datos_api
+from api.Datos_API_Com_Madrid import obtener_datos_api
 
 from django.core.paginator import Paginator
 
