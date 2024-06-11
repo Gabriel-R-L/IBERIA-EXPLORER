@@ -2,35 +2,45 @@
 {% load static %}
 
 {% block content %}
-<h1>Pedidos Pendientes de Pago</h1>
-{% if pedidos_pendientes %}
-    <table>
-        <tr>
-            <th>Titulo</th>
-            <th>Fecha</th>
-            <th>Total</th>
-            <th>Acciones</th>
-        </tr>
-        {% for pedido in pedidos_pendientes %}
-        <tr>
-            <td>{{ pedido.id_pedido }}</td>
-            <td>{{ pedido.fecha_reserva }}</td>
-            <td>{{ pedido.total }}</td>
-            <td>
-                <form action="{% url 'appCarritoPedido:cancelar_pedido' pedido.id_pedido %}" method="post" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit">Cancelar</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
-    <form action="{% url 'appCarritoPedido:completar_pago' %}" method="post">
-        {% csrf_token %}
-        <button type="submit">Pagar</button>
-    </form>
-{% else %}
-    <p>No tienes pedidos pendientes de pago.</p>
-{% endif %}
-
+<div class="container mx-auto p-4">
+    <h1 class="text-2xl font-bold mb-4">Pedidos Pendientes de Pago</h1>
+    {% if pedidos_pendientes %}
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white border border-gray-200 shadow-md">
+            <thead>
+                <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                    <th class="py-3 px-6 text-left">Titulo</th>
+                    <th class="py-3 px-6 text-left">Fecha</th>
+                    <th class="py-3 px-6 text-left">Total</th>
+                    <th class="py-3 px-6 text-left">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-600 text-sm font-light">
+                {% for pedido in pedidos_pendientes %}
+                <tr class="border-b border-gray-200 hover:bg-gray-100">
+                    <td class="py-3 px-6 text-left">{{ pedido.id_pedido }}</td>
+                    <td class="py-3 px-6 text-left">{{ pedido.fecha_reserva }}</td>
+                    <td class="py-3 px-6 text-left">{{ pedido.total }}</td>
+                    <td class="py-3 px-6 text-left">
+                        <form action="{% url 'appCarritoPedido:cancelar_pedido' pedido.id_pedido %}" method="post" class="inline">
+                            {% csrf_token %}
+                            <button type="submit" class="bg-red-500 text-white py-1 px-3 rounded-md hover:bg-red-600">Cancelar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="mt-4">
+        <form action="{% url 'appCarritoPedido:completar_pago' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600">Pagar</button>
+        </form>
+    </div>
+    {% else %}
+    <p class="text-gray-600">No tienes pedidos pendientes de pago.</p>
+    {% endif %}
+</div>
 {% endblock content %}
+

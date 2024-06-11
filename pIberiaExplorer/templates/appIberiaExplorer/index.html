@@ -4,9 +4,31 @@
 {% block head %} {% endblock head %}
 
 {% block content %}
+
+
+<!-- Flow bite-->
+
+<section class="bg-white dark:bg-gray-900 my-16">
+  <div class="gap-16 items-center py-8 px-4 mx-auto max-w-screen-xl lg:grid lg:grid-cols-2 lg:py-16 lg:px-6">
+      <div class="font-light text-gray-500 sm:text-lg dark:text-gray-400">
+          <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Iberia Explorer</h2>
+          <p class="mb-4">Somos estrategas, diseñadores y desarrolladores. Innovadores y solucionadores de problemas. Lo suficientemente pequeños como para ser simples y rápidos, pero lo suficientemente grandes como para ofrecer el alcance que deseas al ritmo que necesitas. Lo suficientemente pequeños como para ser simples y rápidos, pero lo suficientemente grandes como para ofrecer el alcance que deseas al ritmo que necesitas.</p>
+          <p>Somos estrategas, diseñadores y desarrolladores. Innovadores y solucionadores de problemas. Lo suficientemente pequeños como para ser simples y rápidos.</p>
+      </div>
+      <div class="grid grid-cols-2 gap-4 mt-8">
+          <img class="w-full rounded-lg" src="{% static 'src/docs/images/index/6-removebg-preview.png' %}" alt="office content 1">
+          <img class="mt-4 w-full lg:mt-10 rounded-lg" src="{% static 'src/docs/images/index/Logo_Iberia_explorer.png' %}" alt="office content 2">
+      </div>
+  </div>
+</section>
+
+
+<!-- Flow bite-->
+
+
 <h1>Iberia Explorer</h1>
 <details open>
-  <summary>Planes de la Comunidad de Madrid</summary>
+  <summary>Planes del Ayuntamiento de Madrid</summary>
   <ul>
     <li><a href="{% url 'appIberiaExplorer:resultado_datos_api' %}">Actividades y eventos</a></li>
   </ul>

@@ -2,50 +2,64 @@
 {% load static %}
 
 {% block content %}
-<h1>Mis Pedidos</h1>
+<div class="container mx-auto p-4">
+  <h1 class="text-2xl font-bold mb-4">Mis Pedidos</h1>
 
-<h2>Pedidos Completados</h2>
-{% if pedidos_completados %}
-    <table>
-        <tr>
-            <th>Fecha</th>
-            <th>Total</th>
-            <th>Detalles</th>
-        </tr>
-        {% for pedido in pedidos_completados %}
-        <tr>
-            <td>{{ pedido.fecha_reserva }}</td>
-            <td>{{ pedido.total }}</td>
-            <td>
-                <a href="{% url 'appCarritoPedido:ver_pedido_detalle' pedido.id_pedido %}">Ver Detalles</a>
+  <h2 class="text-xl font-semibold mb-2">Pedidos Completados</h2>
+  {% if pedidos_completados %}
+    <div class="overflow-x-auto mb-6">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Detalles</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          {% for pedido in pedidos_completados %}
+          <tr>
+            <td class="px-6 py-4 whitespace-nowrap">{{ pedido.fecha_reserva }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ pedido.total }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <a href="{% url 'appCarritoPedido:ver_pedido_detalle' pedido.id_pedido %}" class="text-blue-600 hover:text-blue-900">Ver Detalles</a>
             </td>
-        </tr>
-        {% endfor %}
-    </table>
-{% else %}
-    <p>No tienes pedidos completados.</p>
-{% endif %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="mb-4">No tienes pedidos completados.</p>
+  {% endif %}
 
-<h2>Pedidos Cancelados</h2>
-{% if pedidos_cancelados %}
-    <table>
-        <tr>
-            <th>Fecha</th>
-            <th>Total</th>
-            <th>Detalles</th>
-        </tr>
-        {% for pedido in pedidos_cancelados %}
-        <tr>
-            <td>{{ pedido.fecha_reserva }}</td>
-            <td>{{ pedido.total }}</td>
-            <td>
-                <a href="{% url 'appCarritoPedido:ver_pedido_detalle' pedido.id_pedido %}">Ver Detalles</a>
+  <h2 class="text-xl font-semibold mb-2">Pedidos Cancelados</h2>
+  {% if pedidos_cancelados %}
+    <div class="overflow-x-auto mb-6">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Detalles</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          {% for pedido in pedidos_cancelados %}
+          <tr>
+            <td class="px-6 py-4 whitespace-nowrap">{{ pedido.fecha_reserva }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ pedido.total }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <a href="{% url 'appCarritoPedido:ver_pedido_detalle' pedido.id_pedido %}" class="text-blue-600 hover:text-blue-900">Ver Detalles</a>
             </td>
-        </tr>
-        {% endfor %}
-    </table>
-{% else %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
     <p>No tienes pedidos cancelados.</p>
-{% endif %}
-
+  {% endif %}
+</div>
 {% endblock content %}
+
