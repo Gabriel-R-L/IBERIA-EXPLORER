@@ -41,7 +41,7 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-SITE_ID = 3
+SITE_ID = 1
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -63,6 +63,9 @@ INSTALLED_APPS = [
     "appNotificaciones",
     "appAjustes",
 ]
+
+
+SOCIAL_ACCOUNT_LOGIN_ON_GET = True
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {

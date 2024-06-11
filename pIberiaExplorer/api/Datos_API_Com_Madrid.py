@@ -10,17 +10,16 @@ locale.setlocale(locale.LC_TIME, "es_ES.UTF-8") # Para que se muestren los meses
 from datetime import datetime
 
 
-def obtener_datos_api():
+def obtener_datos_api(tipo_plan: str = None):
     """
-    Función para obtener datos desde una API
+    Obtiene los planes propuestos por el Ayuntamiento de Madrid desde la API. Si se especifica un tipo de plan, se obtienen solo los planes de ese tipo (dedicado a la views para ver planes similares).
 
-    Params: None
+    Args:
+        tipo_plan (str, optional): Si se indica, solo se guardarán los que sean como el que se indica. Por defecto es None.
 
-    ============================
-    Returns: lista de diccionarios
+    Returns:
+        List: Datos tratados de la API
     """
-
-    # URL de la API de ejemplo
     url = (
         "https://datos.madrid.es/egob/catalogo/300107-0-agenda-actividades-eventos.json"
     )
@@ -47,8 +46,12 @@ def obtener_datos_api():
                         descripcion = dato["description"]
                     else:
                         descripcion = dato["description"][:400] + "..." + "<a href='%s'> Leer más</a>" % dato["link"]
+                        
+                    # Guardar solo los que coincidan con el tipo de plan indicado
                     
-                    # Problema: algunos objetos dan error en dato["address"] y no devuelve dichos objetos
+                    if tipo_plan is not None and tipo_plan not in dato['type']:
+                        continue
+                    
                     datos_necesarios.append(
                         {
                             "id_api": dato["id"],
@@ -64,10 +67,11 @@ def obtener_datos_api():
                             "organizador": dato["organization"]["organizationname"],
                             "enlace_detalles": dato["link"],
                             "en_bd": False,
+                            "url_tipo_plan": dato['type']
                         }
                     )
                 except KeyError as e:
-                    print(f"Error al obtener datos: {e}")
+                    # print(f"Error al obtener datos: {e}")
                     continue # Continuar con la siguiente iteración del bucle
             
             return datos_necesarios
@@ -79,18 +83,19 @@ def obtener_datos_api():
         # Capturar excepciones de solicitudes HTTP
         print(f"Error de conexión: {e}")
         return None
-
-#? Esta función no sería necesaria puesto que con el objeto "datos_finales" ya se obtienen los datos necesarios
+    
+    
 def crear_obj_formateado(datos):
     """
     Función para crear un objeto formateado con los datos obtenidos desde la API
 
-    Params:
-    - datos: dict
+    Args:
+        datos (dict): Datos obtenidos desde la API
 
-    ============================
-    Returns: dict
-    """
+    Returns:
+        Dict: Datos formateados (sin caracteres raros, etc)
+    """    
+
     datos_tratados = {}
     for clave, valor in datos.items():
         # Reemplazar caracteres en las claves

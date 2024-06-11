@@ -25,8 +25,7 @@ from django.conf import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("accounts/", include("allauth.urls")),
-    path('accounts/signup/', google_login_redirect, name='account_signup'),
+    path("g/", include("allauth.urls")),
     # APPS
     path("", include("appIberiaExplorer.urls", namespace="appIberiaExplorer")),
     path("registro/", include("appLoginRegistro.urls", namespace="appLoginRegistro")),
