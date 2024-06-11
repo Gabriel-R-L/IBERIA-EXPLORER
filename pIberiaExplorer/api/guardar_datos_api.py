@@ -4,6 +4,9 @@ import re
 import django
 
 import locale
+
+from appAjustes.models import UsuarioPreferencia
+from pIberiaExplorer.appNotificaciones.models import Notificacion
 locale.setlocale(locale.LC_TIME, "es_ES.UTF-8") # Para que se muestren los meses en español
 from datetime import datetime
 
@@ -25,11 +28,11 @@ import locale
 locale.setlocale(locale.LC_TIME, "es_ES.UTF-8") # Para que se muestren los meses en español
 from datetime import datetime
 
-from Plantilla_API_Com_Madrid import obtener_datos_api
+from pIberiaExplorer.api.Datos_API_Com_Madrid import obtener_datos_api
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if project_root not in sys.path:
     sys.path.append(project_root)
-from appIberiaExplorer.models import Plan
+from appIberiaExplorer.models import Plan, AtributoPlan
 
 
 def guardar_datos_api():
@@ -44,6 +47,7 @@ def guardar_datos_api():
         Returns: None
     """
     datos = obtener_datos_api()
+    numero_planes_recomendados = 0
     
     if datos is not None:
         for dato in datos:
@@ -58,18 +62,19 @@ def guardar_datos_api():
             descripcion_str = dato['descripcion']
             nombre_calle_str = dato['nombre_calle']
             hora_inicio_str = dato['hora_inicio']
+            url_tipo_plan = dato['url_tipo_plan']
             
             if buscar_precio(precio_str):
                 if not Plan.objects.filter(titulo=titulo_str).exists():
                     precio = float(price_match.group(1))
                     
                     if fecha_inicio_str:
-                        fecha_inicio = datetime.strptime(fecha_inicio, "%d de %B de %Y").strftime("%Y-%m-%d")
+                        fecha_inicio = datetime.strptime(fecha_inicio_str, "%d de %B de %Y").strftime("%Y-%m-%d")
                     else:
                         fecha_inicio = None
                         
                     if fecha_fin_str:
-                        fecha_fin = datetime.strptime(fecha_fin, "%d de %B de %Y").strftime("%Y-%m-%d")
+                        fecha_fin = datetime.strptime(fecha_fin_str, "%d de %B de %Y").strftime("%Y-%m-%d")
                     else:
                         fecha_fin = None
                         
@@ -100,10 +105,30 @@ def guardar_datos_api():
                         fecha_inicio=fecha_inicio,
                         fecha_fin=fecha_fin,
                         hora_inicio=hora_inicio,
-                        nombre_lugar=nombre_calle
+                        nombre_lugar=nombre_calle,
                     )
-                    
                     print(f"Plan {plan.titulo} creado")
+                    
+                    if not AtributoPlan.objects.filter(plan=plan, nombre=url_tipo_plan).exists():
+                        atributo_plan = AtributoPlan.objects.create(
+                            plan=plan,
+                            url=url_tipo_plan
+                        )
+                        
+                        if UsuarioPreferencia.objects.filter(atributo_plan=atributo_plan).exists() and numero_planes_recomendados < 5:
+                            Notificacion.objects.create(
+                                titulo=f"Se ha añadido un nuevo plan que puede ser de tu interés: {plan.titulo}",
+                                descripcion=f"Tipo de plan: {atributo_plan.nombre}. Accede al apartado de 'Tus Recomendaciones' para ver más detalles de este y otros planes.",
+                                fecha=datetime.now(),
+                                leida=False
+                            )
+                            
+                            numero_planes_recomendados += 1
+                            
+                            
+                        print(f"Atributo {atributo_plan.nombre} creado")
+                    else:
+                        print(f"Atributo {atributo_plan.nombre} ya existe")
                 else:
                     print(f"Plan {titulo_str} ya existe")
             else:

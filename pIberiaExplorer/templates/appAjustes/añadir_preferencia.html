@@ -1,0 +1,35 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+    <h1>Añadir preferencia</h1>
+    {{ form }}
+    <button id="saveButton" type="submit">Añadir</button>
+    <a href="{% url 'appAjustes:ver_datos' %}">Volver</a>
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+    function checkSelectedOption() {
+        var select = document.getElementById("id_atributo_plan");
+        var selectedOption = select.options[select.selectedIndex].value;
+        if (selectedOption == "None" || selectedOption == "") {
+            $("#saveButton").prop("disabled", true);
+        } else {
+            $("#saveButton").prop("disabled", false);
+        }
+    }
+    
+    // Check the initial state
+    checkSelectedOption();
+    
+    // Attach change event listener
+    $("#id_atributo_plan").change(function() {
+        checkSelectedOption();
+    });
+});
+</script>
+{% endblock content %}

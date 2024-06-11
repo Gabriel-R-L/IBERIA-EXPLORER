@@ -11,6 +11,15 @@
 
 <div class="mt-8 space-y-8">
     <h1 class="flex items-center text-5xl font-extrabold dark:text-white">Actividades y eventos del Ayuntamiento de Madrid<span class="bg-blue-100 text-blue-800 text-2xl font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-2">BÚSQUEDA CON API</span></h1>
+
+    <h2>{{ datos_totales }} resultados encontrados</h2>
+    <form method="post">
+        <h3>Buscar por tipo de plan</h3>
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">Buscar</button>
+    </form>
+
     <!-- Primer contenedor de tarjetas -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         <!-- Tarjetas -->

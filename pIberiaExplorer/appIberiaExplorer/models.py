@@ -1,7 +1,9 @@
 from django.db import models
 
 
-# 1 Continente
+####################################################
+# Continente
+####################################################
 class Continente(models.Model):
     id_continente = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=255)
@@ -10,52 +12,103 @@ class Continente(models.Model):
         managed = True
         verbose_name = "Continente"
         verbose_name_plural = "Continentes"
+        
+    def __str__(self):
+        return self.nombre
 
 
-# 2 Pais
+####################################################
+# Pais
+####################################################
 class Pais(models.Model):
     id_pais = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=255)
-    id_continente = models.ForeignKey(Continente, on_delete=models.CASCADE)
+    continente = models.ForeignKey(Continente, on_delete=models.CASCADE)
 
     class Meta:
         managed = True
         verbose_name = "Pais"
         verbose_name_plural = "Paises"
+        
+    def __str__(self):
+        return f"{self.nombre}, {self.continente}"
 
 
-# 3 Ciudad
+####################################################
+# Ciudad
+####################################################
 class Ciudad(models.Model):
     id_ciudad = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=255)
-    id_pais = models.ForeignKey(Pais, on_delete=models.CASCADE)
-    id_continente = models.ForeignKey(Continente, on_delete=models.CASCADE)
+    pais = models.ForeignKey(Pais, on_delete=models.CASCADE)
 
     class Meta:
         managed = True
         verbose_name = "Ciudad"
         verbose_name_plural = "Ciudades"
+    
+    def __str__(self):
+        return f"{self.nombre}, {self.pais}"
 
 
-# 4 AtributoPlan
+####################################################
+# Plan
+####################################################
+class Plan(models.Model):
+    id_plan = models.AutoField(primary_key=True)
+    id_plan_api = models.IntegerField(null=True, default=0)
+    titulo = models.CharField(max_length=255)
+    precio = models.FloatField()
+    descripcion = models.CharField(max_length=255)
+    fecha_inicio = models.DateField(null=True)
+    fecha_fin = models.DateField(null=True)
+    hora_inicio = models.TimeField(null=True)
+    nombre_lugar = models.CharField(max_length=255, null=True)
+    codigo_postal = models.CharField(max_length=5, null=True)
+    nombre_calle = models.CharField(max_length=255, null=True)
+    organizador = models.CharField(max_length=255, null=True)
+
+    class Meta:
+        managed = True
+        verbose_name = "Plan"
+        verbose_name_plural = "Planes"
+        
+    def __str__(self):
+        return f"{self.titulo}, {self.precio}, {self.id_plan_api}"
+        
+
+####################################################
+# AtributoPlan
+####################################################
 class AtributoPlan(models.Model):
     id_atributo_plan = models.AutoField(primary_key=True)
+    url = models.CharField(blank=True, null=True)
     nombre = models.CharField(max_length=255, blank=True, null=True)
-    descripcion = models.CharField(max_length=255, blank=True, null=True)
-    precio = models.FloatField(blank=True, null=True)
-    duracion = models.IntegerField(blank=True, null=True)
-    admite_perro = models.IntegerField(blank=True, null=True)
-    fecha_inicio = models.DateTimeField(blank=True, null=True)
-    fecha_fin = models.DateTimeField(blank=True, null=True)
+    plan = models.ForeignKey(Plan, on_delete=models.CASCADE, null=True)
 
     class Meta:
         managed = True
         verbose_name = "AtributoPlan"
         verbose_name_plural = "AtributoPlanes"
+        
+    def __str__(self):
+        return f"{self.nombre}, {self.url}, {self.plan}"
+    
+    def save(self, *args, **kwargs):
+        import re
+        if self.url:
+            self.nombre = re.sub(r'(?<=[a-z])(?=[A-Z])', '/', self.url.split('/')[-1])
+        super().save(*args, **kwargs)
 
 
+        
+        
+######################################################################################################################################
+######################################################################################################################################
+
+""" 
 # 5 Proveedor
-""" class Proveedor(models.Model):
+class Proveedor(models.Model):
     id_proveedor = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=255)
     direccion = models.CharField(max_length=255)
@@ -71,7 +124,7 @@ class AtributoPlan(models.Model):
 
 
 # 6 TipoPlan
-class TipoPlan(models.Model):
+""" class TipoPlan(models.Model):
     TIPO_PLAN = [
         ("Api", 1),
         ("Manual", 2),
@@ -84,45 +137,7 @@ class TipoPlan(models.Model):
     class Meta:
         managed = True
         verbose_name = "TipoPlan"
-        verbose_name_plural = "TipoPlanes"
-
-
-# 7 Plan
-class Plan(models.Model):
-    from .models import TipoPlan
-
-    id_plan = models.AutoField(primary_key=True)
-    id_plan_api = models.IntegerField(null=True)
-    titulo = models.CharField(max_length=255)
-    precio = models.FloatField()
-    descripcion = models.CharField(max_length=255)
-    fecha_inicio = models.DateField(null=True)
-    fecha_fin = models.DateField(null=True)
-    hora_inicio = models.TimeField(null=True)
-    nombre_lugar = models.CharField(max_length=255, null=True)
-    codigo_postal = models.CharField(max_length=5, null=True)
-    nombre_calle = models.CharField(max_length=255, null=True)
-    organizador = models.CharField(max_length=255, null=True)
-    # id_tipo_plan = models.ForeignKey(TipoPlan, on_delete=models.CASCADE)
-
-    class Meta:
-        managed = True
-        verbose_name = "Plan"
-        verbose_name_plural = "Planes"
-
-# 8 UsuarioPreferencias
-class UsuarioPreferencia(models.Model):
-    from appLoginRegistro.models import Usuario
-    id_preferencia = models.AutoField(primary_key=True)
-    id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True)
-    id_atributo_plan_plan = models.ForeignKey(
-        AtributoPlan, on_delete=models.CASCADE, null=True
-    )
-
-    class Meta:
-        managed = True
-        verbose_name = "UsuarioPreferencia"
-        verbose_name_plural = "UsuarioPreferencias"
+        verbose_name_plural = "TipoPlanes" """
 
 
 # 10 Favorito
@@ -139,7 +154,7 @@ class UsuarioPreferencia(models.Model):
 
 
 # 11 Comentario
-class Comentario(models.Model):
+""" class Comentario(models.Model):
     from appLoginRegistro.models import Usuario
     id_comentario = models.AutoField(primary_key=True)
     comentario = models.CharField(max_length=255)
@@ -149,7 +164,7 @@ class Comentario(models.Model):
     class Meta:
         managed = True
         verbose_name = "Comentario"
-        verbose_name_plural = "Comentarios"
+        verbose_name_plural = "Comentarios" """
 
 
 # 13 EstadoReserva
