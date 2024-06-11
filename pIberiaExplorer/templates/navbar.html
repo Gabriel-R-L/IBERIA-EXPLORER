@@ -29,7 +29,7 @@
           <a href="{% url 'appCarritoPedido:ver_pedidos' %}" class="text-sm font-normal text-red-500 dark:text-white hover:underline">Ver historial de pedidos</a>
 
           <!-- Notificaciones -->
-          <a href="{% url 'appNotificaciones:ver_notificaciones' %}" class="text-sm font-normal text-red-500 dark:text-white hover:underline">
+          <a href="{% url 'appNotificaciones:ver_notificaciones' %}" class="text-sm font-normal tehttp://127.0.0.1:8000/carrito/pedido/10/xt-red-500 dark:text-white hover:underline">
             Notificaciones
             {% if cantidad_notificaciones %} 
               ({{ cantidad_notificaciones }})
@@ -42,7 +42,7 @@
           </a>
         {% endif %}
           {% if not request.user.is_authenticated %}
-            <a href="#" class="text-sm  text-red-600 dark:text-red-500 hover:underline">Iniciar sesión</a>
+            <a href="{% url 'appLoginRegistro:login_register' %}" class="text-sm  text-red-600 dark:text-red-500 hover:underline">Iniciar sesión</a>
           {% endif %}
 
       </div>
@@ -53,16 +53,16 @@
       <div class="flex items-center">
           <ul class="flex flex-row font-medium mt-0 space-x-8 rtl:space-x-reverse text-sm">
               <li>
-                  <a href="#" class="text-gray-900 dark:text-white hover:underline" aria-current="page">Home</a>
+                  <a href="{% url 'appIberiaExplorer:index' %}" class="text-gray-900 dark:text-white hover:underline" aria-current="page">Inicio</a>
               </li>
               <li>
-                  <a href="#" class="text-gray-900 dark:text-white hover:underline">Company</a>
+                  <a href="#" class="text-gray-900 dark:text-white hover:underline">Compañía</a>
               </li>
               <li>
-                  <a href="#" class="text-gray-900 dark:text-white hover:underline">Team</a>
+                  <a href="#" class="text-gray-900 dark:text-white hover:underline">Equipo</a>
               </li>
               <li>
-                  <a href="#" class="text-gray-900 dark:text-white hover:underline">Features</a>
+                  <a href="#" class="text-gray-900 dark:text-white hover:underline">Características</a>
               </li>
           </ul>
       </div>
