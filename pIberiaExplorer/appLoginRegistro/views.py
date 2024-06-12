@@ -34,7 +34,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from spanlp.palabrota import Palabrota
 from django.utils.crypto import get_random_string
 
-from api.Plantilla_API_Com_Madrid import obtener_datos_api
+from api.Datos_API_Com_Madrid import obtener_datos_api
 
 from django.core.paginator import Paginator
 
@@ -52,9 +52,7 @@ from services.buscar_ip import buscar_ip
 from pIberiaExplorer.utils import APP_LOGIN_REGISTRO
 from appCarritoPedido.views import Carrito, Pedido
 
-
-def google_login_redirect(request):
-    return redirect('account_login')
+from appNotificaciones.models import Notificacion
 
 
 ###########################################
@@ -164,7 +162,6 @@ def login(request):
 ##########################################
 # Crear cuenta
 def register(request):
-    from appNotificaciones.models import Notificacion
     if request.method == "POST":
         email = request.session.get("email", None)
         form = RegisterForm(request.POST)

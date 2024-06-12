@@ -1,0 +1,37 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block content %}
+<h1>Tus datos: {{ usuario.username }}</h1>
+
+<h2>Tus pedidos</h2>
+{% if pedidos %}
+{% for pedido in pedidos %}
+<div>
+    <h3>{{ pedido.fecha_reserva }}</h3>
+    <p>{{ pedido.id_pedido }}</p>
+    <p>{{ pedido.id_cliente }}</p>
+    <p>{{ pedido.estado }}</p>
+    <p>{{ pedido.total }}</p>
+</div>
+{% endfor %}
+{% else %}
+<p>No has hecho ningún pedido todavía</p>
+{% endif %}
+<h2>Tus etiquetas</h2>
+<h5>Etiquetas que has elegido o se te han asignado en base a tus compras en los planes</h5>
+{% if preferencias %}
+{% for preferencia in preferencias %}
+<div>
+    <h3>{{ preferencia.atributo_plan }}</h3>
+    <form action="{% url 'appAjustes:borrar_preferencia' preferencia.id_preferencia %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" style="color: red;">Borrar</button>
+    </form>
+</div>
+{% endfor %}
+{% else %}
+    <p>No tienes etiquetas asignadas</p>
+{% endif %}
+<a href="{% url 'appAjustes:añadir_preferencia' %}">Añadir preferencia</a>
+{% endblock content %}

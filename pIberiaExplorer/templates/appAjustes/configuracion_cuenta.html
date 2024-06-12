@@ -2,19 +2,21 @@
 {% load static %}
 
 {% block content %}
+
 <div class="container mx-auto p-4">
     <h1 class="text-2xl font-bold mb-4">Configuración de la cuenta</h1>
-    <form action="" method="post" class="space-y-4">
+    <form id="mainForm" action="{% url 'appAjustes:configuracion_cuenta' %}" method="post" class="space-y-4">
         {% csrf_token %}
         
         <div class="flex items-center space-x-4">
-            <img src="{{ user.foto_perfil.url }}" alt="Perfil" class="w-16 h-16 rounded-full">
+            <img id="profileImage" src="{{ user.foto_perfil.url }}" alt="Perfil" class="w-16 h-16 rounded-full cursor-pointer">
             {{ form_datos }}
         </div>
         
         <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">Guardar cambios</button>
+        <input class="hidden" type="file" id="fileInput" name="foto_perfil" accept="image/*" onchange="document.getElementById('uploadForm').submit();">
     </form>
-    
+
     <div class="mt-4 space-y-2">
         <button id="logout-button" 
                 type="button"
@@ -40,6 +42,8 @@
     </div>
 
     <h1 class="text-2xl font-bold mt-8 mb-4">Tus datos</h1>
+    <a href="{% url 'appAjustes:ver_datos' %}">Ver tus datos</a>
+
     <hr class="mb-4">
     
     <h1 class="text-2xl font-bold mt-8 mb-4">Cambiar contraseña</h1>
@@ -54,6 +58,26 @@
 
 <!-- TODO: Cambiar y poner en otro lado -->
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const profileImage = document.getElementById('profileImage');
+        const fileInput = document.getElementById('fileInput');
+
+        profileImage.onclick = function() {
+            fileInput.click();
+        };
+
+        fileInput.onchange = function() {
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profileImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+    });
+
     document.querySelectorAll('.confirmation-button').forEach(button => {
         button.addEventListener('click', function(event) {
             event.preventDefault();

@@ -1,4 +1,7 @@
 ./pIberiaExplorer/static/admin/
+./pIberiaExplorer/static/CACHE/
 __pycache__
 .venv
 .vscode
+.env
+node_modules
