@@ -1,9 +1,23 @@
+from multiprocessing import context
 from django.shortcuts import render
+from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 import os
+
+from appLoginRegistro.models import Usuario
+from pIberiaExplorer.utils import APP_AJUSTES
+
+from appAjustes.models import UsuarioPreferencia
+from appIberiaExplorer.models import AtributoPlan
+
+from .forms import AñadirPreferencia
+from django.utils.translation import gettext_lazy as _
+
 
 ##########################################
 # Borrar foto perfil
-def borrar_foto_perfil(foto_perfil):
+def borrar_foto_perfil(id_usuario, foto_perfil):
     from django.conf import settings
     # No borrar la foto por defecto para otros usuarios
     if foto_perfil and 'default.png' not in foto_perfil: 
@@ -11,6 +25,10 @@ def borrar_foto_perfil(foto_perfil):
             avatar_path = os.path.join(settings.MEDIA_ROOT, p)
             if os.path.exists(avatar_path):
                 os.remove(avatar_path)
+            usuario = Usuario.objects.get(id_usuario=id_usuario)
+            usuario.foto_perfil = os.path.join(settings.MEDIA_ROOT, '/img/profile_pictures/default.png')
+            usuario.save()
+            
             
 ##########################################
 # Configuracion de la cuenta
@@ -19,7 +37,9 @@ def configuracion_cuenta(request):
     from .forms import ConfiguracionCuentaForm, CambiarContrasenaForm
     from django.utils.translation import gettext_lazy as _
     
-    usuario = request.user
+    usuario = Usuario.objects.get(id_usuario=request.user.id_usuario)
+    context = { }
+    
     if request.method == 'POST':
         form = ConfiguracionCuentaForm(request.POST, request.FILES, instance=usuario)
         if form.is_valid():
@@ -28,10 +48,17 @@ def configuracion_cuenta(request):
             usuario.last_name = form.cleaned_data['last_name']
             usuario.email = form.cleaned_data['email']
             if form.cleaned_data['foto_perfil']:
-                borrar_foto_perfil(usuario.foto_perfil)
+                borrar_foto_perfil(usuario.id_usuario, usuario.foto_perfil)
                 usuario.foto_perfil = form.cleaned_data['foto_perfil']
             usuario.save()
-            return render(request, 'appAjustes/configuracion_cuenta.html', {'form': form, 'mensaje': _('Cambios guardados correctamente.')})
+            
+            form_cambio_pssw = CambiarContrasenaForm()
+            
+            context = {
+                'mensaje_error': _('Cambios guardados correctamente.'),
+                'form_datos': form,
+                'form_cambio_pssw': CambiarContrasenaForm()
+            }
     else:
         form_datos = ConfiguracionCuentaForm(instance=usuario)
         form_cambio_pssw = CambiarContrasenaForm()
@@ -41,4 +68,92 @@ def configuracion_cuenta(request):
             'form_cambio_pssw': form_cambio_pssw,
         }
         
-    return render(request, 'appAjustes/configuracion_cuenta.html', context=context)
+    return render(request, f'{APP_AJUSTES}/configuracion_cuenta.html', context=context)
+
+##########################################
+# Ver datos
+def ver_datos(request):
+    from appCarritoPedido.models import Pedido, PedidoDetalle
+    from django.utils.translation import gettext_lazy as _
+    
+    usuario = request.user
+    
+    pedidos = Pedido.objects.filter(id_cliente=usuario)
+    nombre_plan = PedidoDetalle.objects.filter(id_pedido__in=pedidos).values('id_plan__titulo').distinct()
+    preferencias = UsuarioPreferencia.objects.filter(usuario=usuario)
+    
+    context = {
+        'usuario': usuario,
+        'pedidos': pedidos,
+        'nombre_plan': nombre_plan,
+        'preferencias': preferencias,
+    }
+    
+    return render(request, f'{APP_AJUSTES}/ver_datos.html', context=context)
+
+##########################################
+# Borrar preferencia
+@login_required(login_url='/registro/')
+def borrar_preferencia(request, id_preferencia):
+    preferencia = get_object_or_404(UsuarioPreferencia, id_preferencia=id_preferencia)
+    preferencia.delete()
+    
+    return redirect('/ajustes/mis-datos')
+
+##########################################
+# Añadir preferencia
+@login_required(login_url='/registro/')
+def añadir_preferencia(request):
+    from appAjustes.models import UsuarioPreferencia
+    usuario = request.user
+    
+    if request.method == 'POST':
+        form = AñadirPreferencia(request.POST, usuario=usuario)
+        if form.is_valid():
+            atributo_plan_id = request.POST['atributo_plan']
+            atributo_plan = AtributoPlan.objects.get(id_atributo_plan=atributo_plan_id)
+
+            preferencia, created = UsuarioPreferencia.objects.get_or_create(atributo_plan=atributo_plan, usuario=usuario)
+            
+            if not created:
+                preferencia.save()
+            
+                context = {
+                    'mensaje_error': _('Preferencia añadida correctamente.')
+                }
+                
+                return redirect('/ajustes/mis-datos', context=context)
+                
+            return redirect('/ajustes/mis-datos')
+    else:
+        form = AñadirPreferencia(usuario=request.user)
+        context = {
+            'form': form
+        }
+        return render(request, f'{APP_AJUSTES}/añadir_preferencia.html', context=context)
+    
+##########################################
+# Cambiar foto perfil
+##########################################
+@login_required(login_url='/registro/')
+def cambiar_foto_perfil(request):
+    from appLoginRegistro.models import Usuario
+    from .forms import CambiarFotoPerfilForm
+    from django.utils.translation import gettext_lazy as _
+    
+    usuario = request.user
+    
+    if request.method == 'POST':
+        form = CambiarFotoPerfilForm(request.POST, request.FILES, instance=usuario)
+        if form.is_valid():
+            borrar_foto_perfil(usuario.id_usuario, usuario.foto_perfil)
+            Usuario.objects.filter(id_usuario=usuario.id_usuario).update(foto_perfil=request.POST['foto_perfil'])
+            
+            redirect('/ajustes/configuracion-cuenta', context={'mensaje_error': 'Foto de perfil cambiada correctamente.'})
+    else:
+        form = CambiarFotoPerfilForm(instance=usuario)
+        context = {
+            'form': form
+        }
+        
+    return redirect('/ajustes/configuracion-cuenta', context=context)

@@ -4,6 +4,7 @@ from django.core.mail import send_mail
 
 from .views import prepararEmail
 from services.send_mail import prepararEmail
+from appNotificaciones.models import Notificacion
 
 
 @receiver(user_logged_in)
@@ -13,3 +14,9 @@ def send_login_email(request, user, **kwargs):
                     "Inicio de sesión",
                     f"Tu cuenta '@{user.username}' ha iniciado sesión en un dispositivo.\n\nSi no has sido tú, por favor, comuníquese con nosotros.",
                 )
+    
+    if user.email_confirmed == False:
+        notificacion = Notificacion.objects.create(
+            usuario=user
+            , titulo_notificacion=f"Confirma tu cuenta."
+            , mensaje_notificacion="Por favor, revise su correo para verificar su cuenta.")

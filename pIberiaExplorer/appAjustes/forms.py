@@ -1,7 +1,10 @@
+from random import choice
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
 from appLoginRegistro.models import Usuario
+from appAjustes.models import UsuarioPreferencia
+from appIberiaExplorer.models import AtributoPlan
 
 
 ############################################
@@ -44,3 +47,38 @@ class CambiarContrasenaForm(forms.Form):
             self.add_error('contrasena_nueva_repetida', _('Las contraseñas no coinciden.'))
         return cleaned_data
     
+############################################
+# AñadirPreferencia
+class AñadirPreferencia(forms.Form):
+    atributo_plan = forms.ChoiceField(
+        label=_('Atributos disponibles')
+    )
+    
+    def __init__(self, *args, **kwargs):
+        usuario = kwargs.pop('usuario', None)
+        super().__init__(*args, **kwargs)
+        
+        choices = []
+        seen = set() # Para evitar duplicados
+        
+        for ap in AtributoPlan.objects.all():
+            if ap.nombre not in seen and not UsuarioPreferencia.objects.filter(usuario=usuario, atributo_plan__nombre=ap.nombre):
+                seen.add(ap.nombre)
+                choices.append((ap.id_atributo_plan, ap.nombre))
+            
+        if not choices:
+            choices.append((None, _('No hay atributos disponibles')))
+                
+        self.fields['atributo_plan'].choices = choices
+    
+############################################
+# Cambiar foto perfil
+############################################
+class CambiarFotoPerfilForm(forms.ModelForm):
+    class Meta:
+        model = Usuario
+        fields = ['foto_perfil']
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        

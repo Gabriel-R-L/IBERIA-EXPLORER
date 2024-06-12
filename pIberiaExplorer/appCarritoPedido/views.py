@@ -13,6 +13,7 @@ sys.path.append(
     os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 )
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
+from appIberiaExplorer.models import AtributoPlan
 
 
 from datetime import timezone
@@ -26,7 +27,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from spanlp.palabrota import Palabrota
 from django.utils.crypto import get_random_string
 
-from api.Plantilla_API_Com_Madrid import obtener_datos_api
+from api.Datos_API_Com_Madrid import obtener_datos_api
 
 from django.core.paginator import Paginator
 
