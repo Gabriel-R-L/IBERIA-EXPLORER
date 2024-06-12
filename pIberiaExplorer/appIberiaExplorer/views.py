@@ -39,6 +39,8 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 import jwt
 
+
+
 from pIberiaExplorer.utils import APP_IBERIA_EXPLORER
 
 
@@ -48,17 +50,23 @@ from pIberiaExplorer.utils import APP_IBERIA_EXPLORER
 def resultado_datos_api(request):
     context = {}
     if request.method == "POST":
-        form = MostrarPreferencia(request.POST)
+        form = BuscadorPreferenciaFecha(request.POST)
         if form.is_valid():
-            atributo_plan_id = request.POST['atributo_plan']
-            nombre_atributo = AtributoPlan.objects.get(id_atributo_plan=atributo_plan_id).nombre.replace("/", "")
-            datos = obtener_datos_api(nombre_atributo)
-            form = MostrarPreferencia(request.POST, selected_atributo_plan=atributo_plan_id)
-            
-            context["nombre_atributo"] = AtributoPlan.objects.get(id_atributo_plan=atributo_plan_id).nombre
+            atributo_plan_id = form.cleaned_data['atributo_plan']
+            print(atributo_plan_id)
+            fecha_inicio = form.cleaned_data['fecha_inicio']
+            fecha_fin = form.cleaned_data['fecha_fin']
+            if atributo_plan_id != '' or atributo_plan_id is None:
+                nombre_ap =  AtributoPlan.objects.get(id_atributo_plan=atributo_plan_id).nombre.replace("/", "")
+                nombre_atributo = nombre_ap
+                context["nombre_atributo"] = nombre_ap
+            else:
+                nombre_atributo = None
+            datos = obtener_datos_api(tipo_plan=nombre_atributo, fecha_inicio=fecha_inicio, fecha_fin=fecha_fin)
+            form = BuscadorPreferenciaFecha(request.POST, selected_atributo_plan=atributo_plan_id)
     else:
         datos = obtener_datos_api()
-        form = MostrarPreferencia()
+        form = BuscadorPreferenciaFecha()
         
         
     datos_totales = len(datos)

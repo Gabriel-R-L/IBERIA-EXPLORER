@@ -63,6 +63,10 @@ def guardar_datos_api():
             nombre_calle_str = dato['nombre_calle']
             hora_inicio_str = dato['hora_inicio']
             url_tipo_plan = dato['url_tipo_plan']
+            codigo_postal = dato['codigo_postal']
+            organizador = dato['organizador']
+            nombre_lugar = dato['nombre_lugar']
+            
             
             if buscar_precio(precio_str):
                 if not Plan.objects.filter(titulo=titulo_str).exists():
@@ -100,12 +104,15 @@ def guardar_datos_api():
                     plan = Plan.objects.create(
                         id_plan_api=id_plan_api,
                         titulo=titulo_str,
-                        descripcion=descripcion,
                         precio=precio,
+                        descripcion=descripcion,
                         fecha_inicio=fecha_inicio,
                         fecha_fin=fecha_fin,
                         hora_inicio=hora_inicio,
-                        nombre_lugar=nombre_calle,
+                        nombre_lugar=nombre_lugar,
+                        codigo_postal=codigo_postal,
+                        nombre_calle=nombre_calle,
+                        organizador=organizador
                     )
                     print(f"Plan {plan.titulo} creado")
                     
