@@ -7,15 +7,19 @@ path_proyecto_padre = os.path.dirname(path_proyecto)
 
 import locale
 locale.setlocale(locale.LC_TIME, "es_ES.UTF-8") # Para que se muestren los meses en español
-from datetime import datetime
+from datetime import date, datetime
 
 
-def obtener_datos_api(tipo_plan: str = None):
+def obtener_datos_api(tipo_plan: str = None, fecha_inicio: date = None, fecha_fin: date = None):
     """
     Obtiene los planes propuestos por el Ayuntamiento de Madrid desde la API. Si se especifica un tipo de plan, se obtienen solo los planes de ese tipo (dedicado a la views para ver planes similares).
 
     Args:
         tipo_plan (str, optional): Si se indica, solo se guardarán los que sean como el que se indica. Por defecto es None.
+        
+        fecha_inicio (date, optional): Fecha de inicio para filtrar los planes. Por defecto es None.
+        
+        fecha_fin (date, optional): Fecha de fin para filtrar los planes. Por defecto es None.
 
     Returns:
         List: Datos tratados de la API
@@ -46,10 +50,18 @@ def obtener_datos_api(tipo_plan: str = None):
                         descripcion = dato["description"]
                     else:
                         descripcion = dato["description"][:400] + "..." + "<a href='%s'> Leer más</a>" % dato["link"]
-                        
-                    # Guardar solo los que coincidan con el tipo de plan indicado
                     
-                    if tipo_plan is not None and tipo_plan not in dato['type']:
+                    # print("Fecha i ", fecha_inicio, "Fecha f ", fecha_fin, "Tipo p ", tipo_plan)
+                    
+                    # Guardar solo los que coincidan con el tipo de plan indicado
+                    if tipo_plan is not None and tipo_plan  not in dato['type']:
+                        continue
+                    
+                    # Guardar solo los que coincidan con la fecha de inicio y fin indicadas
+                    if fecha_inicio is not None and datetime.strptime(fecha_inicio_original, "%Y-%m-%d") <= datetime.strptime(str(fecha_inicio), "%Y-%m-%d"):
+                        continue
+                    
+                    if fecha_fin is not None and datetime.strptime(fecha_fin_original, "%Y-%m-%d") >= datetime.strptime(str(fecha_fin), "%Y-%m-%d"):
                         continue
                     
                     datos_necesarios.append(
@@ -70,6 +82,14 @@ def obtener_datos_api(tipo_plan: str = None):
                             "url_tipo_plan": dato['type']
                         }
                     )
+                    
+                    # Ordenar los datos necesarios en base a la fecha de inicio
+                    if fecha_inicio is not None:
+                        datos_necesarios.sort(key=lambda x: datetime.strptime(x["fecha_inicio"], "%d de %B de %Y"))
+                        
+                    # Ordenar los datos necesarios en base a la fecha de fin
+                    if fecha_fin and fecha_inicio is None:
+                        datos_necesarios.sort(key=lambda x: datetime.strptime(x["fecha_fin"], "%d de %B de %Y"))
                 except KeyError as e:
                     # print(f"Error al obtener datos: {e}")
                     continue # Continuar con la siguiente iteración del bucle
