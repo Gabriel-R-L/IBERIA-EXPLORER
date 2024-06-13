@@ -9,18 +9,27 @@ class BuscadorPreferenciaFecha(forms.Form):
         label=_('Atributos disponibles'),
         required=False,
         initial=None,
+        widget=forms.Select(attrs={'class': 'form-select block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50'})
     )
     
     fecha_inicio = forms.DateField(
         label=_('Fecha de inicio'),
         required=False,
-        widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'dd/mm/aaaa', 'type': 'date'})
+        widget=forms.DateInput(attrs={
+            'class': 'form-input block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50',
+            'placeholder': 'dd/mm/aaaa',
+            'type': 'date'
+        })
     )
     
     fecha_fin = forms.DateField(
         label=_('Fecha de fin'),
         required=False,
-        widget=forms.DateInput(attrs={'class': 'form-control', 'placeholder': 'dd/mm/aaaa', 'type': 'date'})
+        widget=forms.DateInput(attrs={
+            'class': 'form-input block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50',
+            'placeholder': 'dd/mm/aaaa',
+            'type': 'date'
+        })
     )
     
     def __init__(self, *args, **kwargs):
