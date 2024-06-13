@@ -5,8 +5,19 @@ import django
 
 import locale
 
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
+# Add the project root to the Python path
+if project_root not in sys.path:
+    sys.path.append(project_root)
+    
+# Set the environment variable for the Django settings module
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pIberiaExplorer.settings')
+django.setup()
+
+
 from appAjustes.models import UsuarioPreferencia
-from pIberiaExplorer.appNotificaciones.models import Notificacion
+from appNotificaciones.models import Notificacion
 locale.setlocale(locale.LC_TIME, "es_ES.UTF-8") # Para que se muestren los meses en español
 from datetime import datetime
 
@@ -28,7 +39,7 @@ import locale
 locale.setlocale(locale.LC_TIME, "es_ES.UTF-8") # Para que se muestren los meses en español
 from datetime import datetime
 
-from pIberiaExplorer.api.Datos_API_Com_Madrid import obtener_datos_api
+from api.Datos_API_Com_Madrid import obtener_datos_api
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if project_root not in sys.path:
     sys.path.append(project_root)
