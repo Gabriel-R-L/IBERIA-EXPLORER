@@ -14,7 +14,6 @@
 
     <h2>{{ datos_totales }} resultados encontrados</h2>
     <form method="post">
-        <h3>Buscar por tipo de plan</h3>
         {% csrf_token %}
         {{ form }}
         <button type="submit">Buscar</button>
@@ -24,7 +23,8 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         <!-- Tarjetas -->
          <!-- Tarjetas de la API -->
-         {% for dato in datos %}
+        {% if datos %}
+        {% for dato in datos %}
          <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
              <a href="{{ dato.enlace_detalles }}">
                  <img class="rounded-t-lg" src="{% static 'src/docs/images/api_ayunta/api_ayunta.png' %}" alt="" />
@@ -85,6 +85,12 @@
              </div>
          </div>
          {% endfor %}
+        {% else %}
+        <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+            <div class="p-5">
+                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">No se han encontrado resultados</h5>
+            </div>
+        {% endif %}
     </div>
 
     <!-- Paginación -->
