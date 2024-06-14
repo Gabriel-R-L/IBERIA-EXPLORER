@@ -10,7 +10,8 @@ urlpatterns = [
     path("actualizar/<int:detalle_id>/", actualizar_carrito, name="actualizar_carrito"),
     path("eliminar/<int:detalle_id>/", eliminar_del_carrito, name="eliminar_del_carrito"),
     # Pedidos
-    path('pedido/completar/', completar_pedido, name='completar_pedido'),
+    # path('pedido/completar/', completar_pedido, name='completar_pedido'),
+    path('pedido/completar/<int:url_to_pay>/', completar_pedido, name='completar_pedido'),
     path('pedidos/', ver_pedidos, name='ver_pedidos'),
     path('pedido/<int:pedido_id>/', ver_pedido_detalle, name='ver_pedido_detalle'),
     path('pagar_pedidos/', pagar_pedidos, name='pagar_pedidos'),
