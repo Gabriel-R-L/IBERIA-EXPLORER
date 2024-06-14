@@ -23,18 +23,6 @@ from datetime import datetime
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-# Add the project root to the Python path
-if project_root not in sys.path:
-    sys.path.append(project_root)
-
-# Set the environment variable for the Django settings module
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pIberiaExplorer.settings')
-django.setup()
-
-# Rutas de los proyectos
-path_proyecto = os.path.dirname(os.path.abspath(__file__))
-path_proyecto_padre = os.path.dirname(path_proyecto)
-
 import locale
 locale.setlocale(locale.LC_TIME, "es_ES.UTF-8") # Para que se muestren los meses en español
 from datetime import datetime
@@ -136,7 +124,7 @@ def guardar_datos_api():
                         if UsuarioPreferencia.objects.filter(atributo_plan=atributo_plan).exists() and numero_planes_recomendados < 5:
                             Notificacion.objects.create(
                                 titulo=f"Se ha añadido un nuevo plan que puede ser de tu interés: {plan.titulo}",
-                                descripcion=f"Tipo de plan: {atributo_plan.nombre}. Accede al apartado de 'Tus Recomendaciones' para ver más detalles de este y otros planes.",
+                                descripcion=f"El plan con el atributo {atributo_plan.nombre} ha sido añadido. ¡No te lo pierdas!",
                                 fecha=datetime.now(),
                                 leida=False
                             )
