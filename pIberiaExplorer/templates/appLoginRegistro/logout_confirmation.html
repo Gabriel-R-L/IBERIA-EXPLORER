@@ -1,8 +1,25 @@
 {% load static %}
-<div id="logout-confirmation-modal" style="display:none;">
-    <div class="modal-content">
-        <p>¿Seguro que quieres cerrar sesión?</p>
-        <button id="confirm-logout">Sí</button>
-        <button id="cancel-logout">No</button>
+
+<!-- Modal -->
+<div id="logout-confirmation-modal" tabindex="-1" aria-hidden="true" class="fixed inset-0 z-50 flex items-center justify-center hidden fixed-center">  <div class="relative w-full max-w-md p-4">
+    <div class="bg-white rounded-lg shadow dark:bg-gray-700">
+      <div class="p-4 text-center">
+        <p class="mb-4 text-gray-700 dark:text-gray-300">¿Seguro que quieres cerrar sesión?</p>
+        <div class="flex justify-center gap-4">
+          <button id="confirm-logout" class="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300 dark:text-gray-300 dark:bg-gray-600 dark:hover:bg-gray-700">Sí</button>
+          <button id="cancel-logout" class="px-4 py-2 text-white bg-red-600 rounded hover:bg-red-700">No</button>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
+
+<style>
+    .fixed-center {
+      position: fixed;
+      top: 50%;
+      left: 61%;
+      transform: translate(-50%, -50%);
+    }
+  </style>
+  
