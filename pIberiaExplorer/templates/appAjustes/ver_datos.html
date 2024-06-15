@@ -2,36 +2,43 @@
 {% load static %}
 
 {% block content %}
-<h1>Tus datos: {{ usuario.username }}</h1>
+<div class="container mx-auto py-8">
+    <h1 class="text-2xl font-bold mb-4">Tus datos: {{ usuario.username }}</h1>
 
-<h2>Tus pedidos</h2>
-{% if pedidos %}
-{% for pedido in pedidos %}
-<div>
-    <h3>{{ pedido.fecha_reserva }}</h3>
-    <p>{{ pedido.id_pedido }}</p>
-    <p>{{ pedido.id_cliente }}</p>
-    <p>{{ pedido.estado }}</p>
-    <p>{{ pedido.total }}</p>
+    <h2 class="text-xl font-semibold mb-4">Tus pedidos</h2>
+    {% if pedidos %}
+        <div class="space-y-4">
+            {% for pedido in pedidos %}
+                <div class="p-4 bg-white rounded-lg shadow-md">
+                    <h3 class="text-lg font-semibold">{{ pedido.fecha_reserva }}</h3>
+                    <p class="text-gray-600">ID Pedido: {{ pedido.id_pedido }}</p>
+                    <p class="text-gray-600">ID Cliente: {{ pedido.id_cliente }}</p>
+                    <p class="text-gray-600">Estado: {{ pedido.estado }}</p>
+                    <p class="text-gray-600">Total: {{ pedido.total }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-gray-600">No has hecho ningún pedido todavía</p>
+    {% endif %}
+
+    <h2 class="text-xl font-semibold mt-8 mb-4">Tus etiquetas</h2>
+    <h5 class="text-gray-700 mb-4">Etiquetas que has elegido o se te han asignado en base a tus compras en los planes</h5>
+    {% if preferencias %}
+        <div class="space-y-4">
+            {% for preferencia in preferencias %}
+                <div class="p-4 bg-white rounded-lg shadow-md flex justify-between items-center">
+                    <h3 class="text-lg font-semibold">{{ preferencia.atributo_plan }}</h3>
+                    <form action="{% url 'appAjustes:borrar_preferencia' preferencia.id_preferencia %}" method="post" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="text-red-600 hover:text-red-800">Borrar</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-gray-600">No tienes etiquetas asignadas</p>
+    {% endif %}
+    <a href="{% url 'appAjustes:añadir_preferencia' %}" class="inline-block mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Añadir preferencia</a>
 </div>
-{% endfor %}
-{% else %}
-<p>No has hecho ningún pedido todavía</p>
-{% endif %}
-<h2>Tus etiquetas</h2>
-<h5>Etiquetas que has elegido o se te han asignado en base a tus compras en los planes</h5>
-{% if preferencias %}
-{% for preferencia in preferencias %}
-<div>
-    <h3>{{ preferencia.atributo_plan }}</h3>
-    <form action="{% url 'appAjustes:borrar_preferencia' preferencia.id_preferencia %}" method="post" style="display:inline;">
-        {% csrf_token %}
-        <button type="submit" style="color: red;">Borrar</button>
-    </form>
-</div>
-{% endfor %}
-{% else %}
-    <p>No tienes etiquetas asignadas</p>
-{% endif %}
-<a href="{% url 'appAjustes:añadir_preferencia' %}">Añadir preferencia</a>
 {% endblock content %}

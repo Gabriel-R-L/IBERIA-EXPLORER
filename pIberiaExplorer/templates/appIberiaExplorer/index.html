@@ -22,17 +22,27 @@
   </div>
 </section>
 
+<section class="bg-white dark:bg-gray-900">
+  <div class="container mx-auto max-w-screen-xl px-4 py-8 lg:py-16">
+      <div class="grid lg:grid-cols-2 lg:gap-8 xl:gap-0">
+          <div class="flex justify-center items-center">
+              <img src="{% static 'src/docs/images/api_ayunta/api_ayunta.png' %}" alt="mockup" class="w-full rounded-lg h-auto max-w-md">
+          </div>
+          <div class="justify-center">
+              <h1 class="max-w-2xl mb-4 text-4xl font-extrabold tracking-tight leading-none md:text-5xl xl:text-6xl dark:text-white">Planes del Ayuntamiento de Madrid</h1>
+              <p class="max-w-2xl mb-6 font-light text-gray-500 text-4xl lg:text-4xl dark:text-gray-900">Encuentra un plan a medida, con o sin pago, busca por tus preferencias, por las fechas de tus vacaciones y mucho más.</p>
+          </div>
+      </div>
+      <div class="flex justify-center mt-8">
+          <a href="{% url 'appIberiaExplorer:resultado_datos_api' %}" class="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">
+              Buscar planes
+              <svg class="w-5 h-5 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+          </a>
+      </div>
+  </div>
+</section>
 
-<!-- Flow bite-->
 
-
-<h1>Iberia Explorer</h1>
-<details open>
-  <summary>Planes del Ayuntamiento de Madrid</summary>
-  <ul>
-    <li><a href="{% url 'appIberiaExplorer:resultado_datos_api' %}">Actividades y eventos</a></li>
-  </ul>
-</details>
 {% endblock content %}
 
 {% block script %} {% endblock script %}

@@ -14,7 +14,7 @@
         </div>
         
         <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">Guardar cambios</button>
-        <input class="hidden" type="file" id="fileInput" name="foto_perfil" accept="image/*" onchange="document.getElementById('uploadForm').submit();">
+        <input class="hidden" type="file" id="fileInput" name="foto_perfil" accept="image/*" onchange="document.getElementById('mainForm').submit();">
     </form>
 
     <div class="mt-4 space-y-2">
@@ -45,14 +45,18 @@
     <a href="{% url 'appAjustes:ver_datos' %}">Ver tus datos</a>
 
     <hr class="mb-4">
+    <div class="flex justify-center items-center min-h-screen py-6">
+        <div class="w-full max-w-md">
+            <h1 class="text-2xl font-bold mt-8 mb-4 text-center">Cambiar contraseña</h1>
+            <form method="post" class="w-full bg-white p-8 rounded-lg shadow-md">
+                {% csrf_token %}
+                {{ form_cambio_pssw }}
+                <button type="submit" class="w-full mt-4 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">Cambiar Contraseña</button>
+            </form>
+            <hr class="mt-8">
+        </div>
+    </div>
     
-    <h1 class="text-2xl font-bold mt-8 mb-4">Cambiar contraseña</h1>
-    <form action="" method="post" class="space-y-4">
-        {% csrf_token %}
-        {{ form_cambio_pssw }}
-        
-        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600">Cambiar contraseña</button>
-    </form>
     <hr class="mt-8">
 </div>
 
