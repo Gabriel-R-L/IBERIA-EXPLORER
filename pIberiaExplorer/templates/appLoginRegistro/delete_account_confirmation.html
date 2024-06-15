@@ -1,7 +1,7 @@
 {% load static %}
 
 <!-- Modal -->
-<div id="delete-account-confirmation-modal" tabindex="-1" aria-hidden="true" class="fixed inset-0 z-50 flex items-center justify-center hidden mt-8">
+<div id="delete-account-confirmation-modal" tabindex="-1" aria-hidden="true" class="fixed inset-0 z-50 flex items-center justify-center hidden fixed-center">
   <div class="relative w-full max-w-md p-4">
     <div class="bg-white rounded-lg shadow dark:bg-gray-700">
       <div class="p-4 text-center">
@@ -16,3 +16,12 @@
     </div>
   </div>
 </div>
+
+<style>
+  .fixed-center {
+    position: fixed;
+    top: 50%;
+    left: 61%;
+    transform: translate(-50%, -50%);
+  }
+</style>

@@ -1,20 +1,20 @@
 {% extends "_base.html" %}
 {% load static %}
 {% block content %}
-<div>
+<div class="container mx-auto py-8">
     {% if notificaciones %}
-    <div>
+    <div class="space-y-4">
         {% for notificacion in notificaciones %}
-            <div>
-                <h2><a href="{% url 'appNotificaciones:ver_notificacion' notificacion.id %}">{{ notificacion.titulo_notificacion }}</a></h2>
-                <p>{{ notificacion.mensaje_notificacion }}</p>
-                <p>{{ notificacion.timestamp }}</p>
-                <a href="{% url 'appNotificaciones:eliminar_notificacion' notificacion.id %}">Borrar notificacion</a>
+            <div class="p-4 bg-white rounded-lg shadow-md">
+                <h2 class="text-lg font-semibold"><a href="{% url 'appNotificaciones:ver_notificacion' notificacion.id %}" class="text-blue-500 hover:underline">{{ notificacion.titulo_notificacion }}</a></h2>
+                <p class="text-gray-600">{{ notificacion.mensaje_notificacion }}</p>
+                <p class="text-gray-400 text-sm">{{ notificacion.timestamp }}</p>
+                <a href="{% url 'appNotificaciones:eliminar_notificacion' notificacion.id %}" class="text-red-500 hover:underline">Borrar notificación</a>
             </div>
         {% endfor %}
     </div>
     {% else %}
-    <p>No hay notificaciones</p>
+    <p class="text-gray-600">No hay notificaciones</p>
     {% endif %}
 </div>
 {% endblock content %}
