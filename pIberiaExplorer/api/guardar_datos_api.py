@@ -121,17 +121,18 @@ def guardar_datos_api():
                             url=url_tipo_plan
                         )
                         
-                        if UsuarioPreferencia.objects.filter(atributo_plan=atributo_plan).exists() and numero_planes_recomendados < 5:
-                            Notificacion.objects.create(
-                                titulo=f"Se ha añadido un nuevo plan que puede ser de tu interés: {plan.titulo}",
-                                descripcion=f"El plan con el atributo {atributo_plan.nombre} ha sido añadido. ¡No te lo pierdas!",
-                                fecha=datetime.now(),
-                                leida=False
-                            )
-                            
-                            numero_planes_recomendados += 1
-                            
-                            
+                        usuarios_preferencia = UsuarioPreferencia.objects.filter(atributo_plan=atributo_plan)
+                        if usuarios_preferencia.exists() and numero_planes_recomendados < 5:
+                            for usuario_preferencia in usuarios_preferencia:
+                                Notificacion.objects.create(
+                                    usuario=usuario_preferencia.usuario,
+                                    titulo_notificacion=f"Se ha añadido un nuevo plan que puede ser de tu interés: {plan.titulo}",
+                                    mensaje_notificacion=f"El plan con el atributo {atributo_plan.nombre} ha sido añadido. ¡No te lo pierdas!",
+                                )
+                                numero_planes_recomendados += 1
+                                print(f"Plan {plan.titulo} añadido a la lista de planes recomendados para el usuario {usuario_preferencia.usuario.username}")
+                                if numero_planes_recomendados >= 5:
+                                    break
                         print(f"Atributo {atributo_plan.nombre} creado")
                     else:
                         print(f"Atributo {atributo_plan.nombre} ya existe")
