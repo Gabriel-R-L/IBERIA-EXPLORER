@@ -2,13 +2,15 @@
 {% load static %}
 
 {% block content %}
-<form action="" method="post">
-    {% csrf_token %}
-    <h1>Añadir preferencia</h1>
-    {{ form }}
-    <button id="saveButton" type="submit">Añadir</button>
-    <a href="{% url 'appAjustes:ver_datos' %}">Volver</a>
-</form>
+<div class="container mx-auto py-8">
+    <form action="" method="post" class="bg-white p-8 rounded-lg shadow-md max-w-md mx-auto">
+        {% csrf_token %}
+        <h1 class="text-2xl font-bold mb-4">Añadir preferencia</h1>
+        {{ form }}
+        <button id="saveButton" type="submit" class="w-full mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed">Añadir</button>
+        <a href="{% url 'appAjustes:ver_datos' %}" class="inline-block mt-4 text-blue-500 hover:underline">Volver</a>
+    </form>
+</div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>

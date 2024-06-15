@@ -14,27 +14,66 @@ class ConfiguracionCuentaForm(forms.ModelForm):
         model = Usuario
         fields = ('username', 'apellido_1', 'apellido_2', 'foto_perfil', 'email', 'telefono', 'direccion', 'id_ciudad')
         
-    labels = {
-        'username': _('Nombre de usuario'),
-        'apellido_1': _('Primer apellido'),
-        'apellido_2': _('Segundo apellido'),
-        'foto_perfil': _('Foto de perfil'),
-        'email': _('Correo electrónico'),
-        'telefono': _('Teléfono'),
-        'direccion': _('Dirección'),
-        'id_ciudad': _('Ciudad'),
-    }
+        labels = {
+            'username': _('Nombre de usuario'),
+            'apellido_1': _('Primer apellido'),
+            'apellido_2': _('Segundo apellido'),
+            'foto_perfil': _('Foto de perfil'),
+            'email': _('Correo electrónico'),
+            'telefono': _('Teléfono'),
+            'direccion': _('Dirección'),
+            'id_ciudad': _('Ciudad'),
+        }
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({
+            'class': 'form-input block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50'
+        })
+        self.fields['apellido_1'].widget.attrs.update({
+            'class': 'form-input block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50'
+        })
+        self.fields['apellido_2'].widget.attrs.update({
+            'class': 'form-input block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50'
+        })
+        self.fields['foto_perfil'].widget.attrs.update({
+            'class': 'form-input block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50'
+        })
+        self.fields['email'].widget.attrs.update({
+            'class': 'form-input block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50'
+        })
+        self.fields['telefono'].widget.attrs.update({
+            'class': 'form-input block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50'
+        })
+        self.fields['direccion'].widget.attrs.update({
+            'class': 'form-input block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50'
+        })
+        self.fields['id_ciudad'].widget.attrs.update({
+            'class': 'form-select block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50'
+        })
 
 
 ############################################
 # Cambiar contraseña
 class CambiarContrasenaForm(forms.Form):
-    contrasena_actual = forms.CharField(label=_('Contraseña actual'), widget=forms.PasswordInput)
-    contrasena_nueva = forms.CharField(label=_('Contraseña nueva'), widget=forms.PasswordInput)
-    contrasena_nueva_repetida = forms.CharField(label=_('Repetir contraseña nueva'), widget=forms.PasswordInput)
+    contrasena_actual = forms.CharField(
+        label=_('Contraseña actual'), 
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-input block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50'
+        })
+    )
+    contrasena_nueva = forms.CharField(
+        label=_('Contraseña nueva'), 
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-input block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50'
+        })
+    )
+    contrasena_nueva_repetida = forms.CharField(
+        label=_('Repetir contraseña nueva'), 
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-input block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50'
+        })
+    )
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -51,7 +90,10 @@ class CambiarContrasenaForm(forms.Form):
 # AñadirPreferencia
 class AñadirPreferencia(forms.Form):
     atributo_plan = forms.ChoiceField(
-        label=_('Atributos disponibles')
+        label=_('Atributos disponibles'),
+        widget=forms.Select(attrs={
+            'class': 'form-select block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50'
+        })
     )
     
     def __init__(self, *args, **kwargs):
