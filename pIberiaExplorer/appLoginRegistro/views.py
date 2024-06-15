@@ -119,6 +119,12 @@ def login(request):
                             "Inicio de sesión",
                             f"Tu cuenta '{user.username}' ha iniciado sesión en un dispositivo con IP {buscar_ip()}.\n\nSi no has sido tú, por favor, contáctenos a este correo.",
                         )
+                        
+                        if user.email_confirmed == False:
+                            notificacion = Notificacion.objects.create(
+                                usuario=user
+                                , titulo_notificacion=f"Confirma tu cuenta."
+                                , mensaje_notificacion="Por favor, revise su correo para verificar su cuenta.")
 
                         return redirect("/")
                     else:
@@ -201,8 +207,6 @@ def register(request):
                         
                         carrito_usuario = Carrito.objects.create(id_usuario=user)
                         carrito_usuario.save()
-                        pedido_usuario = Pedido.objects.create(id_cliente=user, total=0, fecha_reserva=timezone.now())
-                        pedido_usuario.save()
 
                         # Genera el enlace de confirmación
                         confirmation_link = request.build_absolute_uri(
