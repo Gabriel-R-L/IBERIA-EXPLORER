@@ -12,7 +12,7 @@
         <thead class="bg-gray-50">
           <tr>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total (€)</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Detalles</th>
           </tr>
         </thead>
@@ -20,7 +20,13 @@
           {% for pedido in pedidos_completados %}
           <tr>
             <td class="px-6 py-4 whitespace-nowrap">{{ pedido.fecha_reserva }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ pedido.total }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              {% if pedido.total|floatformat:0 == pedido.total|floatformat %}
+                  {{ pedido.total|floatformat:0 }}
+              {% else %}
+                  {{ pedido.total }}
+              {% endif %}
+            </td>
             <td class="px-6 py-4 whitespace-nowrap">
               <a href="{% url 'appCarritoPedido:ver_pedido_detalle' pedido.id_pedido %}" class="text-blue-600 hover:text-blue-900">Ver Detalles</a>
             </td>
@@ -40,7 +46,7 @@
         <thead class="bg-gray-50">
           <tr>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total (€)</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Detalles</th>
           </tr>
         </thead>
@@ -48,7 +54,13 @@
           {% for pedido in pedidos_cancelados %}
           <tr>
             <td class="px-6 py-4 whitespace-nowrap">{{ pedido.fecha_reserva }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ pedido.total }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              {% if pedido.total|floatformat:0 == pedido.total|floatformat %}
+                  {{ pedido.total|floatformat:0 }}
+              {% else %}
+                  {{ pedido.total }}
+              {% endif %}
+            </td>
             <td class="px-6 py-4 whitespace-nowrap">
               <a href="{% url 'appCarritoPedido:ver_pedido_detalle' pedido.id_pedido %}" class="text-blue-600 hover:text-blue-900">Ver Detalles</a>
             </td>

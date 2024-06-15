@@ -10,6 +10,7 @@
           {% csrf_token %} 
           {{ form }}
           <button>Iniciar sesión</button>
+          <a href="{% url 'appLoginRegistro:recuperar_contraseña' %}">¿Has olvidado tu contraseña?</a>
         </form>
       </div>
     </div>
