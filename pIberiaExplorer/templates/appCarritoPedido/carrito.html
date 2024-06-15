@@ -17,7 +17,7 @@
                     <th class="py-3 px-6 text-left">Cantidad</th>
                     <th class="py-3 px-6 text-left">Precio</th>
                     <th class="py-3 px-6 text-left">Total</th>
-                    <th class="py-3 px-6 text-left">Acciones</th>
+                    <th class="py-3 px-6 text-left"></th>
                 </tr>
             </thead>
             <tbody class="text-gray-600 text-sm font-light">
@@ -31,8 +31,14 @@
                             <button type="submit" class="bg-blue-500 text-white py-1 px-3 rounded-md hover:bg-blue-600">Actualizar</button>
                         </form>
                     </td>
-                    <td class="py-3 px-6 text-left">{{ item.id_plan.precio }}</td>
-                    <td class="py-3 px-6 text-left">{{ total }}</td>
+                    <td class="py-3 px-6 text-left">
+                        {% if item.id_plan.precio|floatformat:0 == item.id_plan.precio|floatformat %}
+                            {{ item.id_plan.precio|floatformat:0 }}
+                        {% else %}
+                            {{ item.id_plan.precio }}
+                        {% endif %}
+                    </td>
+                    <td class="py-3 px-6 text-left">{% widthratio item.id_plan.precio 1 item.cantidad %}</td>
                     <td class="py-3 px-6 text-left">
                         <form action="{% url 'appCarritoPedido:eliminar_del_carrito' item.id_carrito_detalle %}" method="post">
                             {% csrf_token %}
@@ -50,10 +56,20 @@
         </table>
     </div>
     <div class="mt-4">
-        <a href="{% url 'appCarritoPedido:completar_pedido' %}" class="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600">Completar Pedido</a>
+        <a href="{% url 'appCarritoPedido:completar_pedido' url_to_pay=1 %}" class="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600">Completar Pedido</a>
     </div>
     {% else %}
     <p class="text-gray-600">No hay productos en el carrito.</p>
+    {% endif %}
+
+    {% if pendiente and not detalles %}
+    <p class="text-gray-500 dark:text-gray-400">
+        <a href="{% url 'appCarritoPedido:completar_pedido' url_to_pay=0 %}" class="inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline">
+        Pulsa aquí para pagar tus pedidos sin completar
+        <svg class="w-4 h-4 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+        </svg>
+    </a></p>
     {% endif %}
 </div>
 {% endblock content %}

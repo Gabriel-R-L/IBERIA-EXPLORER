@@ -18,9 +18,15 @@
             <tbody class="text-gray-600 text-sm font-light">
                 {% for pedido in pedidos_pendientes %}
                 <tr class="border-b border-gray-200 hover:bg-gray-100">
-                    <td class="py-3 px-6 text-left">{{ pedido.id_pedido }}</td>
+                    <td class="py-3 px-6 text-left">{{ pedido.nombre_plan }}</td>
                     <td class="py-3 px-6 text-left">{{ pedido.fecha_reserva }}</td>
-                    <td class="py-3 px-6 text-left">{{ pedido.total }}</td>
+                    <td class="py-3 px-6 text-left">
+                        {% if pedido.total|floatformat:0 == pedido.total|floatformat %}
+                            {{ pedido.total|floatformat:0 }}
+                        {% else %}
+                            {{ pedido.total }}
+                        {% endif %}
+                    </td>
                     <td class="py-3 px-6 text-left">
                         <form action="{% url 'appCarritoPedido:cancelar_pedido' pedido.id_pedido %}" method="post" class="inline">
                             {% csrf_token %}

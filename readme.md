@@ -55,6 +55,9 @@ Antes de nada debes de saber que hay dos archivos de Base de Datos: `0001_iberia
 ## 2. Runnear el proyecto<a name="2"></a>
 Si los pasos anteriores los hemos hecho correctamente, simplemente con ejecutar `py manage.py runserver 8000` deberíamos poder ejecutar el proyecto de forma funcional.
 
+> [!IMPORTANT]
+> Situarse en pIberiaExplorer y ejecutar el siguiente comando en una terminal aparte y que corra siempre:
+> `npx tailwindcss -i ./static/src/input.css -o ./static/src/output.css --watch`
 
 ## Notas dev<a name="3"></a>
 ### Exportar la Base de Datos
