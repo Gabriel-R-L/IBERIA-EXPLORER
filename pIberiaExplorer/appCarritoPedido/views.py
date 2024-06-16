@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.shortcuts import redirect, render, get_object_or_404
 
 from django.shortcuts import render, redirect
@@ -14,6 +15,11 @@ from pIberiaExplorer.utils import APP_CARRITO_PEDIDO
 ###########################################
 @login_required(login_url='/registro/')
 def agregar_al_carrito(request, plan_id):
+    if not request.user.email_confirmed:
+        context = {
+            'mensaje_error': 'Inicie sesión para agregar planes al carrito.'
+        }
+        return render(request, 'appIberiaExplorer/index.html', context=context)
     from appIberiaExplorer.models import Plan
     plan = get_object_or_404(Plan, id_plan_api=plan_id)
     cart, created = Carrito.objects.get_or_create(id_usuario=request.user)

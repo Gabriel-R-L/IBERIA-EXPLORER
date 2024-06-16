@@ -3,7 +3,8 @@ from django.db import models
 from appLoginRegistro.models import Usuario
 
 ##################################################
-# Notificaciones
+# NOTIFICACIONES
+##################################################
 class Notificacion(models.Model):   
     id = models.AutoField(primary_key=True)
     usuario = models.ForeignKey(Usuario, null=True, blank=True, on_delete=models.PROTECT)

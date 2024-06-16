@@ -1,6 +1,11 @@
 {% extends "_base.html" %}
 {% load static %}
 
+{% block head %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script>
+<script src="{% static 'js/add_preference.js' %}" defer></script>
+{% endblock head %}
+
 {% block content %}
 <div class="container mx-auto py-8">
     <form action="" method="post" class="bg-white p-8 rounded-lg shadow-md max-w-md mx-auto">
@@ -11,27 +16,4 @@
         <a href="{% url 'appAjustes:ver_datos' %}" class="inline-block mt-4 text-blue-500 hover:underline">Volver</a>
     </form>
 </div>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-$(document).ready(function() {
-    function checkSelectedOption() {
-        var select = document.getElementById("id_atributo_plan");
-        var selectedOption = select.options[select.selectedIndex].value;
-        if (selectedOption == "None" || selectedOption == "") {
-            $("#saveButton").prop("disabled", true);
-        } else {
-            $("#saveButton").prop("disabled", false);
-        }
-    }
-    
-    // Check the initial state
-    checkSelectedOption();
-    
-    // Attach change event listener
-    $("#id_atributo_plan").change(function() {
-        checkSelectedOption();
-    });
-});
-</script>
 {% endblock content %}
