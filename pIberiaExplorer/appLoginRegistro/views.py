@@ -1,64 +1,34 @@
-from multiprocessing import context
-import re
-from turtle import ht
 from django.shortcuts import redirect, render, get_object_or_404
-from django.contrib.auth import login as login_user, logout as logout_user, authenticate
-from django.conf import settings
+from django.contrib.auth import login as login_user, logout as logout_user
+
 from django.db import IntegrityError
-
 from django.core.exceptions import ValidationError
-from validate_email import validate_email
-from django.core.mail import send_mail
+from datetime import timezone
 
-from django.shortcuts import render
 from django.urls import reverse
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.contrib.auth.hashers import make_password
-
-import os
-import sys
-sys.path.append(
-    os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-)
-sys.path.append(os.path.dirname(os.path.realpath(__file__)))
-
-
-from datetime import timezone
-import urllib.request as urllib
+from django.contrib.auth.decorators import login_required
 
 from .forms import *
 from .models import *
 
-from django.urls import reverse
-from django.contrib.sites.shortcuts import get_current_site
-
 from spanlp.palabrota import Palabrota
 from django.utils.crypto import get_random_string
 
-from api.Datos_API_Com_Madrid import obtener_datos_api
-
-from django.core.paginator import Paginator
-
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
-from django.views.decorators.csrf import csrf_exempt
-from google.oauth2 import id_token
-from google.auth.transport import requests
-import jwt
-
-from django.contrib.auth.decorators import login_required
-
-from services.send_mail import prepararEmail, validarEmail
 from services.buscar_ip import buscar_ip
-from pIberiaExplorer.utils import APP_LOGIN_REGISTRO
-from appCarritoPedido.views import Carrito, Pedido
+from services.send_mail import prepararEmail, validarEmail
 
+from appCarritoPedido.views import Carrito
 from appNotificaciones.models import Notificacion
+
+from pIberiaExplorer.utils import APP_LOGIN_REGISTRO
 
 
 ###########################################
-# Login/Registro
+# LOGIN/REGISTRO
+###########################################
 def login_register(request):
     """ 
         - Método para crear cuenta o iniciar sesión.
@@ -106,7 +76,8 @@ def login_register(request):
            
 
 ##########################################
-# Iniciar sesión
+# LOGIN
+##########################################
 def login(request):
     if request.method == "POST":
         email_to_find = request.session.get("email", None)
@@ -176,7 +147,8 @@ def login(request):
 
 
 ##########################################
-# Crear cuenta
+# REGISTER
+##########################################
 def register(request):
     if request.method == "POST":
         email = request.session.get("email", None)
@@ -289,7 +261,8 @@ def register(request):
 
 
 ##########################################
-# Cerrar sesión
+# LOGOUT
+##########################################
 @login_required(login_url='/registro/')
 def logout(request):
     logout_user(request)
@@ -309,7 +282,8 @@ def logout_confirmation(request):
 
 
 ##########################################
-# Borrar cuenta (borrado lógico)
+# BORRAR CUENTA (borrado lógico)
+##########################################
 @login_required(login_url='/registro/')
 def delete_account(request):
     usuario = Usuario.objects.get(id_usuario=request.user.id_usuario)
@@ -336,7 +310,8 @@ def delete_account_confirmation(request):
 
 
 ##########################################
-# Recuperar contraseña
+# RECUPEAR CONTRASEÑA
+##########################################
 def recuperar_contraseña(request):
     if request.method == "POST":
         email = request.POST["email"]
@@ -369,26 +344,6 @@ def recuperar_contraseña(request):
     else:
         return render(request, f"{APP_LOGIN_REGISTRO}/recuperar_contraseña.html")
 
-
-##########################################
-# Verificar email
-@login_required(login_url='/registro/')
-def confirm_email(request, token):
-    try:
-        user = Usuario.objects.get(confirmation_token=token)
-        user.email_confirmed = True
-        user.save()
-        return redirect("/registro/email_confirmed")
-    except Usuario.DoesNotExist:
-        context = {
-            "mensaje_error": "El token de confirmación es inválido",
-            "sub_mensaje_error": "Por favor, verifique que el enlace sea correcto.",
-        }
-        return redirect("/", context=context)
-    
-
-##########################################
-# Recuperar contraseña
 def recover_pssw(request, token):
     if request.method == "POST":
         password = request.POST["password"]
@@ -424,10 +379,29 @@ def recover_pssw(request, token):
             "token": token,
         }
         return render(request, f"{APP_LOGIN_REGISTRO}/recover_pssw.html", context=context)
-
+    
 
 ##########################################
-# Email confirmado
+# VERIFICAR EMAIL
+##########################################
+@login_required(login_url='/registro/')
+def confirm_email(request, token):
+    try:
+        user = Usuario.objects.get(confirmation_token=token)
+        user.email_confirmed = True
+        user.save()
+        return redirect("/registro/email_confirmed")
+    except Usuario.DoesNotExist:
+        context = {
+            "mensaje_error": "El token de confirmación es inválido",
+            "sub_mensaje_error": "Por favor, verifique que el enlace sea correcto.",
+        }
+        return redirect("/", context=context)
+    
+
+##########################################
+# EMAIL CONFIRMADO
+##########################################
 @login_required(login_url='/registro/')
 def email_confirmed(request):
     return render(request, f"{APP_LOGIN_REGISTRO}/email_confirmed.html")

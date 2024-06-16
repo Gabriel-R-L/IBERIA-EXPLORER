@@ -1,5 +1,8 @@
 from django.contrib import admin
 from .models import Notificacion
+admin.site.site_header = "SITIO DE ADMINISTRACIÓN DE USUARIOS"
+admin.site.site_title = "SITIO DE ADMINISTRACIÓN DE USUARIOS"
+admin.site.index_title = "Bienvenido al portal de Administración"
 
 class NotificacionAdmin(admin.ModelAdmin):
     list_display = ['id','usuario', 'titulo_notificacion', 'mensaje_notificacion', 'timestamp', 'leido']

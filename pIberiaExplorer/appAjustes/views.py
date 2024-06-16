@@ -1,22 +1,20 @@
-from multiprocessing import context
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 import os
 
+from .forms import *
 from appLoginRegistro.models import Usuario
-from pIberiaExplorer.utils import APP_AJUSTES
-
-from appAjustes.models import UsuarioPreferencia
 from appIberiaExplorer.models import AtributoPlan
+from appAjustes.models import UsuarioPreferencia
 
-from .forms import AñadirPreferencia
-from django.utils.translation import gettext_lazy as _
+from pIberiaExplorer.utils import APP_AJUSTES
 
 
 ##########################################
-# Borrar foto perfil
+# BORRAR FOTO DE PERFIL
+##########################################
 def borrar_foto_perfil(id_usuario, foto_perfil):
     from django.conf import settings
     # No borrar la foto por defecto para otros usuarios
@@ -31,7 +29,8 @@ def borrar_foto_perfil(id_usuario, foto_perfil):
             
             
 ##########################################
-# Configuracion de la cuenta
+# CONFIGURACION DE CUENTA
+##########################################
 def configuracion_cuenta(request):
     from appLoginRegistro.models import Usuario
     from .forms import ConfiguracionCuentaForm, CambiarContrasenaForm
@@ -70,8 +69,10 @@ def configuracion_cuenta(request):
         
     return render(request, f'{APP_AJUSTES}/configuracion_cuenta.html', context=context)
 
+
 ##########################################
-# Ver datos
+# VER DATOS
+##########################################
 def ver_datos(request):
     from appCarritoPedido.models import Pedido, PedidoDetalle
     from django.utils.translation import gettext_lazy as _
@@ -91,8 +92,10 @@ def ver_datos(request):
     
     return render(request, f'{APP_AJUSTES}/ver_datos.html', context=context)
 
+
 ##########################################
-# Borrar preferencia
+# BORRAR PREFERENCIA
+##########################################
 @login_required(login_url='/registro/')
 def borrar_preferencia(request, id_preferencia):
     preferencia = get_object_or_404(UsuarioPreferencia, id_preferencia=id_preferencia)
@@ -100,8 +103,10 @@ def borrar_preferencia(request, id_preferencia):
     
     return redirect('/ajustes/mis-datos')
 
+
 ##########################################
-# Añadir preferencia
+# AÑADIR PREFERENCIA
+##########################################
 @login_required(login_url='/registro/')
 def añadir_preferencia(request):
     from appAjustes.models import UsuarioPreferencia
@@ -119,7 +124,7 @@ def añadir_preferencia(request):
                 preferencia.save()
             
                 context = {
-                    'mensaje_error': _('Preferencia añadida correctamente.')
+                    'mensaje_error': 'Preferencia añadida correctamente.'
                 }
                 
                 return redirect('/ajustes/mis-datos', context=context)
@@ -132,8 +137,9 @@ def añadir_preferencia(request):
         }
         return render(request, f'{APP_AJUSTES}/añadir_preferencia.html', context=context)
     
+    
 ##########################################
-# Cambiar foto perfil
+# CAMBIAR FOTO DE PERFIL
 ##########################################
 @login_required(login_url='/registro/')
 def cambiar_foto_perfil(request):
