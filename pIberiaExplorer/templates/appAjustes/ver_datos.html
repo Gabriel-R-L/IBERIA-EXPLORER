@@ -11,10 +11,24 @@
             {% for pedido in pedidos %}
                 <div class="p-4 bg-white rounded-lg shadow-md">
                     <h3 class="text-lg font-semibold">{{ pedido.fecha_reserva }}</h3>
-                    <p class="text-gray-600">ID Pedido: {{ pedido.id_pedido }}</p>
-                    <p class="text-gray-600">ID Cliente: {{ pedido.id_cliente }}</p>
-                    <p class="text-gray-600">Estado: {{ pedido.estado }}</p>
-                    <p class="text-gray-600">Total: {{ pedido.total }}</p>
+                    <p class="text-gray-600">Nombre del plan: {{ pedido.nombre_plan }}</p>
+                    <p class="text-gray-600">Correo asignado: {{ pedido.id_cliente.email }}</p>
+                    <p class="text-gray-600">Estado: 
+                        {% if pedido.estado == 'COMPLETADO' %}
+                        <span class="font-semibold" style="color: #6eb800;">Completado</span>
+                        {% elif pedido.estado == 'CANCELADO' %}
+                        <span class="font-semibold" style="color: #ff0000;">Cancelado</span>
+                        {% else %}
+                        <span class="font-semibold" style="color: #c98200;">Pendiente</span>
+                        {% endif %}
+                    </p>
+                    <p class="text-gray-600">Total: 
+                        {% if pedido.total|floatformat:0 == pedido.total|floatformat %}
+                        {{ pedido.total|floatformat:0 }}
+                        {% else %}
+                            {{ pedido.total }}
+                        {% endif %}
+                    </p>
                 </div>
             {% endfor %}
         </div>
@@ -28,7 +42,7 @@
         <div class="space-y-4">
             {% for preferencia in preferencias %}
                 <div class="p-4 bg-white rounded-lg shadow-md flex justify-between items-center">
-                    <h3 class="text-lg font-semibold">{{ preferencia.atributo_plan }}</h3>
+                    <h3 class="text-lg font-semibold">{{ preferencia.atributo_plan.nombre }}</h3>
                     <form action="{% url 'appAjustes:borrar_preferencia' preferencia.id_preferencia %}" method="post" class="inline">
                         {% csrf_token %}
                         <button type="submit" class="text-red-600 hover:text-red-800">Borrar</button>

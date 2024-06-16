@@ -6,11 +6,10 @@ def is_postgres_service_active() -> bool:
     """
     Verificar si el servicio de postgresql esta activo en el sistema operativo
 
-    Params: None
-
-    ============================
-    Returns: bool
-    """
+    Returns:
+        bool: True si el servicio esta activo, False si no lo esta
+    """    
+    
     load_dotenv()
     
     try:
