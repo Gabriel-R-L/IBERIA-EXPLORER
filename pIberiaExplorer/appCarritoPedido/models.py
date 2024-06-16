@@ -1,5 +1,9 @@
 from django.db import models
 
+
+####################################
+# CARRITO
+####################################
 class Carrito(models.Model):
     from appLoginRegistro.models import Usuario
     id_carrito = models.AutoField(primary_key=True)
@@ -12,8 +16,6 @@ class Carrito(models.Model):
         
     def __str__(self):
         return f"{self.id_carrito}, {self.id_usuario}"
-    
-        
         
 class CarritoDetalle(models.Model):
     from appIberiaExplorer.models import Plan
@@ -31,7 +33,9 @@ class CarritoDetalle(models.Model):
         return f"{self.id_carrito_detalle}, {self.cantidad}, {self.id_carrito}, {self.id_plan}"
     
 
-
+####################################
+# PEDIDOS
+####################################
 class Pedido(models.Model):
     from appLoginRegistro.models import Usuario
     ESTADOS_PEDIDO = [
@@ -53,7 +57,6 @@ class Pedido(models.Model):
         
     def __str__(self):
         return f"{self.id_pedido}, {self.fecha_reserva}, {self.total}, {self.id_cliente}, {self.estado}"
-        
         
 class PedidoDetalle(models.Model):
     from appIberiaExplorer.models import Plan

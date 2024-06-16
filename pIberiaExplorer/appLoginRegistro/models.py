@@ -4,7 +4,8 @@ from django.utils import timezone
 
 
 ############################################
-# Usuario
+# USUARIO
+############################################
 class CustomUserManager(UserManager):
     def _create_user(self, username, email, password, **extra_fields):
         if not email:

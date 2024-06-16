@@ -6,7 +6,7 @@ admin.site.index_title = "Bienvenido al portal de Administración"
 
 
 ####################################################
-# Continente
+# CONTINENTE
 ####################################################
 class ContinenteAdmin(admin.ModelAdmin):
     list_display = ['id_continente', 'nombre']
@@ -16,7 +16,7 @@ admin.site.register(Continente, ContinenteAdmin)
 
 
 ####################################################
-# Pais
+# PAIS
 ####################################################
 class PaisAdmin(admin.ModelAdmin):
     list_display = ['id_pais', 'nombre', 'continente']
@@ -26,7 +26,7 @@ admin.site.register(Pais, PaisAdmin)
 
 
 ####################################################
-# Ciudad
+# CIUDAD
 ####################################################
 class CiudadAdmin(admin.ModelAdmin):
     list_display = ['id_ciudad', 'nombre', 'pais']
@@ -36,7 +36,7 @@ admin.site.register(Ciudad, CiudadAdmin)
 
 
 ####################################################
-# Plan
+# PLAN
 ####################################################
 class PlanAdmin(admin.ModelAdmin):
     list_display = ['id_plan', 'id_plan_api', 'titulo', 'precio', 'fecha_inicio', 'fecha_fin', 'hora_inicio', 'nombre_lugar', 'codigo_postal', 'nombre_calle', 'organizador']
@@ -46,7 +46,7 @@ admin.site.register(Plan, PlanAdmin)
 
 
 ####################################################
-# AtributoPlan
+# ATRIBUTOPLAN
 ####################################################
 class AtributoPlanAdmin(admin.ModelAdmin):
     list_display = ['id_atributo_plan', 'nombre', 'url', 'plan']
