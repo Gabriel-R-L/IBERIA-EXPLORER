@@ -1,7 +1,8 @@
 from django.urls import path, include
 from .views import *
 
-app_name = "appIberiaExplorer"
+from pIberiaExplorer.utils import APP_IBERIA_EXPLORER
+app_name = APP_IBERIA_EXPLORER
 
 urlpatterns = [
     path("", index, name="index"),

@@ -1,7 +1,8 @@
 from django.urls import path
 from .views import *
 
-app_name = 'appNotificaciones'
+from pIberiaExplorer.utils import APP_NOTIFICACIONES
+app_name = APP_NOTIFICACIONES
 
 urlpatterns = [
     path('', ver_notificaciones, name='ver_notificaciones'),

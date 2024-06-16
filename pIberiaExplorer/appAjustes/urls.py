@@ -1,7 +1,8 @@
 from django.urls import path
 from .views import *
 
-app_name = 'appAjustes'
+from pIberiaExplorer.utils import APP_AJUSTES
+app_name = APP_AJUSTES
 
 urlpatterns = [
     path('configuracion-cuenta/', configuracion_cuenta, name='configuracion_cuenta'),

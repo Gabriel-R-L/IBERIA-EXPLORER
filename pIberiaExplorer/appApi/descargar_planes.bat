@@ -5,7 +5,7 @@ netstat -ano | findstr "127.0.0.1:8000"
 IF %ERRORLEVEL% EQU 0 (
     echo El servidor esta activo, ejecutar scheduler.py
     set SCRIPT_DIR=%~dp0
-    set PYTHON_SCRIPT=%SCRIPT_DIR%..\api\guardar_datos_api.py
+    set PYTHON_SCRIPT=%SCRIPT_DIR%..\appApi\guardar_datos_api.py
     if exist "%PYTHON_SCRIPT%" (
         echo Ejecutando %PYTHON_SCRIPT%
         python "%PYTHON_SCRIPT%"
