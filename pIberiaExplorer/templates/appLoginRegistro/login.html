@@ -5,17 +5,6 @@
 <section class="flex items-center justify-center my-8">
   <div class="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow dark:bg-gray-800">
     <div>
-<<<<<<< HEAD
-      <div>
-        <h1>Iniciar sesión</h1>
-        <form method="post">
-          {% csrf_token %} 
-          {{ form }}
-          <button>Iniciar sesión</button>
-          <a href="{% url 'appLoginRegistro:recuperar_contraseña' %}">¿Has olvidado tu contraseña?</a>
-        </form>
-      </div>
-=======
       <h1 class="text-2xl font-bold text-center text-gray-900 dark:text-white">Iniciar sesión</h1>
       <form method="post" class="mt-8 space-y-6">
         {% csrf_token %}
@@ -23,8 +12,8 @@
         <button type="submit" class="w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
           Iniciar sesión
         </button>
+        <a class="hover:underline mt-8" href="{% url 'appLoginRegistro:recuperar_contraseña' %}">¿Has olvidado tu contraseña?</a>
       </form>
->>>>>>> 3edcacee98bf860d256a6c4c179a53ca73f5e830
     </div>
   </div>
 </section>

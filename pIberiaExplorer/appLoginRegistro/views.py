@@ -90,16 +90,16 @@ def login_register(request):
     if request.method == "POST":
         email_to_verify = request.POST["email"]
         user_has_account = Usuario.objects.filter(email=email_to_verify).first()
-        if user_has_account.is_active == False and user_has_account.fecha_baja != None:
-            context = {
-                "form": LoginRegisterForm(),
-                "mensaje_error": "La cuenta ha sido eliminada",
-                "sub_mensaje_error": "Por favor, contacte con el soporte técnico.",
-            }
-            return render(request, f"{APP_LOGIN_REGISTRO}/login_register.html", context=context)
-        
         request.session["email"] = email_to_verify
         if user_has_account:
+            request.session["email"] = email_to_verify
+            if user_has_account.is_active == False and user_has_account.fecha_baja != None:
+                context = {
+                    "form": LoginRegisterForm(),
+                    "mensaje_error": "La cuenta ha sido eliminada",
+                    "sub_mensaje_error": "Por favor, contacte con el soporte técnico.",
+                }
+                return render(request, f"{APP_LOGIN_REGISTRO}/login_register.html", context=context)
             return redirect("/registro/login")
         else:
             return redirect("/registro/register")
@@ -340,10 +340,9 @@ def delete_account_confirmation(request):
 def recuperar_contraseña(request):
     if request.method == "POST":
         email = request.POST["email"]
-        user = Usuario.objects.filter(email=email).first()
+        user = Usuario.objects.filter(email=request.session["email"]).first()
+        print("---> ", user.confirmation_token)
         if user:
-            # user.confirmation_token = get_random_string(length=32)
-            # user.save()
             confirmation_link = request.build_absolute_uri(
                 reverse(
                     f"{APP_LOGIN_REGISTRO}:recover_pssw",
@@ -405,6 +404,7 @@ def recover_pssw(request, token):
                         "token": token,
                     }
                     return render(request, f"{APP_LOGIN_REGISTRO}/recover_pssw.html", context=context)
+                
                 # Encripta la nueva contraseña antes de guardarla
                 user.password = make_password(password)
                 user.save()
