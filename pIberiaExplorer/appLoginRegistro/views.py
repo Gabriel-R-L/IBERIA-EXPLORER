@@ -1,3 +1,4 @@
+from multiprocessing import context
 import re
 from turtle import ht
 from django.shortcuts import redirect, render, get_object_or_404
@@ -13,6 +14,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from django.contrib.auth.hashers import make_password
 
 import os
 import sys
@@ -90,6 +92,14 @@ def login_register(request):
         user_has_account = Usuario.objects.filter(email=email_to_verify).first()
         request.session["email"] = email_to_verify
         if user_has_account:
+            request.session["email"] = email_to_verify
+            if user_has_account.is_active == False and user_has_account.fecha_baja != None:
+                context = {
+                    "form": LoginRegisterForm(),
+                    "mensaje_error": "La cuenta ha sido eliminada",
+                    "sub_mensaje_error": "Por favor, contacte con el soporte técnico.",
+                }
+                return render(request, f"{APP_LOGIN_REGISTRO}/login_register.html", context=context)
             return redirect("/registro/login")
         else:
             return redirect("/registro/register")
@@ -174,10 +184,10 @@ def register(request):
         try:
             if form.is_valid():
                 if validarEmail(email):
-                    if request.POST["password"] == request.POST["password_confirm"]:
+                    if form.cleaned_data["password"] == form.cleaned_data["password_confirm"]:
                         # Comprobar que no se ha escrito una mala palabra
                         palabrota = Palabrota()
-                        if palabrota.contains_palabrota(request.POST["username"]):
+                        if palabrota.contains_palabrota(form.cleaned_data["username"]):
                             context = {
                                 "mensaje_error": "Nombre inapropiado",
                                 "sub_mensaje_error": "Por favor, elija un nombre de usuario adecuado.",
@@ -188,9 +198,9 @@ def register(request):
 
                         # Creo el usuario
                         user = Usuario.objects.create(
-                            username=request.POST["username"],
+                            username=form.cleaned_data["username"],
                             email=email,
-                            password=request.POST["password"],
+                            password= make_password(form.cleaned_data["password"]),
                             confirmation_token=get_random_string(length=32),
                         )
                         user.save()
@@ -199,11 +209,13 @@ def register(request):
                               usuario=user
                             , titulo_notificacion=f"¡Bienvenido {user.username}!"
                             , mensaje_notificacion="Por favor, revise su correo para verificar su cuenta.")
+                        notificacion.save()
                         
                         notificacion2 = Notificacion.objects.create(
                               usuario=user
                             , titulo_notificacion=f"Configura tu cuenta"
                             , mensaje_notificacion="Recuerda que puedes configurar tu cuenta en la sección de 'Mi perfil', y personalizar tu experiencia en nuestra plataforma.")
+                        notificacion2.save()
                         
                         carrito_usuario = Carrito.objects.create(id_usuario=user)
                         carrito_usuario.save()
@@ -300,8 +312,7 @@ def logout_confirmation(request):
 # Borrar cuenta (borrado lógico)
 @login_required(login_url='/registro/')
 def delete_account(request):
-    usuario = request.user
-    usuario.activo = False
+    usuario = Usuario.objects.get(id_usuario=request.user.id_usuario)
     usuario.fecha_baja = timezone.now()
     usuario.is_active = False
     usuario.save()
@@ -325,6 +336,41 @@ def delete_account_confirmation(request):
 
 
 ##########################################
+# Recuperar contraseña
+def recuperar_contraseña(request):
+    if request.method == "POST":
+        email = request.POST["email"]
+        user = Usuario.objects.filter(email=request.session["email"]).first()
+        print("---> ", user.confirmation_token)
+        if user:
+            confirmation_link = request.build_absolute_uri(
+                reverse(
+                    f"{APP_LOGIN_REGISTRO}:recover_pssw",
+                    args=[user.confirmation_token],
+                )
+            )
+            prepararEmail(
+                user.email,
+                "Recuperar contraseña",
+                f"Para recuperar tu contraseña, por favor haz clic en el siguiente enlace: {confirmation_link}",
+            )
+            
+            context = {
+                "mensaje_error": "Revise su correo",
+                "sub_mensaje_error": "Por favor, revise su correo para recuperar su contraseña.",
+            }
+            return redirect("/", context=context)
+        else:
+            context = {
+                "mensaje_error": "El email no existe",
+                "sub_mensaje_error": "Por favor, verifique que el email sea correcto.",
+            }
+            return render(request, f"{APP_LOGIN_REGISTRO}/recuperar_contraseña.html", context=context)
+    else:
+        return render(request, f"{APP_LOGIN_REGISTRO}/recuperar_contraseña.html")
+
+
+##########################################
 # Verificar email
 @login_required(login_url='/registro/')
 def confirm_email(request, token):
@@ -339,6 +385,45 @@ def confirm_email(request, token):
             "sub_mensaje_error": "Por favor, verifique que el enlace sea correcto.",
         }
         return redirect("/", context=context)
+    
+
+##########################################
+# Recuperar contraseña
+def recover_pssw(request, token):
+    if request.method == "POST":
+        password = request.POST["password"]
+        password_confirm = request.POST["password_confirm"]
+        if password == password_confirm:
+            user = Usuario.objects.filter(confirmation_token=token).first()
+            if user is not None:
+                # Comprueba si la contraseña proporcionada es igual a la anterior (ya encriptada)
+                if user.check_password(password):
+                    context = {
+                        "mensaje_error": "La contraseña no puede ser igual a la anterior",
+                        "sub_mensaje_error": "Por favor, elija una contraseña diferente a la anterior.",
+                        "token": token,
+                    }
+                    return render(request, f"{APP_LOGIN_REGISTRO}/recover_pssw.html", context=context)
+                
+                # Encripta la nueva contraseña antes de guardarla
+                user.password = make_password(password)
+                user.save()
+                return redirect("/")
+            else:
+                # Manejar el caso en que el token no corresponda a ningún usuario
+                pass
+        else:
+            context = {
+                "mensaje_error": "Las contraseñas no coinciden",
+                "sub_mensaje_error": "Por favor, verifique que las contraseñas coincidan.",
+                "token": token,
+            }
+            return render(request, f"{APP_LOGIN_REGISTRO}/recover_pssw.html", context=context)
+    else:
+        context = {
+            "token": token,
+        }
+        return render(request, f"{APP_LOGIN_REGISTRO}/recover_pssw.html", context=context)
 
 
 ##########################################
