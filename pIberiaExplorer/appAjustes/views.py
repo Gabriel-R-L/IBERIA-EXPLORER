@@ -110,7 +110,7 @@ def añadir_preferencia(request):
     if request.method == 'POST':
         form = AñadirPreferencia(request.POST, usuario=usuario)
         if form.is_valid():
-            atributo_plan_id = request.POST['atributo_plan']
+            atributo_plan_id = form.cleaned_data['atributo_plan']
             atributo_plan = AtributoPlan.objects.get(id_atributo_plan=atributo_plan_id)
 
             preferencia, created = UsuarioPreferencia.objects.get_or_create(atributo_plan=atributo_plan, usuario=usuario)
@@ -147,7 +147,7 @@ def cambiar_foto_perfil(request):
         form = CambiarFotoPerfilForm(request.POST, request.FILES, instance=usuario)
         if form.is_valid():
             borrar_foto_perfil(usuario.id_usuario, usuario.foto_perfil)
-            Usuario.objects.filter(id_usuario=usuario.id_usuario).update(foto_perfil=request.POST['foto_perfil'])
+            Usuario.objects.filter(id_usuario=usuario.id_usuario).update(foto_perfil=form.cleaned_data['foto_perfil'])
             
             redirect('/ajustes/configuracion-cuenta', context={'mensaje_error': 'Foto de perfil cambiada correctamente.'})
     else:

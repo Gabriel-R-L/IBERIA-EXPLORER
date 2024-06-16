@@ -145,7 +145,6 @@ def pagar_pedidos(request):
     # Obtener todos los pedidos pendientes del usuario actual
     pedidos_pendientes = Pedido.objects.filter(id_cliente=request.user, estado='PENDIENTE')
     
-    nombres_planes_pedidos = []
     for pedido in pedidos_pendientes:
         detalle = PedidoDetalle.objects.filter(id_pedido=pedido).values_list('id_plan__titulo', flat=True).first()
         pedido.nombre_plan = detalle
@@ -223,6 +222,8 @@ def ver_pedido_detalle(request, pedido_id):
     total = 0
     for detail in detalles:
         total += detail.id_plan.precio  * detail.cantidad
+    if total % 1 == 0:
+        total = int(total)
     
     # Preparar el contexto para pasar a la plantilla
     context = {

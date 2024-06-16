@@ -1,6 +1,6 @@
 from django.urls import path, include
 from requests import delete
-from .views import delete_account, delete_account_confirmation, login_register, login, logout_confirmation, register, logout, confirm_email, email_confirmed
+from .views import delete_account, delete_account_confirmation, login_register, login, logout_confirmation, register, logout, confirm_email, email_confirmed, recuperar_contraseña, recover_pssw
 
 app_name = "appLoginRegistro"
 
@@ -20,4 +20,8 @@ urlpatterns = [
     # Confirmar correo
     path("confirm_email/<str:token>/", confirm_email, name="confirm_email"),
     path("email_confirmed/", email_confirmed, name="email_confirmed"),
+    
+    # Recuperar contraseña
+    path("recuperar_contraseña/", recuperar_contraseña, name="recuperar_contraseña"), 
+    path("cambiar_contraseña/<str:token>/", recover_pssw, name="recover_pssw")
 ]

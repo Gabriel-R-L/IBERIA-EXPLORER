@@ -106,3 +106,45 @@ def resultado_datos_api(request):
 ###########################################
 def index(request):
     return render(request, f"{APP_IBERIA_EXPLORER}/index.html")
+
+
+###########################################
+# Acerca de
+###########################################
+def acerca_de(request):
+    return render(request, f"{APP_IBERIA_EXPLORER}/info_TFG.html")
+
+
+###########################################
+# Contacto
+###########################################
+def contacto(request):
+    return render(request, f"{APP_IBERIA_EXPLORER}/contacto.html")
+
+
+###########################################
+# Privacidad
+###########################################
+def privacidad(request):
+    return render(request, f"{APP_IBERIA_EXPLORER}/politica_de_privacidad.html")
+
+
+###########################################
+# Cookies
+###########################################
+def cookies(request):
+    return render(request, f"{APP_IBERIA_EXPLORER}/uso_de_cookies.html")
+
+
+###########################################
+# FAQ
+###########################################
+def faq(request):
+    return render(request, f"{APP_IBERIA_EXPLORER}/faq.html")
+
+
+###########################################
+# Sobre nosotros
+###########################################
+def sobre_nosotros(request):
+    return render(request, f"{APP_IBERIA_EXPLORER}/equipo.html")
