@@ -58,10 +58,10 @@ def obtener_datos_api(tipo_plan: str = None, fecha_inicio: date = None, fecha_fi
                         continue
                     
                     # Guardar solo los que coincidan con la fecha de inicio y fin indicadas
-                    if fecha_inicio is not None and datetime.strptime(fecha_inicio_original, "%Y-%m-%d") <= datetime.strptime(str(fecha_inicio), "%Y-%m-%d"):
+                    if fecha_inicio is not None and datetime.strptime(fecha_inicio_original, "%Y-%m-%d") < datetime.strptime(str(fecha_inicio), "%Y-%m-%d"):
                         continue
                     
-                    if fecha_fin is not None and datetime.strptime(fecha_fin_original, "%Y-%m-%d") >= datetime.strptime(str(fecha_fin), "%Y-%m-%d"):
+                    if fecha_fin is not None and datetime.strptime(fecha_fin_original, "%Y-%m-%d") > datetime.strptime(str(fecha_fin), "%Y-%m-%d"):
                         continue
                     
                     datos_necesarios.append(

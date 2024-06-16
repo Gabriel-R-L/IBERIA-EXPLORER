@@ -1,50 +1,17 @@
 from django.shortcuts import redirect, render, get_object_or_404
-from django.contrib.auth import login as login_user, logout as logout_user, authenticate
-from django.conf import settings
-from django.db import IntegrityError
 
-from django.core.exceptions import ValidationError
-from validate_email import validate_email
-from django.core.mail import send_mail
-
-import os
-import sys
-sys.path.append(
-    os.path.join(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-)
-sys.path.append(os.path.dirname(os.path.realpath(__file__)))
-from appIberiaExplorer.models import AtributoPlan
-
-
-from datetime import timezone
-import urllib.request as urllib
-
-from .models import *
-
-from django.urls import reverse
-from django.contrib.sites.shortcuts import get_current_site
-
-from spanlp.palabrota import Palabrota
-from django.utils.crypto import get_random_string
-
-from api.Datos_API_Com_Madrid import obtener_datos_api
-
-from django.core.paginator import Paginator
-
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.views.decorators.csrf import csrf_exempt
-from google.oauth2 import id_token
-from google.auth.transport import requests
-import jwt
-
 from django.contrib.auth.decorators import login_required
+
+from appIberiaExplorer.models import AtributoPlan
+from .models import *
 
 from pIberiaExplorer.utils import APP_CARRITO_PEDIDO
 
 
 ###########################################
-# Carrito
+# CARRITO
+###########################################
 @login_required(login_url='/registro/')
 def agregar_al_carrito(request, plan_id):
     from appIberiaExplorer.models import Plan
@@ -112,7 +79,8 @@ def ver_carrito(request):
 
 
 ###########################################
-# Pedidos
+# PEDIDOS
+###########################################
 @login_required(login_url='/registro/')
 def completar_pedido(request, url_to_pay=0):
     carrito = get_object_or_404(Carrito, id_usuario=request.user)

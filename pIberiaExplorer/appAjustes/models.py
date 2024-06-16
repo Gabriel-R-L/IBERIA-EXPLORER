@@ -1,7 +1,8 @@
 from django.db import models
 
+
 ####################################################
-# UsuarioPreferencia
+# USUARIOPREFERENCIA
 ####################################################
 class UsuarioPreferencia(models.Model):
     from appLoginRegistro.models import Usuario

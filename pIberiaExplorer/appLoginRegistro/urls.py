@@ -1,6 +1,5 @@
-from django.urls import path, include
-from requests import delete
-from .views import delete_account, delete_account_confirmation, login_register, login, logout_confirmation, register, logout, confirm_email, email_confirmed, recuperar_contraseña, recover_pssw
+from django.urls import path
+from .views import *
 
 app_name = "appLoginRegistro"
 

@@ -1,8 +1,12 @@
 from django.contrib import admin
 from .models import UsuarioPreferencia
+admin.site.site_header = "SITIO DE ADMINISTRACIÓN DE AJUSTES"
+admin.site.site_title = "SITIO DE ADMINISTRACIÓN DEL AJUSTES"
+admin.site.index_title = "Bienvenido al portal de Administración"
+
 
 ####################################################
-# UsuarioPreferencia
+# USUARIOPREFERENCIA
 ####################################################
 class UsuarioPreferenciaAdmin(admin.ModelAdmin):
     list_display = ['id_preferencia', 'usuario', 'atributo_plan']
