@@ -2,49 +2,37 @@ import os
 import sys
 import re
 import django
-
+from datetime import datetime
 import locale
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-# Add the project root to the Python path
+# Añadir la raíz del proyecto al path de Python
 if project_root not in sys.path:
     sys.path.append(project_root)
-    
-# Set the environment variable for the Django settings module
+# Esta variable de entorno se debe establecer antes de cargar la configuración de Django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pIberiaExplorer.settings')
 django.setup()
 
+locale.setlocale(locale.LC_TIME, "es_ES.UTF-8") # Para que se muestren los meses en español
 
+from appApi.Datos_API_Com_Madrid import obtener_datos_api
+from appIberiaExplorer.models import Plan, AtributoPlan
 from appAjustes.models import UsuarioPreferencia
 from appNotificaciones.models import Notificacion
-locale.setlocale(locale.LC_TIME, "es_ES.UTF-8") # Para que se muestren los meses en español
-from datetime import datetime
-
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-
-import locale
-locale.setlocale(locale.LC_TIME, "es_ES.UTF-8") # Para que se muestren los meses en español
-from datetime import datetime
-
-from api.Datos_API_Com_Madrid import obtener_datos_api
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-if project_root not in sys.path:
-    sys.path.append(project_root)
-from appIberiaExplorer.models import Plan, AtributoPlan
 
 
 def guardar_datos_api():
-    """ 
-        Método encargado de guardar los datos obtenidos de la API con un coste > 0
-        en la base de datos
-        
-        Cuando el servidor activo, este archivo se ejecutará cada hora
-        
-        Params: None
-        
-        Returns: None
     """
+    Método encargado de guardar los datos obtenidos de la API con un coste > 0
+    en la base de datos
+    
+    Cuando el servidor activo, este archivo se ejecutará cada hora
+    
+    Params: None
+    
+    Returns: None
+    """    
     datos = obtener_datos_api()
     numero_planes_recomendados = 0
     

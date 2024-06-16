@@ -2,7 +2,7 @@ from django.db import models
 
 
 ####################################################
-# Continente
+# CONTINENTE
 ####################################################
 class Continente(models.Model):
     id_continente = models.AutoField(primary_key=True)
@@ -18,7 +18,7 @@ class Continente(models.Model):
 
 
 ####################################################
-# Pais
+# PAIS
 ####################################################
 class Pais(models.Model):
     id_pais = models.AutoField(primary_key=True)
@@ -35,7 +35,7 @@ class Pais(models.Model):
 
 
 ####################################################
-# Ciudad
+# CIUDAD
 ####################################################
 class Ciudad(models.Model):
     id_ciudad = models.AutoField(primary_key=True)
@@ -48,11 +48,11 @@ class Ciudad(models.Model):
         verbose_name_plural = "Ciudades"
     
     def __str__(self):
-        return f"{self.nombre}, {self.pais}"
+        return f"{self.nombre}"
 
 
 ####################################################
-# Plan
+# PLAN
 ####################################################
 class Plan(models.Model):
     id_plan = models.AutoField(primary_key=True)
@@ -78,7 +78,7 @@ class Plan(models.Model):
         
 
 ####################################################
-# AtributoPlan
+# ATRIBUTOPLAN
 ####################################################
 class AtributoPlan(models.Model):
     id_atributo_plan = models.AutoField(primary_key=True)
