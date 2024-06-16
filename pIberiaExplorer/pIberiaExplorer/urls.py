@@ -24,6 +24,7 @@ from django.conf import settings
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("g/", include("allauth.urls")),
+    
     # APPS
     path("", include("appIberiaExplorer.urls", namespace="appIberiaExplorer")),
     path("registro/", include("appLoginRegistro.urls", namespace="appLoginRegistro")),

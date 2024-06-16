@@ -43,7 +43,7 @@ def guardar_datos_api():
             price_match = re.search(r'(\d+(\.\d+)?)', precio_str)
             if 'euro' not in precio_str:
                 continue
-            titulo_str = dato['titulo'].lower()
+            titulo_str = dato['titulo']
             fecha_inicio_str = dato['fecha_inicio']
             fecha_fin_str = dato['fecha_fin']
             descripcion_str = dato['descripcion']
@@ -125,6 +125,38 @@ def guardar_datos_api():
                     else:
                         print(f"Atributo {atributo_plan.nombre} ya existe")
                 else:
+                    plan = Plan.objects.get(titulo=titulo_str)
+                    
+                    if not AtributoPlan.objects.filter(plan=plan, nombre=url_tipo_plan).exists():
+                        atributo_plan = AtributoPlan.objects.create(
+                            plan=plan,
+                            url=url_tipo_plan
+                        )
+                        
+                        usuarios_preferencia = UsuarioPreferencia.objects.filter(atributo_plan=atributo_plan)
+                        if usuarios_preferencia.exists() and numero_planes_recomendados < 5:
+                            for usuario_preferencia in usuarios_preferencia:
+                                Notificacion.objects.create(
+                                    usuario=usuario_preferencia.usuario,
+                                    titulo_notificacion=f"Se ha añadido un nuevo plan que puede ser de tu interés: {plan.titulo}",
+                                    mensaje_notificacion=f"El plan con el atributo {atributo_plan.nombre} ha sido añadido. ¡No te lo pierdas!",
+                                )
+                                numero_planes_recomendados += 1
+                                print(f"Plan {plan.titulo} añadido a la lista de planes recomendados para el usuario {usuario_preferencia.usuario.username}")
+                                if numero_planes_recomendados >= 5:
+                                    break
+                        print(f"Atributo {atributo_plan.nombre} creado")
+                    else:
+                        if not AtributoPlan.objects.filter(plan=plan, nombre=url_tipo_plan).exists():
+                            atributo_plan = AtributoPlan.objects.create(
+                                plan=plan,
+                                url=url_tipo_plan
+                            )
+                            
+                            usuarios_preferencia = UsuarioPreferencia.objects.filter(atributo_plan=atributo_plan)
+                            print(f"Atributo {atributo_plan.nombre} creado")
+                        else:
+                            print(f"Atributo {atributo_plan.nombre} ya existe")
                     print(f"Plan {titulo_str} ya existe")
             else:
                 print(f"Plan {titulo_str} no cumple con las normas")

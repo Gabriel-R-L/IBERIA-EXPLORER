@@ -1,7 +1,8 @@
 from django.urls import path
 from .views import *
 
-app_name = "appLoginRegistro"
+from pIberiaExplorer.utils import APP_LOGIN_REGISTRO
+app_name = APP_LOGIN_REGISTRO
 
 urlpatterns = [
     path("", login_register, name="login_register"),   

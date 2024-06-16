@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from re import DEBUG
 from django.conf import settings
 
 from django.core.exceptions import ValidationError
@@ -39,19 +39,22 @@ def validarEmail(correo):
         email_validated = validate_email(correo)
         existe_correo_db = Usuario.objects.filter(email=correo).exists()
 
-        #!#########################################
-        #! DEBUG FALSE
-        #!#########################################
-        # Si existe el correo o la sintaxis del correo no es adecuada
-        # if existe_correo_db or not validate_email:
-        #     return False
-        # else:
-        #     return True
 
-        #!#########################################
-        #! DEBUG TRUE
-        #!#########################################
-        return email_validated
+        ##########################################
+        # DEBUG FALSE
+        ##########################################
+        # Si existe el correo o la sintaxis del correo no es adecuada
+        if not DEBUG:
+            if existe_correo_db or not validate_email:
+                return False
+            else:
+                return True
+
+        ##########################################
+        # DEBUG TRUE
+        ##########################################
+        if DEBUG:
+            return email_validated
 
     except ValidationError:
         return False

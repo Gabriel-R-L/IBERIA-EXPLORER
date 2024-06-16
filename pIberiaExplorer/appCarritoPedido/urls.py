@@ -1,7 +1,8 @@
 from django.urls import path, include
 from .views import *
 
-app_name = "appCarritoPedido"
+from pIberiaExplorer.utils import APP_CARRITO_PEDIDO
+app_name = APP_CARRITO_PEDIDO
 
 urlpatterns = [
     # Carrito

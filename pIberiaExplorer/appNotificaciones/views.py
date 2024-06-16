@@ -1,13 +1,13 @@
 from django.shortcuts import render
-from requests import get
-from .models import Notificacion
 from django.shortcuts import redirect, render, get_object_or_404
 
+from .models import *
 from pIberiaExplorer.utils import APP_NOTIFICACIONES
 
 
 ##########################################
-# Notificaciones
+# NOTIFICACIONES
+##########################################
 def ver_notificaciones(request):
     user = request.user
     
@@ -25,7 +25,8 @@ def ver_notificaciones(request):
 
 
 ##########################################
-# Ver notificacion
+# VER NOTIFICACION
+##########################################
 def ver_notificacion(request, id):
     notificacion = get_object_or_404(Notificacion, usuario=request.user, id=id)
    
@@ -41,7 +42,8 @@ def ver_notificacion(request, id):
 
 
 ##########################################
-# Borrar todas las notificaciones
+# BORRAR NOTIFICACIONES
+##########################################
 def eliminar_notificaciones(request):
     notificaciones = Notificacion.objects.filter(usuario=request.user)
     notificaciones.delete()
@@ -50,7 +52,8 @@ def eliminar_notificaciones(request):
 
 
 ##########################################
-# Borrar notificacion
+# BORRAR NOTIFICACION
+##########################################
 def eliminar_notificacion(request, id):
     notificacion = get_object_or_404(Notificacion, usuario=request.user, id=id)
     notificacion.delete()

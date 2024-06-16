@@ -1,3 +1,4 @@
+from os import read
 from random import choice
 from django import forms
 from django.utils.translation import gettext_lazy as _
@@ -24,7 +25,7 @@ class ConfiguracionCuentaForm(forms.ModelForm):
             'direccion': _('Dirección'),
             'id_ciudad': _('Ciudad'),
         }
-    
+        
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update({
@@ -40,7 +41,8 @@ class ConfiguracionCuentaForm(forms.ModelForm):
             'class': 'form-input block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50'
         })
         self.fields['email'].widget.attrs.update({
-            'class': 'form-input block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50'
+            'class': 'form-input block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 bg-gray-200',
+            'readonly': 'readonly'
         })
         self.fields['telefono'].widget.attrs.update({
             'class': 'form-input block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50'
@@ -55,7 +57,7 @@ class ConfiguracionCuentaForm(forms.ModelForm):
 
 ############################################
 # Cambiar contraseña
-class CambiarContrasenaForm(forms.Form):
+class CambiarContraseñaForm(forms.Form):
     contrasena_actual = forms.CharField(
         label=_('Contraseña actual'), 
         widget=forms.PasswordInput(attrs={

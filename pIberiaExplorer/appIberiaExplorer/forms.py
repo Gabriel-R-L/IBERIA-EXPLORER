@@ -8,7 +8,6 @@ class BuscadorPreferenciaFecha(forms.Form):
     atributo_plan = forms.ChoiceField(
         label=_('Atributos disponibles'),
         required=False,
-        initial=None,
         widget=forms.Select(attrs={'class': 'form-select block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50'})
     )
     
@@ -49,7 +48,7 @@ class BuscadorPreferenciaFecha(forms.Form):
         
         if selected_atributo_plan:
             try:
-                nombre_atributo = AtributoPlan.objects.get(id_atributo_plan=selected_atributo_plan).nombre.replace("/", "")
+                nombre_atributo = AtributoPlan.objects.get(id_atributo_plan=selected_atributo_plan).nombre
                 choices = [(selected_atributo_plan, nombre_atributo)] + [
                     choice for choice in choices if choice[0] != selected_atributo_plan
                 ]
@@ -57,14 +56,3 @@ class BuscadorPreferenciaFecha(forms.Form):
                 pass  # Manejo de excepción si el atributo seleccionado no existe
                 
         self.fields['atributo_plan'].choices = choices
-
-    def clean(self):
-        cleaned_data = super().clean()
-        fecha_inicio = cleaned_data.get("fecha_inicio")
-        fecha_fin = cleaned_data.get("fecha_fin")
-        
-        if fecha_inicio and fecha_fin:
-            if fecha_inicio > fecha_fin:
-                self.add_error('fecha_inicio', _('La fecha de inicio no puede ser mayor que la fecha de fin'))
-        
-        return cleaned_data
