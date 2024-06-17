@@ -18,32 +18,88 @@
         
         <!-- Carrito de la compra -->
         {% if request.user.is_authenticated %}
-          <a href="{% url 'appCarritoPedido:ver_carrito' %}" class="text-sm font-normal text-red-500 dark:text-white hover:underline">
-            Carrito
-            {% if cantidad_total > 0 %} 
-              ({{ cantidad_total }})
-            {% endif %}
+        <button type="button" class="relative inline-flex items-center p-1 text-sm font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+          <a href="{% url 'appCarritoPedido:ver_carrito' %}" class="flex items-center">
+            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
+            </svg>
+            
+              {% if cantidad_total > 0 %}
+              <span class="sr-only">Notifications</span>
+              <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
+                {{ cantidad_total }}
+              </div>
+              {% endif %}
+            
           </a>
 
-          <!-- Historial de pedidos -->
+          <!-- Historial de pedidos 
           <a href="{% url 'appCarritoPedido:ver_pedidos' %}" class="text-sm font-normal text-red-500 dark:text-white hover:underline">Ver historial de pedidos</a>
+          -->
+          
+          <!-- Botón notificaciones -->
+          <button type="button" class="relative inline-flex items-center p-2 text-sm font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            <a href="{% url 'appNotificaciones:ver_notificaciones' %}" class="text-sm font-normal tehttp://127.0.0.1:8000/carrito/pedido/10/xt-red-500 dark:text-white hover:underline">
+              <svg class="w-5 h-5" aria-hidden="true" xmlns="{% url 'appNotificaciones:ver_notificaciones' %}" fill="currentColor" viewBox="0 0 20 16">
+                <path d="m10.036 8.278 9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z"/>
+                <path d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z"/>
+                </svg>
+            </a>
+                {% if cantidad_notificaciones %}
+                  <span class="sr-only">Notifications</span>
+                  <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">
+                    {{ cantidad_notificaciones }}
+                  </div>
+                {% endif %}
+            </button>
 
-          <!-- Notificaciones -->
-          <a href="{% url 'appNotificaciones:ver_notificaciones' %}" class="text-sm font-normal tehttp://127.0.0.1:8000/carrito/pedido/10/xt-red-500 dark:text-white hover:underline">
-            Notificaciones
-            {% if cantidad_notificaciones %} 
-              ({{ cantidad_notificaciones }})
-            {% endif %}
-          </a>
+            <!-- Botón perfil -->
 
-          <!-- Ajustes -->
-          <a href="{% url 'appAjustes:configuracion_cuenta' %}" class="text-sm font-normal text-red-500 dark:text-white hover:underline">
-            Ajustes
-          </a>
-        {% endif %}
-          {% if not request.user.is_authenticated %}
-            <a href="{% url 'appLoginRegistro:login_register' %}" class="text-sm  text-red-600 dark:text-red-500 hover:underline">Iniciar sesión</a>
-          {% endif %}
+            <!-- Avatar Button -->
+            <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-end" class="w-10 h-10 rounded-full cursor-pointer" src="{{ user.foto_perfil.url }}" alt="User dropdown">
+
+            <!-- Dropdown menu -->
+            <div id="userDropdown" class="absolute z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-64 dark:bg-gray-700 dark:divide-gray-600">
+                <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                    <div class="font-medium truncate">
+                        {{ user.username }}
+                    </div>
+                    <div class="font-medium truncate">
+                        {{ user.email }}
+                    </div>
+                </div>
+                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
+                    <li>
+                        <a href="{% url 'appAjustes:configuracion_cuenta' %}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                            Mi perfil
+                        </a>
+                    </li>
+                </ul>
+                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
+                  <li>
+                      <a href="{% url 'appCarritoPedido:ver_pedidos' %}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                          Mi historial de pedidos
+                      </a>
+                  </li>
+              </ul>
+                <div class="py-1">
+                    <a href="{% url 'appLoginRegistro:logout' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+                        Cerrar sesión
+                    </a>
+                </div>
+            </div>
+            <!-- Botón perfil -->
+
+
+
+            <!-- Iniciar sesión -->
+            
+              {% endif %}
+              {% if not request.user.is_authenticated %}
+                <a href="{% url 'appLoginRegistro:login_register' %}" class="text-sm  text-red-600 dark:text-red-500 hover:underline">Iniciar sesión</a>
+              {% endif %}
+            
+        
 
       </div>
   </div>

@@ -56,7 +56,7 @@ def guardar_datos_api():
             
             
             if buscar_precio(precio_str):
-                if not Plan.objects.filter(titulo=titulo_str).exists():
+                if not Plan.objects.filter(titulo=titulo_str.lower()).exists():
                     precio = float(price_match.group(1))
                     
                     if fecha_inicio_str:

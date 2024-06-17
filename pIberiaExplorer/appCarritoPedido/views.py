@@ -17,10 +17,11 @@ from pIberiaExplorer.utils import APP_CARRITO_PEDIDO
 def agregar_al_carrito(request, plan_id):
     if not request.user.email_confirmed:
         context = {
-            'mensaje_error': 'Inicie sesión para agregar planes al carrito.'
+            'mensaje_error': 'Verifique su correo electrónico para agregar planes al carrito.'
         }
         return render(request, 'appIberiaExplorer/index.html', context=context)
     from appIberiaExplorer.models import Plan
+    print(">>>>>>>>>>>>>>>>>>", plan_id)
     plan = get_object_or_404(Plan, id_plan_api=plan_id)
     cart, created = Carrito.objects.get_or_create(id_usuario=request.user)
     carrito_details, created = CarritoDetalle.objects.get_or_create(id_carrito=cart, id_plan=plan, cantidad=1)

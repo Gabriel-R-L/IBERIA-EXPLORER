@@ -32,4 +32,3 @@ urlpatterns = [
     path("notificaciones/", include("appNotificaciones.urls", namespace="appNotificaciones")),
     path("ajustes/", include("appAjustes.urls", namespace="appAjustes")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
-
