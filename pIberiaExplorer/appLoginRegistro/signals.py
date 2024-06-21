@@ -6,6 +6,7 @@ from services.send_mail import prepararEmail
 from appNotificaciones.models import Notificacion
 
 
+# Se envía un correo electrónico al usuario cuando inicia sesión
 @receiver(user_logged_in)
 def send_login_email(request, user, **kwargs):
     prepararEmail(

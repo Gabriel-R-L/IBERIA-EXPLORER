@@ -10,7 +10,19 @@ from appLoginRegistro.models import Usuario
 
 ##########################################
 # Preparar email
+##########################################
 def prepararEmail(email, asunto, mensaje):
+    """
+    Prepara y envía un correo electrónico.
+
+    Args:
+        email (str): Dirección de correo electrónico del destinatario.
+        asunto (str): Asunto del correo electrónico.
+        mensaje (str): Contenido del correo electrónico.
+
+    Returns:
+        None
+    """
     asunto = f"{asunto}"
     mensaje = f"{mensaje}"
     enviarEmail(email, asunto, mensaje)
@@ -18,43 +30,58 @@ def prepararEmail(email, asunto, mensaje):
 
 ##########################################
 # Enviar email
+##########################################
 def enviarEmail(email, asunto, mensaje):
-    sender = settings.EMAIL_HOST_USER  # emisor
-    recipient = [email]  # receptor
+    """
+    Envía un correo electrónico usando las configuraciones de Django.
+
+    Args:
+        email (str): Dirección de correo electrónico del destinatario.
+        asunto (str): Asunto del correo electrónico.
+        mensaje (str): Contenido del correo electrónico.
+
+    Returns:
+        None
+    """
+    sender = settings.EMAIL_HOST_USER  # Email del remitente configurado en settings
+    recipient = [email]  # Lista de destinatarios
 
     send_mail(
         asunto,
         mensaje,
         sender,
         recipient,
-        fail_silently=False,
-        html_message=mensaje,
+        fail_silently=False,  # No silenciar errores para que se lancen excepciones si hay problemas
+        html_message=mensaje,  # Mensaje en formato HTML
     )
 
 
 ##########################################
 # Validacion correo
+##########################################
 def validarEmail(correo):
+    """
+    Valida si una dirección de correo electrónico es válida y si no está duplicada en la base de datos.
+
+    Args:
+        correo (str): Dirección de correo electrónico a validar.
+
+    Returns:
+        bool: True si el correo es válido y no está duplicado, False en caso contrario.
+    """
     try:
-        email_validated = validate_email(correo)
-        existe_correo_db = Usuario.objects.filter(email=correo).exists()
+        email_validated = validate_email(correo)  # Validación sintáctica del correo
 
+        existe_correo_db = Usuario.objects.filter(email=correo).exists()  # Verificación si el correo ya está en la base de datos
 
-        ##########################################
-        # DEBUG FALSE
-        ##########################################
-        # Si existe el correo o la sintaxis del correo no es adecuada
-        if not DEBUG:
-            if existe_correo_db or not validate_email:
+        if not DEBUG:  # Si no estamos en modo DEBUG
+            if existe_correo_db or not email_validated:  # Si el correo existe en la base de datos o no es válido sintácticamente
                 return False
             else:
                 return True
 
-        ##########################################
-        # DEBUG TRUE
-        ##########################################
-        if DEBUG:
-            return email_validated
+        if DEBUG:  # Si estamos en modo DEBUG
+            return email_validated  # Devolver el resultado de la validación sintáctica del correo
 
     except ValidationError:
-        return False
+        return False  # Manejar excepción si la validación de correo falla

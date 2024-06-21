@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<div class="container mx-auto p-4">
+<div class="container mx-auto p-4 dark:text-white">
   <h1 class="text-2xl font-bold mb-4">Mis Pedidos</h1>
 
   <h2 class="text-xl font-semibold mb-2">Pedidos Completados</h2>
@@ -19,8 +19,8 @@
         <tbody class="bg-white divide-y divide-gray-200">
           {% for pedido in pedidos_completados %}
           <tr>
-            <td class="px-6 py-4 whitespace-nowrap">{{ pedido.fecha_reserva }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">
+            <td class="px-6 py-4 whitespace-nowrap dark:text-black">{{ pedido.fecha_reserva }}</td>
+            <td class="px-6 py-4 whitespace-nowrap dark:text-black">
               {% if pedido.total|floatformat:0 == pedido.total|floatformat %}
                   {{ pedido.total|floatformat:0 }}
               {% else %}
@@ -53,8 +53,8 @@
         <tbody class="bg-white divide-y divide-gray-200">
           {% for pedido in pedidos_cancelados %}
           <tr>
-            <td class="px-6 py-4 whitespace-nowrap">{{ pedido.fecha_reserva }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">
+            <td class="px-6 py-4 whitespace-nowrap dark:text-black">{{ pedido.fecha_reserva }}</td>
+            <td class="px-6 py-4 whitespace-nowrap dark:text-black">
               {% if pedido.total|floatformat:0 == pedido.total|floatformat %}
                   {{ pedido.total|floatformat:0 }}
               {% else %}

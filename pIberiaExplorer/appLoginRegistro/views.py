@@ -79,6 +79,20 @@ def login_register(request):
 # LOGIN
 ##########################################
 def login(request):
+    """ 
+    Vista para manejar el proceso de inicio de sesión de un usuario.
+
+    - Si el método HTTP es POST:
+        - Recupera el correo electrónico almacenado en la sesión.
+        - Valida el formulario de inicio de sesión.
+        - Intenta autenticar al usuario y realiza validaciones adicionales (estado, roles).
+        - Envía un correo electrónico de inicio de sesión.
+        - Crea una notificación si la cuenta de correo no está confirmada.
+
+    Returns:
+        - Redirige a la página principal en caso de éxito.
+        - Renderiza el formulario de inicio de sesión nuevamente en caso de error.
+    """
     if request.method == "POST":
         email_to_find = request.session.get("email", None)
         form = LoginForm(request.POST)
@@ -150,6 +164,21 @@ def login(request):
 # REGISTER
 ##########################################
 def register(request):
+    """ 
+    Vista para manejar el proceso de registro de un nuevo usuario.
+
+    - Si el método HTTP es POST:
+        - Valida el formulario de registro.
+        - Verifica si el correo electrónico ya está validado.
+        - Comprueba que las contraseñas coincidan.
+        - Filtra nombres de usuario inapropiados.
+        - Crea un nuevo usuario, genera un token de confirmación y envía un correo electrónico.
+        - Crea notificaciones para el nuevo usuario.
+
+    Returns:
+        - Redirige a la página principal en caso de éxito.
+        - Renderiza el formulario de registro nuevamente en caso de error.
+    """
     if request.method == "POST":
         email = request.session.get("email", None)
         form = RegisterForm(request.POST)
@@ -275,6 +304,13 @@ def logout(request):
 
 @login_required(login_url='/registro/')
 def logout_confirmation(request):
+    """ 
+    Vista para mostrar la confirmación de cierre de sesión mediante AJAX.
+
+    Returns:
+        - Retorna una respuesta JSON con el HTML de la confirmación de cierre de sesión.
+        - Renderiza la página de confirmación de cierre de sesión si la solicitud no es AJAX.
+    """
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         html = render_to_string(f'{APP_LOGIN_REGISTRO}/logout_confirmation.html', {}, request=request)
         return JsonResponse({'html': html})
@@ -303,6 +339,13 @@ def delete_account(request):
     
 @login_required(login_url='/registro/')
 def delete_account_confirmation(request):
+    """ 
+    Vista para mostrar la confirmación de eliminación de cuenta mediante AJAX.
+
+    Returns:
+        - Retorna una respuesta JSON con el HTML de la confirmación de eliminación de cuenta.
+        - Renderiza la página de confirmación de eliminación de cuenta si la solicitud no es AJAX.
+    """
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         html = render_to_string(f'{APP_LOGIN_REGISTRO}/delete_account_confirmation.html', {}, request=request)
         return JsonResponse({'html': html})
@@ -310,7 +353,7 @@ def delete_account_confirmation(request):
 
 
 ##########################################
-# RECUPEAR CONTRASEÑA
+# RECUPERAR CONTRASEÑA
 ##########################################
 def recuperar_contraseña(request):
     if request.method == "POST":

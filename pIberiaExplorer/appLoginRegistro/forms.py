@@ -1,12 +1,11 @@
 from django import forms
-from django.utils.translation import gettext_lazy as _
-
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV2Checkbox
 
 
 ##########################################
-# Login/Register Form
+# LOGINREGISTERFORM
+##########################################
 class LoginRegisterForm(forms.Form):
     email = forms.EmailField(
         label="Correo electrónico",
@@ -19,7 +18,7 @@ class LoginRegisterForm(forms.Form):
         
         
 ##########################################
-# Iniciar sesión
+# LOGINFORM
 ##########################################
 class LoginForm(forms.Form):
     password = forms.CharField(
@@ -34,7 +33,7 @@ class LoginForm(forms.Form):
     
 
 ##########################################
-# Registro
+# REGISTERFORM
 ##########################################
 class RegisterForm(forms.Form):
     username = forms.CharField(
