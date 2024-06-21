@@ -2,6 +2,7 @@ from django.utils import timezone
 from django.db import models
 from appLoginRegistro.models import Usuario
 
+
 ##################################################
 # NOTIFICACIONES
 ##################################################

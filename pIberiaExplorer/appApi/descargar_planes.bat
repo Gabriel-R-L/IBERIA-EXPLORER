@@ -19,3 +19,8 @@ IF %ERRORLEVEL% EQU 0 (
     timeout /t 5 /nobreak >nul
 )
 goto CHECK_SERVER
+
+rem %0: Se refiere al nombre del archivo por lotes.
+rem ~d: Modificador que extrae la letra de la unidad del archivo por lotes (por ejemplo, C:).
+rem ~p: Modificador que extrae la ruta del archivo por lotes, excluyendo el nombre del archivo.
+rem 0: Indica que se aplica al primer parámetro, que es el nombre del archivo por lotes.

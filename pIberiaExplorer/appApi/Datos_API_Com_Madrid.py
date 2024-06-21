@@ -51,8 +51,6 @@ def obtener_datos_api(tipo_plan: str = None, fecha_inicio: date = None, fecha_fi
                     else:
                         descripcion = dato["description"][:400] + "..." + "<a href='%s'> Leer más</a>" % dato["link"]
                     
-                    # print("Fecha i ", fecha_inicio, "Fecha f ", fecha_fin, "Tipo p ", tipo_plan)
-                    
                     # Guardar solo los que coincidan con el tipo de plan indicado
                     if tipo_plan is not None and tipo_plan  not in dato['type']:
                         continue

@@ -2,14 +2,14 @@
 {% load static %}
 
 {% block content %}
-<div class="container mx-auto py-8">
+<div class="container mx-auto py-8 dark:text-white">
     <h1 class="text-2xl font-bold mb-4">Tus datos: {{ usuario.username }}</h1>
 
     <h2 class="text-xl font-semibold mb-4">Tus pedidos</h2>
     {% if pedidos %}
         <div class="space-y-4">
             {% for pedido in pedidos %}
-                <div class="p-4 bg-white rounded-lg shadow-md">
+                <div class="p-4 bg-white rounded-lg shadow-md dark:text-black">
                     <h3 class="text-lg font-semibold">{{ pedido.fecha_reserva }}</h3>
                     <p class="text-gray-600">Nombre del plan: {{ pedido.nombre_plan }}</p>
                     <p class="text-gray-600">Correo asignado: {{ pedido.id_cliente.email }}</p>
@@ -36,10 +36,10 @@
         <p class="text-gray-600">No has hecho ningún pedido todavía</p>
     {% endif %}
 
-    <h2 class="text-xl font-semibold mt-8 mb-4">Tus etiquetas</h2>
-    <h5 class="text-gray-700 mb-4">Etiquetas que has elegido o se te han asignado en base a tus compras en los planes</h5>
+    <h2 class="text-xl font-semibold mt-8 mb-4">Tus preferencias</h2>
+    <h5 class="text-gray-700 mb-4">Preferencias que has elegido o se te han asignado en base a tus compras en los planes</h5>
     {% if preferencias %}
-        <div class="space-y-4">
+        <div class="space-y-4 dark:text-black">
             {% for preferencia in preferencias %}
                 <div class="p-4 bg-white rounded-lg shadow-md flex justify-between items-center">
                     <h3 class="text-lg font-semibold">{{ preferencia.atributo_plan.nombre }}</h3>
@@ -51,7 +51,7 @@
             {% endfor %}
         </div>
     {% else %}
-        <p class="text-gray-600">No tienes etiquetas asignadas</p>
+        <p class="text-gray-600">No tienes preferencias asignadas</p>
     {% endif %}
     <a href="{% url 'appAjustes:añadir_preferencia' %}" class="inline-block mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Añadir preferencia</a>
 </div>

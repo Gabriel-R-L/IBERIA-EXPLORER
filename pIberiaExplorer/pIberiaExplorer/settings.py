@@ -40,7 +40,11 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
-SITE_ID = 1
+SITE_ID = 1 
+""" 
+    Si con el SITE_ID = 1 no funciona, probar con SITE_ID = 2 o 3.
+    A Mario le funciona con el 3 y a Gabriel con el 1. 
+"""
 
 INSTALLED_APPS = [
     "django.contrib.admin",
