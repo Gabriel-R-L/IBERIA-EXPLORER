@@ -22,10 +22,35 @@
       <link rel="stylesheet" href="{% static 'src/output.css' %}">
     {% endcompress %}
 
+    <style>
+      /* Estilo inicial del scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px; /* Grosor del scroll */
+      }
+
+      ::-webkit-scrollbar-track {
+        background-color: none; /* Color de fondo del track (área no ocupada por el scroll) */
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background-color: rgb(35 56 118 / 0.5); /* Color del scroll */
+        border-radius: 10px; /* Bordes redondeados */
+      }
+
+      /* Estilo para ensanchar el scroll cuando el ratón pasa por encima */
+      /* ::-webkit-scrollbar-thumb:hover {
+        background-color: rgb(35 56 118 / 1);
+      } */
+
+      * {
+        scroll-behavior: smooth;
+      }
+    </style>
+
     {% block head %} {% endblock head %}
   </head>
 
-  <body class="bg-red-50">
+  <body class="bg-red-50 dark:bg-gray-900">
     <div class="container mx-auto mt-4">
       {% include "navbar.html" %}
       {% include "carousel.html"%}
@@ -37,8 +62,10 @@
       </main>
       {% include "footer.html" %}
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
   </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+  <script src="{% static 'js/prefs_color_theme.js' %}"></script>
+  <script src="{% static 'js/navbar_anim.js' %}"></script>
 
   {% block script %} {% endblock script %}
 </html>

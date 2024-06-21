@@ -1,7 +1,9 @@
-import urllib
+import socket
+
+
+# Función que busca la IP del usuario
 def buscar_ip():
     try:
-        with urllib.request.urlopen('https://ident.me') as response:
-            return response.read().decode('utf8')
+        return socket.gethostbyname(socket.gethostname())
     except Exception as e:
         print(f"Error al intentar obtener la IP: {e}")
